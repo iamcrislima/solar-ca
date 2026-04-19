@@ -89,11 +89,12 @@ function useT() {
 }
 
 // ── FAIcon — ícone que bypassa o reconciliador do React ───────────────────────
-function FAIcon({ icon, style }: { icon: string; style?: React.CSSProperties }) {
+function FAIcon({ icon, style, onClick }: { icon: string; style?: React.CSSProperties; onClick?: () => void }) {
   return (
     <span
       dangerouslySetInnerHTML={{ __html: `<i class="${icon}"></i>` }}
       style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1, ...style }}
+      onClick={onClick}
     />
   );
 }
@@ -1651,7 +1652,7 @@ function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }: {
                 <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', height: 48 }}>
                   <input
                     value={query} placeholder="Digite o serviço desejado..."
-                    onChange={e => { setQuery(e.target.value); setCatSel(null); }}
+                    onChange={e => { setQuery(e.target.value); }}
                     style={{ flex: 1, border: 'none', outline: 'none', padding: '0 16px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', background: 'transparent' }}
                   />
                   <div style={{ width: 48, height: 48, background: '#0058db', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}>
