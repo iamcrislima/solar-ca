@@ -1,0 +1,109 @@
+/* 1DS Design Tokens */
+:root {
+  --primary-pure: #0058db;
+  --primary-light: #dce6f5;
+  --primary-medium: #6393db;
+  --secondary-light: #dfe7f2;
+  --neutral-light-pure: #ffffff;
+  --neutral-light-medium: #ebebeb;
+  --neutral-light-down: #d5d5d5;
+  --neutral-dark-pure: #333333;
+  --neutral-dark-down: #565656;
+  --neutral-dark-medium: #7d7d7d;
+  --neutral-dark-up: #a3a3a3;
+  --background-color-light: #f4f6f9;
+  --colors-neutral-01: #353535;
+  --shadow-level-3: 0px 6px 8px 0px rgba(24, 39, 75, 0.12), 0px 8px 16px 0px rgba(24, 39, 75, 0.08);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: var(--background-color-light);
+  color: var(--neutral-dark-pure);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Override 1ds Button primary style to match Figma */
+.btn-entrar {
+  background-color: var(--primary-pure) !important;
+  border-radius: 8px !important;
+  height: 32px !important;
+  min-width: 88px !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+/* Override 1ds Input to match Figma */
+.search-input-wrapper .ids-input {
+  border-radius: 8px !important;
+  border-color: var(--neutral-dark-up) !important;
+  height: 44px !important;
+}
+
+/* ── Dark Mode ─────────────────────────────────────────────────────────────── */
+html[data-dark="true"] #root {
+  filter: invert(1) hue-rotate(180deg);
+}
+html[data-dark="true"] #root img {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* ── Alto Contraste (WCAG — preto/branco absoluto) ──────────────────────── */
+
+/* 1. Tudo vira preto/branco */
+html[data-contrast="true"] #root *,
+html[data-contrast="true"] #root *::before,
+html[data-contrast="true"] #root *::after {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* 2. Elementos interativos (botões, links, clicáveis) → amarelo */
+html[data-contrast="true"] #root button,
+html[data-contrast="true"] #root a,
+html[data-contrast="true"] #root [style*="cursor: pointer"],
+html[data-contrast="true"] #root [style*="cursor:pointer"] {
+  color: #ffff00 !important;
+  -webkit-text-fill-color: #ffff00 !important;
+  border-color: #ffff00 !important;
+}
+
+/* 3. Inputs e selects mantêm borda visível */
+html[data-contrast="true"] #root input,
+html[data-contrast="true"] #root select,
+html[data-contrast="true"] #root textarea {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+}
+
+/* 4. Placeholder cinza claro para não confundir com texto real */
+html[data-contrast="true"] #root input::placeholder,
+html[data-contrast="true"] #root textarea::placeholder {
+  color: #aaaaaa !important;
+  -webkit-text-fill-color: #aaaaaa !important;
+}
+
+/* 5. Imagens em escala de cinza para manter legibilidade */
+html[data-contrast="true"] #root img {
+  filter: grayscale(100%) contrast(150%) brightness(1.2) !important;
+  border: 1px solid #ffffff !important;
+}
+
+/* 6. Foco visível com anel amarelo */
+html[data-contrast="true"] #root *:focus-visible {
+  outline: 3px solid #ffff00 !important;
+  outline-offset: 2px !important;
+}

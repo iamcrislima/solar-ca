@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__figma-desktop__get_design_context",
+      "mcp__figma-desktop__get_code_connect_suggestions",
+      "mcp__mcp-registry__search_mcp_registry",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "mcp__1ds-react__list_components",
+      "mcp__figma-desktop__get_screenshot",
+      "mcp__1ds-react__get_component",
+      "Bash(npm create *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(npx vite *)",
+      "Bash(curl -s http://localhost:5174)",
+      "Bash(curl -s http://localhost:5175)",
+      "mcp__Claude_Preview__preview_start",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(dir \"C:\\\\Users\\\\cristianderson.lima\\\\AppData\\\\Local\\\\figma\\\\figma-backend\\\\figma_backend\\\\asset_proxy\" /b)",
+      "Bash(dir \"C:\\\\Users\\\\cristianderson.lima\\\\.figma\" /b)",
+      "Bash(npx tsc *)",
+      "Bash(node --input-type=module --eval \"import\\('./src/App.tsx'\\)\")",
+      "Bash(grep -o '\"role\":\"user\",\"content\":\\\\[{\"type\":\"text\",\"text\":\"[^\"]*\"' \"154ee4d6-3732-4bc2-9b63-c022af1745e9.jsonl\")",
+      "Bash(node -e ' *)",
+      "Bash(Test-Path \"C:\\\\Users\\\\cristianderson.lima\\\\solar-bpm\\\\.git\\\\index.lock\")",
+      "Bash(cmd /c \"rmdir /s /q \\\\\"C:\\\\Users\\\\cristianderson.lima\\\\solar-bpm\\\\.git\\\\\"\")",
+      "Bash(cmd /c \"del /f \\\\\"C:\\\\Users\\\\cristianderson.lima\\\\solar-bpm\\\\.gitignore\\\\\"\")"
+    ]
+  }
+}
