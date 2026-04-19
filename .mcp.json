@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "1ds-react": {
+      "command": "npx",
+      "args": [
+        "@1doc/1ds-react-mcp@latest"
+      ]
+    }
+  }
+}
