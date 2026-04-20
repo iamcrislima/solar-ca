@@ -75,11 +75,16 @@ const TRANS = {
     rpAssinaturaTitle: 'Assinatura de documentos',
     rpAssinaturaDesc: 'Revise os documentos abaixo e selecione quais deseja assinar. Você pode abrir cada arquivo para consultar o conteúdo antes de decidir.',
     rpSelecionarTodos: 'Selecionar todos para assinar',
+    rpAssinarTodos: 'Assinar todos',
+    rpRecusarTodos: 'Recusar todos',
     rpLimparSelecao: 'Limpar seleção',
     rpAssinar: 'Assinar',
+    rpRecusar: 'Recusar',
     rpNaoAssinar: 'Não assinar',
     rpSelecionado: 'Selecionado',
     rpVisualizar: 'Visualizar',
+    rpDocumentosParaAssinar: 'para assinar',
+    rpDocumentosParaRecusar: 'para recusar',
     rpDocumentosSelecionados: 'documento(s) selecionado(s) para assinatura',
     rpParecer: 'Parecer ou observações',
     rpParecerPlaceholder: 'Adicione observações ou justificativas (opcional)',
@@ -225,11 +230,16 @@ const TRANS = {
     rpAssinaturaTitle: 'Document signing',
     rpAssinaturaDesc: 'Review the documents below and select which ones you want to sign. You can open each file to review the content before deciding.',
     rpSelecionarTodos: 'Select all to sign',
+    rpAssinarTodos: 'Sign all',
+    rpRecusarTodos: 'Refuse all',
     rpLimparSelecao: 'Clear selection',
     rpAssinar: 'Sign',
+    rpRecusar: 'Refuse',
     rpNaoAssinar: "Don't sign",
     rpSelecionado: 'Selected',
     rpVisualizar: 'Preview',
+    rpDocumentosParaAssinar: 'to sign',
+    rpDocumentosParaRecusar: 'to refuse',
     rpDocumentosSelecionados: 'document(s) selected for signing',
     rpParecer: 'Notes or remarks',
     rpParecerPlaceholder: 'Add notes or justifications (optional)',
@@ -3140,25 +3150,51 @@ const MOCK_DOCUMENTOS_ASSINATURA: DocParaAssinar[] = [
 
 function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pendencia | null; onVoltar: () => void; onConcluir: () => void }) {
   const t = useT();
-  const [selecionados, setSelecionados] = useState<Set<string>>(new Set());
-  const [parecer, setParecer] = useState('');
+  // 'assinar' ou 'recusar' por documento (mutuamente exclusivos)
+  const [paraAssinar,  setParaAssinar]  = useState<Set<string>>(new Set());
+  const [paraRecusar,  setParaRecusar]  = useState<Set<string>>(new Set());
+  const [parecer,      setParecer]      = useState('');
 
   const docs = MOCK_DOCUMENTOS_ASSINATURA;
-  const totalSelecionados = selecionados.size;
-  const todosSelecionados = totalSelecionados === docs.length && docs.length > 0;
+  const totalAssinar  = paraAssinar.size;
+  const totalRecusar  = paraRecusar.size;
+  const todosAssinar  = totalAssinar === docs.length && docs.length > 0;
 
-  function toggleDoc(id: string) {
-    setSelecionados(prev => {
+  // Marca para assinar (e desmarca de recusar)
+  function marcarAssinar(id: string) {
+    setParaAssinar(prev => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(id)) { next.delete(id); return next; }
+      next.add(id);
       return next;
     });
+    setParaRecusar(prev => { const next = new Set(prev); next.delete(id); return next; });
   }
 
-  function selecionarTodos() {
-    if (todosSelecionados) setSelecionados(new Set());
-    else setSelecionados(new Set(docs.map(d => d.id)));
+  // Marca para recusar (e desmarca de assinar)
+  function marcarRecusar(id: string) {
+    setParaRecusar(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) { next.delete(id); return next; }
+      next.add(id);
+      return next;
+    });
+    setParaAssinar(prev => { const next = new Set(prev); next.delete(id); return next; });
+  }
+
+  function assinarTodos() {
+    setParaAssinar(new Set(docs.map(d => d.id)));
+    setParaRecusar(new Set());
+  }
+
+  function recusarTodos() {
+    setParaRecusar(new Set(docs.map(d => d.id)));
+    setParaAssinar(new Set());
+  }
+
+  function limparSelecao() {
+    setParaAssinar(new Set());
+    setParaRecusar(new Set());
   }
 
   const iconInfo = pendencia ? PENDENCIA_ICON[pendencia.tipo] : PENDENCIA_ICON['Assinatura de documentos'];
@@ -3227,77 +3263,127 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
           </p>
         </div>
 
-        {/* Barra de resumo + selecionar todos */}
+        {/* Barra de resumo + ações em massa */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           gap: 12, flexWrap: 'wrap',
-          background: totalSelecionados > 0 ? '#edf2ff' : '#f4f6f9',
-          border: `1px solid ${totalSelecionados > 0 ? '#b3c7e6' : '#ebebeb'}`,
+          background: '#f4f6f9',
+          border: '1px solid #ebebeb',
           borderRadius: 8, padding: '10px 14px',
-          transition: 'background 0.15s, border-color 0.15s',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{
-              width: 28, height: 28, borderRadius: '50%',
-              background: totalSelecionados > 0 ? '#0058db' : '#d5d5d5',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 12, color: 'white',
-            }}>
-              {totalSelecionados}
+          {/* Contadores */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontFamily: 'Open Sans, sans-serif', fontSize: 13 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{
+                minWidth: 24, height: 24, borderRadius: '50%', padding: '0 6px',
+                background: totalAssinar > 0 ? '#0058db' : '#d5d5d5',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 700, fontSize: 12, color: 'white',
+              }}>{totalAssinar}</span>
+              <span style={{ color: '#333' }}>{t('rpDocumentosParaAssinar')}</span>
             </div>
-            <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333', fontWeight: 500 }}>
-              {totalSelecionados} de {docs.length} {t('rpDocumentosSelecionados')}
-            </span>
+            <span style={{ color: '#d5d5d5' }}>·</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{
+                minWidth: 24, height: 24, borderRadius: '50%', padding: '0 6px',
+                background: totalRecusar > 0 ? '#c0182d' : '#d5d5d5',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 700, fontSize: 12, color: 'white',
+              }}>{totalRecusar}</span>
+              <span style={{ color: '#333' }}>{t('rpDocumentosParaRecusar')}</span>
+            </div>
           </div>
-          <button
-            onClick={selecionarTodos}
-            style={{
-              background: 'white', border: '1.5px solid #0058db',
-              color: '#0058db', borderRadius: 6, height: 34, padding: '0 14px',
-              fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12,
-              cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
-            }}
-            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'}
-            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
-          >
-            <FAIcon icon={todosSelecionados ? 'fa-regular fa-square-xmark' : 'fa-regular fa-square-check'} style={{ fontSize: 13 }} />
-            {todosSelecionados ? t('rpLimparSelecao') : t('rpSelecionarTodos')}
-          </button>
+
+          {/* Botões de ação em massa */}
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button
+              onClick={assinarTodos}
+              style={{
+                background: todosAssinar ? '#0058db' : 'white',
+                border: '1.5px solid #0058db',
+                color: todosAssinar ? 'white' : '#0058db',
+                borderRadius: 6, height: 34, padding: '0 14px',
+                fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12,
+                cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 7,
+                transition: 'background 0.12s',
+              }}
+              onMouseEnter={e => { if (!todosAssinar) (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'; }}
+              onMouseLeave={e => { if (!todosAssinar) (e.currentTarget as HTMLButtonElement).style.background = 'white'; }}
+            >
+              <FAIcon icon="fa-regular fa-signature" style={{ fontSize: 12 }} />
+              {t('rpAssinarTodos')}
+            </button>
+            <button
+              onClick={recusarTodos}
+              style={{
+                background: totalRecusar === docs.length && docs.length > 0 ? '#c0182d' : 'white',
+                border: '1.5px solid #c0182d',
+                color: totalRecusar === docs.length && docs.length > 0 ? 'white' : '#c0182d',
+                borderRadius: 6, height: 34, padding: '0 14px',
+                fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12,
+                cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 7,
+                transition: 'background 0.12s',
+              }}
+              onMouseEnter={e => { if (totalRecusar < docs.length) (e.currentTarget as HTMLButtonElement).style.background = '#fff0f2'; }}
+              onMouseLeave={e => { if (totalRecusar < docs.length) (e.currentTarget as HTMLButtonElement).style.background = 'white'; }}
+            >
+              <FAIcon icon="fa-regular fa-xmark-circle" style={{ fontSize: 12 }} />
+              {t('rpRecusarTodos')}
+            </button>
+            {(totalAssinar > 0 || totalRecusar > 0) && (
+              <button
+                onClick={limparSelecao}
+                style={{
+                  background: 'white', border: '1.5px solid #d5d5d5', color: '#565656',
+                  borderRadius: 6, height: 34, padding: '0 14px',
+                  fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12,
+                  cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 7,
+                }}
+                onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#f4f6f9'}
+                onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
+              >
+                <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 12 }} />
+                {t('rpLimparSelecao')}
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* Lista de documentos selecionáveis */}
+        {/* Lista de documentos — tri-state: neutro / assinar / recusar */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {docs.map(doc => {
-            const sel = selecionados.has(doc.id);
+            const assinando = paraAssinar.has(doc.id);
+            const recusando = paraRecusar.has(doc.id);
+            const borderColor = assinando ? '#0058db' : recusando ? '#c0182d' : '#dde3ee';
+            const bgColor     = assinando ? '#f5f9ff'  : recusando ? '#fff5f5'  : 'white';
+            const shadow      = assinando ? '0px 2px 8px rgba(0,88,219,0.12)' : recusando ? '0px 2px 8px rgba(192,24,45,0.10)' : 'none';
+
             return (
               <div
                 key={doc.id}
-                onClick={() => toggleDoc(doc.id)}
                 style={{
-                  background: sel ? '#f5f9ff' : 'white',
-                  border: `2px solid ${sel ? '#0058db' : '#dde3ee'}`,
+                  background: bgColor,
+                  border: `2px solid ${borderColor}`,
                   borderRadius: 10, padding: '14px 16px',
                   display: 'flex', alignItems: 'center', gap: 14,
-                  cursor: 'pointer',
                   transition: 'background 0.15s, border-color 0.15s, box-shadow 0.15s',
-                  boxShadow: sel ? '0px 2px 8px rgba(0,88,219,0.12)' : 'none',
-                }}
-                onMouseEnter={e => {
-                  if (!sel) (e.currentTarget as HTMLDivElement).style.borderColor = '#b3c7e6';
-                }}
-                onMouseLeave={e => {
-                  if (!sel) (e.currentTarget as HTMLDivElement).style.borderColor = '#dde3ee';
+                  boxShadow: shadow,
                 }}
               >
-                {/* Checkbox customizado */}
-                <div style={{
-                  width: 24, height: 24, borderRadius: 6, flexShrink: 0,
-                  border: `2px solid ${sel ? '#0058db' : '#a3a3a3'}`,
-                  background: sel ? '#0058db' : 'white',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  transition: 'background 0.15s, border-color 0.15s',
-                }}>
-                  {sel && <FAIcon icon="fa-solid fa-check" style={{ fontSize: 12, color: 'white' }} />}
+                {/* Indicador de estado (clicável para toggle assinar) */}
+                <div
+                  onClick={() => marcarAssinar(doc.id)}
+                  title={t('rpAssinar')}
+                  style={{
+                    width: 24, height: 24, borderRadius: 6, flexShrink: 0, cursor: 'pointer',
+                    border: `2px solid ${assinando ? '#0058db' : '#a3a3a3'}`,
+                    background: assinando ? '#0058db' : 'white',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'background 0.15s, border-color 0.15s',
+                  }}
+                >
+                  {assinando && <FAIcon icon="fa-solid fa-check" style={{ fontSize: 12, color: 'white' }} />}
+                  {recusando && <FAIcon icon="fa-solid fa-xmark" style={{ fontSize: 12, color: '#a3a3a3' }} />}
                 </div>
 
                 {/* Ícone do arquivo */}
@@ -3325,19 +3411,65 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
                   </div>
                 </div>
 
-                {/* Status / ação visualizar */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-                  {sel && (
+                {/* Badge de estado + ações */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                  {assinando && (
                     <span style={{
                       display: 'inline-flex', alignItems: 'center', gap: 6,
                       background: '#0058db', color: 'white',
                       borderRadius: 100, padding: '4px 10px',
                       fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11,
+                      whiteSpace: 'nowrap',
                     }}>
                       <FAIcon icon="fa-regular fa-signature" style={{ fontSize: 11 }} />
                       {t('rpAssinar')}
                     </span>
                   )}
+                  {recusando && (
+                    <span style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      background: '#c0182d', color: 'white',
+                      borderRadius: 100, padding: '4px 10px',
+                      fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11,
+                      whiteSpace: 'nowrap',
+                    }}>
+                      <FAIcon icon="fa-regular fa-xmark-circle" style={{ fontSize: 11 }} />
+                      {t('rpRecusar')}
+                    </span>
+                  )}
+
+                  {/* Botão Recusar individual */}
+                  <button
+                    onClick={e => { e.stopPropagation(); marcarRecusar(doc.id); }}
+                    title={t('rpRecusar')}
+                    style={{
+                      background: recusando ? '#fff0f2' : 'white',
+                      border: `1px solid ${recusando ? '#c0182d' : '#d5d5d5'}`,
+                      borderRadius: 6,
+                      width: 34, height: 34, cursor: 'pointer',
+                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      color: recusando ? '#c0182d' : '#565656',
+                      transition: 'all 0.12s',
+                    }}
+                    onMouseEnter={e => {
+                      if (!recusando) {
+                        (e.currentTarget as HTMLButtonElement).style.background = '#fff0f2';
+                        (e.currentTarget as HTMLButtonElement).style.borderColor = '#c0182d';
+                        (e.currentTarget as HTMLButtonElement).style.color = '#c0182d';
+                      }
+                    }}
+                    onMouseLeave={e => {
+                      if (!recusando) {
+                        (e.currentTarget as HTMLButtonElement).style.background = 'white';
+                        (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5';
+                        (e.currentTarget as HTMLButtonElement).style.color = '#565656';
+                      }
+                    }}
+                  >
+                    <FAIcon icon="fa-regular fa-xmark-circle" style={{ fontSize: 14 }} />
+                  </button>
+
+                  {/* Botão Visualizar */}
                   <button
                     onClick={e => { e.stopPropagation(); /* preview */ }}
                     title={t('rpVisualizar')}
@@ -3345,7 +3477,7 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
                       background: 'white', border: '1px solid #d5d5d5', borderRadius: 6,
                       width: 34, height: 34, cursor: 'pointer',
                       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      color: '#565656',
+                      color: '#565656', transition: 'all 0.12s',
                     }}
                     onMouseEnter={e => {
                       (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff';
