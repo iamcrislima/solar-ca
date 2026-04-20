@@ -42,6 +42,16 @@ const TRANS = {
     solicitacaoDesc: 'Solicite serviços municipais de forma rápida e digital. Encontre o serviço pelo nome ou navegue pelas categorias.',
     meusDadosTitle: 'Meus Dados', identificacao: 'Identificação', acesso: 'Acesso',
     dadosPessoais: 'Dados Pessoais', endereco: 'Endereço',
+    // Meus Processos
+    meusProcessosTitle: 'Meus processos',
+    meusProcessosDesc: 'Acompanhe todos os seus processos municipais em um só lugar. Filtre por status, busque pelo número ou título e veja o histórico completo.',
+    mpTotal: 'Total de processos', mpAndamento: 'Em andamento', mpConcluidos: 'Concluídos', mpPendentes: 'Com pendências',
+    mpBuscar: 'Buscar por número, título ou órgão...',
+    mpTodos: 'Todos', mpExportarPdf: 'Exportar PDF', mpExportarXls: 'Exportar planilha',
+    mpNenhumTitle: 'Nenhum processo encontrado',
+    mpNenhumDesc: 'Ajuste os filtros ou busque por outro termo',
+    mpVer: 'Ver detalhes',
+    mpAtualizado: 'Atualizado em', mpOrgao: 'Órgão',
     // Login
     boasVindas: 'Boas vindas ao FloripaOn', senha: 'Senha', esqueciSenha: 'Esqueci a senha',
     ouContinuar: 'Ou continuar com', redefinicaoSenha: 'Redefinição de senha',
@@ -76,6 +86,16 @@ const TRANS = {
     solicitacaoDesc: 'Request municipal services quickly and digitally. Find the service by name or browse through categories.',
     meusDadosTitle: 'My Profile', identificacao: 'Identification', acesso: 'Access',
     dadosPessoais: 'Personal Data', endereco: 'Address',
+    // My Processes
+    meusProcessosTitle: 'My processes',
+    meusProcessosDesc: 'Keep track of all your municipal processes in one place. Filter by status, search by number or title and see the full history.',
+    mpTotal: 'Total processes', mpAndamento: 'In progress', mpConcluidos: 'Completed', mpPendentes: 'With pending items',
+    mpBuscar: 'Search by number, title or agency...',
+    mpTodos: 'All', mpExportarPdf: 'Export PDF', mpExportarXls: 'Export spreadsheet',
+    mpNenhumTitle: 'No processes found',
+    mpNenhumDesc: 'Adjust the filters or search for another term',
+    mpVer: 'View details',
+    mpAtualizado: 'Updated on', mpOrgao: 'Agency',
     boasVindas: 'Welcome to FloripaOn', senha: 'Password', esqueciSenha: 'Forgot my password',
     ouContinuar: 'Or continue with', redefinicaoSenha: 'Password Reset',
     redefinirSenha: 'Reset Password', voltar: 'Back', emailCadastrado: 'Registered email',
@@ -115,7 +135,7 @@ const imgTimelineEnd     = 'http://localhost:3845/assets/d195b410caf516ddd897952
 const imgLocationDot     = 'http://localhost:3845/assets/c7bfbd2db7dbf29fac74fea0b36e09c701fc1b3f.svg';
 
 // ── Tipo de página ────────────────────────────────────────────────────────────
-type Page = 'home' | 'consulta' | 'processo' | 'documentos' | 'meusdados' | 'solicitacao' | 'cat-servicos' | 'servico-detalhe' | 'servico-form';
+type Page = 'home' | 'consulta' | 'processo' | 'documentos' | 'meusdados' | 'meusprocessos' | 'solicitacao' | 'cat-servicos' | 'servico-detalhe' | 'servico-form';
 
 // ── Serviços municipais para o dropdown de busca ──────────────────────────────
 const ALL_SERVICES = [
@@ -726,7 +746,7 @@ function SideMenu({ activePage, onNavigate, expanded, onLogin, isLoggedIn, onLog
   ];
 
   const loggedInItems: { icon: string; label: string; page: Page | null }[] = [
-    { icon: 'fa-regular fa-folder-user',  label: t('meusProcessos'),     page: null },
+    { icon: 'fa-regular fa-folder-user',  label: t('meusProcessos'),     page: 'meusprocessos' as Page },
     { icon: 'fa-regular fa-clock',        label: t('minhasPendencias'),   page: null },
     { icon: 'fa-regular fa-circle-check', label: t('processosLiberados'), page: null },
   ];
@@ -887,6 +907,11 @@ function Breadcrumb({ page, onNavigate, selectedCat, selectedService }: {
       {/* Meus dados */}
       {page === 'meusdados' && (
         <>{sep}<span style={{ ...txt, fontWeight: 400 }}>{t('meusDados')}</span></>
+      )}
+
+      {/* Meus processos */}
+      {page === 'meusprocessos' && (
+        <>{sep}<span style={{ ...txt, fontWeight: 400 }}>{t('meusProcessos')}</span></>
       )}
 
       {/* Solicitação de serviços + sub-páginas */}
@@ -1932,6 +1957,289 @@ function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }: {
   );
 }
 
+// ── Mock: processos do usuário ────────────────────────────────────────────────
+interface MeuProcesso {
+  numero: string;
+  titulo: string;
+  orgao: string;
+  dataAbertura: string;
+  atualizadoEm: string;
+  status: ProcessoStatus;
+}
+
+const MOCK_MEUS_PROCESSOS: MeuProcesso[] = [
+  { numero: 'PMF2026/000418', titulo: 'Solicitação de Cartão Nacional do Idoso', orgao: 'Secretaria de Assistência Social', dataAbertura: '05/04/2026', atualizadoEm: '18/04/2026', status: 'Em Andamento' },
+  { numero: 'PMF2026/000392', titulo: 'Solicitação de IPTU — isenção', orgao: 'Secretaria da Fazenda', dataAbertura: '02/04/2026', atualizadoEm: '15/04/2026', status: 'Pendente' },
+  { numero: 'PMF2026/000367', titulo: 'Ligação de Água e Ramal', orgao: 'CASAN / SEINFRA', dataAbertura: '28/03/2026', atualizadoEm: '14/04/2026', status: 'Em Andamento' },
+  { numero: 'PMF2026/000341', titulo: 'Matrícula Escolar Municipal', orgao: 'Secretaria de Educação', dataAbertura: '20/03/2026', atualizadoEm: '12/04/2026', status: 'Concluído' },
+  { numero: 'PMF2026/000298', titulo: 'Licença Ambiental — obra residencial', orgao: 'Secretaria do Meio Ambiente', dataAbertura: '15/03/2026', atualizadoEm: '10/04/2026', status: 'Pendente' },
+  { numero: 'PMF2026/000275', titulo: 'Aprovação de projeto arquitetônico', orgao: 'Secretaria de Urbanismo', dataAbertura: '10/03/2026', atualizadoEm: '08/04/2026', status: 'Em Andamento' },
+  { numero: 'PMF2026/000244', titulo: 'Fala, cidadão — reclamação iluminação', orgao: 'Ouvidoria Municipal', dataAbertura: '05/03/2026', atualizadoEm: '06/04/2026', status: 'Concluído' },
+  { numero: 'PMF2026/000221', titulo: 'Mobilidade Urbana — passe livre estudantil', orgao: 'Secretaria de Mobilidade', dataAbertura: '02/03/2026', atualizadoEm: '02/04/2026', status: 'Em Andamento' },
+  { numero: 'PMF2026/000198', titulo: 'Solicitação de poda de árvore', orgao: 'Secretaria do Meio Ambiente', dataAbertura: '25/02/2026', atualizadoEm: '28/03/2026', status: 'Concluído' },
+  { numero: 'PMF2026/000174', titulo: 'Vistoria de habite-se', orgao: 'Secretaria de Urbanismo', dataAbertura: '20/02/2026', atualizadoEm: '22/03/2026', status: 'Concluído' },
+  { numero: 'PMF2026/000152', titulo: 'Retificação de área — imóvel urbano', orgao: 'Secretaria de Urbanismo', dataAbertura: '15/02/2026', atualizadoEm: '18/03/2026', status: 'Em Andamento' },
+  { numero: 'PMF2026/000128', titulo: 'Alvará de construção', orgao: 'Secretaria de Urbanismo', dataAbertura: '10/02/2026', atualizadoEm: '14/03/2026', status: 'Pendente' },
+];
+
+// ── Card estatístico (big number) ─────────────────────────────────────────────
+function StatCard({ icon, label, value, color, bg, active, onClick }: {
+  icon: string; label: string; value: number;
+  color: string; bg: string;
+  active?: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        flex: 1, minWidth: 180,
+        background: 'white',
+        border: active ? `2px solid ${color}` : '1px solid #dde3ee',
+        borderRadius: 12,
+        padding: '20px 22px',
+        cursor: onClick ? 'pointer' : 'default',
+        boxShadow: active ? `0px 6px 18px rgba(24,39,75,0.13)` : '0px 2px 8px rgba(24,39,75,0.06)',
+        transition: 'box-shadow 0.15s, border-color 0.15s, transform 0.15s',
+        display: 'flex', alignItems: 'center', gap: 16,
+      }}
+      onMouseEnter={e => { if (onClick) { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 6px 18px rgba(24,39,75,0.13)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'; } }}
+      onMouseLeave={e => { if (onClick && !active) { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 2px 8px rgba(24,39,75,0.06)'; } (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; }}
+    >
+      <div style={{ width: 48, height: 48, borderRadius: 12, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <FAIcon icon={icon} style={{ fontSize: 20, color }} />
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.3, marginBottom: 4 }}>
+          {label}
+        </div>
+        <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 28, fontWeight: 700, color: '#1a1a1a', lineHeight: 1 }}>
+          {value}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Card de processo (linha detalhada) ────────────────────────────────────────
+function ProcessoCard({ processo, onClick }: { processo: MeuProcesso; onClick: () => void }) {
+  const t = useT();
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        background: 'white', border: '1px solid #dde3ee', borderRadius: 10,
+        padding: '18px 22px', display: 'flex', alignItems: 'center', gap: 16,
+        cursor: 'pointer',
+        boxShadow: '0px 2px 8px rgba(24,39,75,0.07)',
+        transition: 'box-shadow 0.15s, border-color 0.15s',
+      }}
+      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 4px 16px rgba(24,39,75,0.13)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#b3c7e6'; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 2px 8px rgba(24,39,75,0.07)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#dde3ee'; }}
+    >
+      <div style={{ width: 48, height: 48, background: '#f0f4fb', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <FAIcon icon="fa-regular fa-folder-open" style={{ fontSize: 22, color: '#0058db' }} />
+      </div>
+
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222', marginBottom: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {processo.titulo}
+        </div>
+        <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>
+            <strong style={{ color: '#565656' }}>Processo:</strong> {processo.numero}
+          </span>
+          <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>
+            <strong style={{ color: '#565656' }}>{t('mpOrgao')}:</strong> {processo.orgao}
+          </span>
+          <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            <FAIcon icon="fa-regular fa-clock" style={{ fontSize: 11, color: '#a3a3a3' }} />
+            {t('mpAtualizado')} {processo.atualizadoEm}
+          </span>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+        <StatusBadge status={processo.status} />
+        <FAIcon icon="fa-regular fa-angle-right" style={{ fontSize: 16, color: '#a3a3a3' }} />
+      </div>
+    </div>
+  );
+}
+
+// ── Tela: Meus Processos ─────────────────────────────────────────────────────
+function MeusProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void }) {
+  const t = useT();
+  const [query, setQuery]     = useState('');
+  const [filtro, setFiltro]   = useState<'todos' | ProcessoStatus>('todos');
+
+  const total       = MOCK_MEUS_PROCESSOS.length;
+  const andamento   = MOCK_MEUS_PROCESSOS.filter(p => p.status === 'Em Andamento').length;
+  const concluidos  = MOCK_MEUS_PROCESSOS.filter(p => p.status === 'Concluído').length;
+  const pendentes   = MOCK_MEUS_PROCESSOS.filter(p => p.status === 'Pendente').length;
+
+  const filtrados = MOCK_MEUS_PROCESSOS.filter(p => {
+    if (filtro !== 'todos' && p.status !== filtro) return false;
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      return (
+        p.numero.toLowerCase().includes(q) ||
+        p.titulo.toLowerCase().includes(q) ||
+        p.orgao.toLowerCase().includes(q)
+      );
+    }
+    return true;
+  });
+
+  const tabs: { id: 'todos' | ProcessoStatus; label: string; count: number }[] = [
+    { id: 'todos',        label: t('mpTodos'),       count: total },
+    { id: 'Em Andamento', label: t('mpAndamento'),   count: andamento },
+    { id: 'Concluído',    label: t('mpConcluidos'),  count: concluidos },
+    { id: 'Pendente',     label: t('mpPendentes'),   count: pendentes },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
+      {/* Título + descrição + ações de exportação */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 280 }}>
+          <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: 0 }}>
+            {t('meusProcessosTitle')}
+          </h1>
+          <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#565656', margin: '6px 0 0 0', maxWidth: 680, lineHeight: 1.5 }}>
+            {t('meusProcessosDesc')}
+          </p>
+        </div>
+        <div style={{ display: 'flex', gap: 10, flexShrink: 0 }}>
+          <button style={{
+            height: 40, padding: '0 16px', borderRadius: 8, background: 'white',
+            border: '1.5px solid #0058db', color: '#0058db',
+            fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13,
+            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}>
+            <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 14 }} />
+            {t('mpExportarPdf')}
+          </button>
+          <button style={{
+            height: 40, padding: '0 16px', borderRadius: 8, background: '#0058db',
+            border: '1.5px solid #0058db', color: 'white',
+            fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13,
+            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = '#0058db'}>
+            <FAIcon icon="fa-regular fa-file-spreadsheet" style={{ fontSize: 14 }} />
+            {t('mpExportarXls')}
+          </button>
+        </div>
+      </div>
+
+      {/* Big numbers (stat cards) */}
+      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+        <StatCard
+          icon="fa-regular fa-folder-user" label={t('mpTotal')} value={total}
+          color="#0058db" bg="#edf2ff"
+          active={filtro === 'todos'}
+          onClick={() => setFiltro('todos')}
+        />
+        <StatCard
+          icon="fa-regular fa-clock-rotate-left" label={t('mpAndamento')} value={andamento}
+          color="#555555" bg="#ebebeb"
+          active={filtro === 'Em Andamento'}
+          onClick={() => setFiltro('Em Andamento')}
+        />
+        <StatCard
+          icon="fa-regular fa-circle-check" label={t('mpConcluidos')} value={concluidos}
+          color="#0f6b3e" bg="#e6f9f0"
+          active={filtro === 'Concluído'}
+          onClick={() => setFiltro('Concluído')}
+        />
+        <StatCard
+          icon="fa-regular fa-triangle-exclamation" label={t('mpPendentes')} value={pendentes}
+          color="#c0182d" bg="#fff0f2"
+          active={filtro === 'Pendente'}
+          onClick={() => setFiltro('Pendente')}
+        />
+      </div>
+
+      {/* Barra de busca + tabs (card único) */}
+      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 16, display: 'flex', flexDirection: 'column', gap: 14, boxShadow: '0px 2px 8px rgba(24,39,75,0.06)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #dce6f5', borderRadius: 8, height: 44, overflow: 'hidden', background: 'white' }}>
+          <FAIcon icon="fa-regular fa-magnifying-glass" style={{ fontSize: 15, color: '#7d7d7d', marginLeft: 14 }} />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder={t('mpBuscar')}
+            style={{ flex: 1, border: 'none', outline: 'none', padding: '0 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', background: 'transparent', height: '100%' }}
+          />
+          {query && (
+            <FAIcon
+              icon="fa-regular fa-xmark"
+              onClick={() => setQuery('')}
+              style={{ fontSize: 14, color: '#7d7d7d', cursor: 'pointer', marginRight: 14 }}
+            />
+          )}
+        </div>
+
+        {/* Tabs */}
+        <div style={{ display: 'flex', gap: 6, borderBottom: '1px solid #ebebeb', flexWrap: 'wrap' }}>
+          {tabs.map(tab => {
+            const active = filtro === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setFiltro(tab.id)}
+                style={{
+                  background: 'none', border: 'none',
+                  borderBottom: active ? '3px solid #0058db' : '3px solid transparent',
+                  padding: '10px 16px',
+                  fontFamily: 'Open Sans, sans-serif',
+                  fontSize: 13, fontWeight: active ? 700 : 500,
+                  color: active ? '#0058db' : '#565656',
+                  cursor: 'pointer',
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  marginBottom: -1,
+                }}
+              >
+                {tab.label}
+                <span style={{
+                  background: active ? '#0058db' : '#ebebeb',
+                  color: active ? 'white' : '#565656',
+                  fontSize: 11, fontWeight: 700,
+                  padding: '2px 8px', borderRadius: 100, lineHeight: 1.2,
+                }}>{tab.count}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Lista de processos */}
+      {filtrados.length > 0 ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {filtrados.map(p => (
+            <ProcessoCard key={p.numero} processo={p} onClick={onNavigateProcesso} />
+          ))}
+        </div>
+      ) : (
+        <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: '48px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 64, height: 64, background: '#edf2ff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <FAIcon icon="fa-regular fa-file-slash" style={{ fontSize: 24, color: '#0058db' }} />
+          </div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222' }}>
+            {t('mpNenhumTitle')}
+          </div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#7a8a9e' }}>
+            {t('mpNenhumDesc')}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Tela: Meus Dados ─────────────────────────────────────────────────────────
 function MeusDados() {
   const [nome,             setNome]             = useState('CRISTIANDERSON ALVES DE LIMA');
@@ -2718,6 +3026,7 @@ export default function App() {
               {page === 'processo'   && <ProcessoDetalhe />}
               {page === 'documentos' && <ConsultaDocumentos />}
               {page === 'meusdados'  && <MeusDados />}
+              {page === 'meusprocessos' && <MeusProcessos onNavigateProcesso={() => setPage('processo')} />}
               {page === 'solicitacao' && (
                 <SolicitacaoServicos
                   onNavigateCat={cat => { setSelectedCat(cat); setPage('cat-servicos'); }}
