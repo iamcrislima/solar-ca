@@ -167,6 +167,25 @@ const TRANS = {
     buscarServico: 'Buscar serviço...', pressEnter: 'Pressione Enter para buscar',
     // Consulta Row
     crProcesso: 'Processo:', crData: 'Data:',
+    // Header subtítulo
+    municipio: 'Município de Florianópolis',
+    // Contato / atendimento
+    contato: 'Contato', horarioAtendimento: 'Horário de Atendimento',
+    horarioAtendimentoDesc: 'Seg. à Sex., das 8h às 17h',
+    centralAjuda: 'Central de ajuda',
+    duvidasContato: 'Em caso de dúvidas sobre seu processo, ou sobre a utilização do sistema, acesse nossa',
+    // Processo busca tooltip
+    tooltipProcesso: 'O nº do processo é formatado por: 1. Sigla do órgão, 2. Procedência, 3. Número sequencial, 4. Ano (4 dígitos). Ex: PMF2026/000418',
+    // Documento busca tooltip
+    tooltipDocumento: 'Informe o código único do documento localizado na lateral direita da via impressa. Ex: 00U61ULQ',
+    // Imprimir / exportar
+    imprimir: 'Imprimir', exportarDescritivo: 'Exportar descritivo',
+    // Destino
+    destinoCidadao: 'Cidadão', destinoEmpresa: 'Empresa', destinoVisitante: 'Visitante',
+    // Dashboard pós-login
+    dashOla: 'Olá', dashAcessoRapido: 'Acesso rápido',
+    dashPendencias: 'Pendências abertas', dashProcessos: 'Processos ativos', dashLiberados: 'Processos liberados',
+    dashHistoricoTitle: 'Últimas atividades', dashVerTodos: 'Ver todos',
   },
   en: {
     inicio: 'Home', consultaProcessos: 'Process Inquiry',
@@ -319,6 +338,18 @@ const TRANS = {
     // Header search
     buscarServico: 'Search service...', pressEnter: 'Press Enter to search',
     crProcesso: 'Process:', crData: 'Date:',
+    municipio: 'Municipality of Florianópolis',
+    contato: 'Contact', horarioAtendimento: 'Office Hours',
+    horarioAtendimentoDesc: 'Mon. to Fri., 8am to 5pm',
+    centralAjuda: 'Help Center',
+    duvidasContato: 'For questions about your process or the use of the system, visit our',
+    tooltipProcesso: 'The process number is formatted as: 1. Agency code, 2. Origin, 3. Sequential number, 4. Year (4 digits). E.g.: PMF2026/000418',
+    tooltipDocumento: 'Enter the unique document code located on the right side of the printed copy. E.g.: 00U61ULQ',
+    imprimir: 'Print', exportarDescritivo: 'Export summary',
+    destinoCidadao: 'Citizen', destinoEmpresa: 'Company', destinoVisitante: 'Visitor',
+    dashOla: 'Hello', dashAcessoRapido: 'Quick access',
+    dashPendencias: 'Open pending items', dashProcessos: 'Active processes', dashLiberados: 'Released processes',
+    dashHistoricoTitle: 'Recent activity', dashVerTodos: 'See all',
   },
 } as const;
 
@@ -606,11 +637,12 @@ function SearchWithDropdown() {
 
 // ── Modal de Login ────────────────────────────────────────────────────────────
 function LoginModal({ onClose, onLogin }: { onClose: () => void; onLogin: () => void }) {
-  const [view,         setView]         = useState<'login' | 'recovery'>('login');
-  const [email,        setEmail]        = useState('');
-  const [senha,        setSenha]        = useState('');
-  const [showSenha,    setShowSenha]    = useState(false);
-  const [emailRecov,   setEmailRecov]   = useState('');
+  const [view,          setView]          = useState<'login' | 'recovery'>('login');
+  const [email,         setEmail]         = useState('');
+  const [senha,         setSenha]         = useState('');
+  const [showSenha,     setShowSenha]     = useState(false);
+  const [emailRecov,    setEmailRecov]    = useState('');
+  const [showLoginForm, setShowLoginForm] = useState(false);
 
   const label: React.CSSProperties = {
     fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#333', lineHeight: '20px',
@@ -659,51 +691,79 @@ function LoginModal({ onClose, onLogin }: { onClose: () => void; onLogin: () => 
                 Boas vindas ao FloripaOn
               </p>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                {/* Email */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <span style={label}>Email <span style={{ color: '#b2132e' }}>*</span></span>
-                  <div style={inputStyle}>
-                    <input style={inputEl} type="email" placeholder="Digite seu email" value={email} onChange={e => setEmail(e.target.value)} />
-                  </div>
-                </div>
+              {/* ── gov.br PRIMEIRO (opção principal) ── */}
+              <a
+                href="https://sso.acesso.gov.br/login?client_id=p-autenticacao-ecidadao.curitiba.pr.gov.br&authorization_id=19dacd624bf"
+                target="_blank" rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
+                <button style={{
+                  width: '100%', height: 52, borderRadius: 10,
+                  background: '#1351b4', border: 'none',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                  fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: 'white',
+                  boxShadow: '0px 2px 8px rgba(19,81,180,0.30)',
+                  transition: 'background 0.12s',
+                }}
+                  onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#0c3d8a'}
+                  onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = '#1351b4'}
+                >
+                  <FAIcon icon="fa-regular fa-shield-check" style={{ fontSize: 18 }} />
+                  Entrar com <strong style={{ fontSize: 20, letterSpacing: '0.09px' }}>gov.br</strong>
+                </button>
+              </a>
+              <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d', textAlign: 'center', margin: 0, lineHeight: '18px' }}>
+                Acesso seguro via conta gov.br — recomendado
+              </p>
 
-                {/* Senha */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <span style={label}>Senha <span style={{ color: '#b2132e' }}>*</span></span>
-                  <div style={inputStyle}>
-                    <input style={inputEl} type={showSenha ? 'text' : 'password'} placeholder="Senha FloripaOn" value={senha} onChange={e => setSenha(e.target.value)} />
-                    <FAIcon icon={showSenha ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} style={{ fontSize: 16, color: '#7d7d7d', cursor: 'pointer', flexShrink: 0 }} />
-                  </div>
-                  <span
-                    onClick={() => setView('recovery')}
-                    style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, color: '#0058db', textDecoration: 'underline', cursor: 'pointer' }}
-                  >
-                    Esqueci a senha
-                  </span>
-                </div>
-              </div>
-
-              {/* Botão Login */}
-              <Button size="md" variant="primary" onClick={() => { onLogin(); onClose(); }} style={{ width: '100%' }}>Login</Button>
-
-              {/* Divider gov.br */}
+              {/* Divider */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 <div style={{ flex: 1, height: 1, background: '#d5d5d5' }} />
-                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 12, color: '#565656', whiteSpace: 'nowrap', letterSpacing: '0.06px' }}>
-                  Ou continuar com
+                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 12, color: '#565656', whiteSpace: 'nowrap' }}>
+                  ou entrar com login do sistema
                 </span>
                 <div style={{ flex: 1, height: 1, background: '#d5d5d5' }} />
               </div>
 
-              {/* gov.br */}
-              <button style={{
-                width: '100%', height: 40, border: '1px solid #0058db', borderRadius: 8,
-                background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-                fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, color: '#194280',
-              }}>
-                Entrar com <strong style={{ fontWeight: 700, fontSize: 18, letterSpacing: '0.09px' }}>gov.br</strong>
-              </button>
+              {/* ── Login do sistema (opção secundária) ── */}
+              {!showLoginForm ? (
+                <button
+                  onClick={() => setShowLoginForm(true)}
+                  style={{
+                    width: '100%', height: 44, border: '1.5px solid #d5d5d5', borderRadius: 8,
+                    background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, color: '#565656',
+                    transition: 'all 0.12s',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#0058db'; (e.currentTarget as HTMLButtonElement).style.color = '#0058db'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5'; (e.currentTarget as HTMLButtonElement).style.color = '#565656'; }}
+                >
+                  <FAIcon icon="fa-regular fa-arrow-right-to-bracket" style={{ fontSize: 14 }} />
+                  Entrar com login do sistema
+                </button>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {/* Email */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <span style={label}>Email <span style={{ color: '#b2132e' }}>*</span></span>
+                    <div style={inputStyle}>
+                      <input style={inputEl} type="email" placeholder="Digite seu email" value={email} onChange={e => setEmail(e.target.value)} />
+                    </div>
+                  </div>
+                  {/* Senha */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <span style={label}>Senha <span style={{ color: '#b2132e' }}>*</span></span>
+                    <div style={inputStyle}>
+                      <input style={inputEl} type={showSenha ? 'text' : 'password'} placeholder="Senha FloripaOn" value={senha} onChange={e => setSenha(e.target.value)} />
+                      <FAIcon icon={showSenha ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} style={{ fontSize: 16, color: '#7d7d7d', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowSenha(v => !v)} />
+                    </div>
+                    <span onClick={() => setView('recovery')} style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, color: '#0058db', textDecoration: 'underline', cursor: 'pointer' }}>
+                      Esqueci a senha
+                    </span>
+                  </div>
+                  <Button size="md" variant="primary" onClick={() => { onLogin(); onClose(); }} style={{ width: '100%' }}>Entrar</Button>
+                </div>
+              )}
             </div>
 
           ) : (
@@ -856,8 +916,12 @@ function Header({ onToggle, onLogin, isLoggedIn, onLogout, darkMode, onToggleDar
       </div>
 
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 16, padding: '0 24px' }}>
-        {/* Logo */}
-        <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 28, color: '#0059db', letterSpacing: '-0.5px', flexShrink: 0 }}>FloripaOn</span>
+        {/* Logo + subtitle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+          <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 28, color: '#0059db', letterSpacing: '-0.5px' }}>FloripaOn</span>
+          <div style={{ width: 1, height: 28, background: '#dce6f5' }} />
+          <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 13, color: '#565656', whiteSpace: 'nowrap' }}>{t('municipio')}</span>
+        </div>
 
         <div style={{ flex: 1 }} />
 
@@ -945,6 +1009,60 @@ function Header({ onToggle, onLogin, isLoggedIn, onLogout, darkMode, onToggleDar
   );
 }
 
+// ── Modal de Contato ─────────────────────────────────────────────────────────
+function ContactModal({ onClose }: { onClose: () => void }) {
+  const t = useT();
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 1000,
+      background: 'rgba(0,0,0,0.40)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+    }} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div style={{
+        background: 'white', borderRadius: 16, padding: '32px 36px',
+        width: 380, boxShadow: '0px 10px 40px rgba(0,0,0,0.20)',
+        display: 'flex', flexDirection: 'column', gap: 24,
+        fontFamily: 'Open Sans, sans-serif',
+      }}>
+        {/* Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2 style={{ fontWeight: 700, fontSize: 18, color: '#1a1a1a', margin: 0 }}>{t('contato')}</h2>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#7d7d7d', padding: 4 }}>
+            <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 18 }} />
+          </button>
+        </div>
+
+        {/* Dúvidas */}
+        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+          <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#edf2ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <FAIcon icon="fa-regular fa-message-lines" style={{ fontSize: 20, color: '#0058db' }} />
+          </div>
+          <p style={{ fontSize: 14, color: '#333', margin: 0, lineHeight: '22px' }}>
+            {t('duvidasContato')}{' '}
+            <span style={{ color: '#0058db', fontWeight: 600, textDecoration: 'underline', cursor: 'pointer' }}>
+              {t('centralAjuda')}.
+            </span>
+          </p>
+        </div>
+
+        {/* Divider */}
+        <div style={{ height: 1, background: '#ebebeb' }} />
+
+        {/* Horário */}
+        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+          <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#edf2ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <FAIcon icon="fa-regular fa-clock" style={{ fontSize: 20, color: '#0058db' }} />
+          </div>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 14, color: '#1a1a1a', marginBottom: 2 }}>{t('horarioAtendimento')}</div>
+            <div style={{ fontSize: 13, color: '#565656' }}>{t('horarioAtendimentoDesc')}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SideMenu({ activePage, onNavigate, expanded, onLogin, isLoggedIn, onLogout }: {
   activePage: Page;
   onNavigate: (page: Page) => void;
@@ -954,6 +1072,7 @@ function SideMenu({ activePage, onNavigate, expanded, onLogin, isLoggedIn, onLog
   onLogout: () => void;
 }) {
   const t = useT();
+  const [showContact, setShowContact] = useState(false);
   const baseItems: { icon: string; label: string; page: Page | null }[] = [
     { icon: 'fa-regular fa-house',            label: t('inicio'),                    page: 'home' },
     { icon: 'fa-regular fa-magnifying-glass', label: t('consultaProcessos'),         page: 'consulta' },
@@ -1073,15 +1192,36 @@ function SideMenu({ activePage, onNavigate, expanded, onLogin, isLoggedIn, onLog
       {/* ── Divider ── */}
       <div style={{ height: 1, background: '#dce6f5', margin: '4px 8px', flexShrink: 0 }} />
 
-      {/* ── Ajuda ── */}
-      <div title={expanded ? undefined : t('ajuda')}
-        style={{ ...menuItemStyle(false, true), marginBottom: 8 }}
+      {/* ── Contato (Ajuda) ── */}
+      <div title={expanded ? undefined : t('contato')}
+        onClick={() => setShowContact(true)}
+        style={{ ...menuItemStyle(false, true) }}
         onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = '#f0f5ff'; (e.currentTarget as HTMLDivElement).style.color = '#0058db'; }}
         onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'transparent'; (e.currentTarget as HTMLDivElement).style.color = '#565656'; }}
       >
-        <FAIcon icon="fa-regular fa-circle-question" style={{ fontSize: 18, flexShrink: 0, color: 'inherit' }} />
-        {expanded && <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, whiteSpace: 'nowrap', pointerEvents: 'none' }}>{t('ajuda')}</span>}
+        <FAIcon icon="fa-regular fa-phone" style={{ fontSize: 18, flexShrink: 0, color: 'inherit' }} />
+        {expanded && <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, whiteSpace: 'nowrap', pointerEvents: 'none' }}>{t('contato')}</span>}
       </div>
+
+      {/* ── Logo Solar BPM ── */}
+      <div style={{
+        flexShrink: 0, overflow: 'hidden',
+        borderTop: '1px solid #dce6f5',
+        padding: expanded ? '10px 12px' : '10px 6px',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: '#1a2940',
+        transition: 'padding 0.2s ease',
+      }}>
+        {expanded ? (
+          <img src="/solarBPM_principal_horizontal_fundoescuro.png" alt="SolarBPM"
+            style={{ height: 28, objectFit: 'contain', maxWidth: '100%' }} />
+        ) : (
+          <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 800, fontSize: 16, color: '#4db8ff', letterSpacing: '-0.5px' }}>S</span>
+        )}
+      </div>
+
+      {/* Modal de contato */}
+      {showContact && <ContactModal onClose={() => setShowContact(false)} />}
     </div>
   );
 }
@@ -1202,15 +1342,44 @@ function CategoryCard({ icon, label, onClick }: { icon: string; label: string; o
   );
 }
 
+// ── Tooltip informativo ("i") ─────────────────────────────────────────────────
+function InfoTooltip({ text }: { text: string }) {
+  const [show, setShow] = useState(false);
+  return (
+    <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+      <span
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
+        style={{ display: 'inline-flex', alignItems: 'center', cursor: 'help', color: '#7d7d7d', fontSize: 14 }}
+      >
+        <i className="fa-regular fa-circle-info" />
+      </span>
+      {show && (
+        <div style={{
+          position: 'absolute', bottom: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)',
+          background: '#222', color: 'white', borderRadius: 8, padding: '10px 14px',
+          fontSize: 12, fontFamily: 'Open Sans, sans-serif', lineHeight: '18px',
+          whiteSpace: 'pre-wrap', maxWidth: 300, zIndex: 500,
+          boxShadow: '0px 4px 16px rgba(0,0,0,0.22)',
+          pointerEvents: 'none',
+        }}>
+          {text}
+          <div style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '6px solid transparent', borderRight: '6px solid transparent', borderTop: '6px solid #222' }} />
+        </div>
+      )}
+    </span>
+  );
+}
+
 // ── Segmento de texto livre ───────────────────────────────────────────────────
-function FormSegment({ label, value, onChange, placeholder, width, last = false }: {
-  label: string; value: string; onChange: (v: string) => void; placeholder?: string; width?: number | string; last?: boolean;
+function FormSegment({ label, value, onChange, placeholder, width, last = false, center = false, maxLength }: {
+  label: string; value: string; onChange: (v: string) => void; placeholder?: string; width?: number | string; last?: boolean; center?: boolean; maxLength?: number;
 }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: width ? 'none' : 1, width: width ?? undefined, borderRight: last ? 'none' : '1px solid #b3c7e6', padding: '8px 14px' }}>
-      <label style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 10, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{label}</label>
-      <input value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
-        style={{ border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 15, color: '#222', padding: 0, width: '100%' }} />
+      <label style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 10, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px', textAlign: center ? 'center' : 'left' }}>{label}</label>
+      <input value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} maxLength={maxLength}
+        style={{ border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 15, color: '#222', padding: 0, width: '100%', textAlign: center ? 'center' : 'left' }} />
     </div>
   );
 }
@@ -1272,12 +1441,15 @@ function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => v
       </div>
 
       <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 8, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)' }}>
-        <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#222', margin: 0 }}>{t('numeroProcesso')}</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#222', margin: 0 }}>{t('numeroProcesso')}</h2>
+          <InfoTooltip text={t('tooltipProcesso')} />
+        </div>
         <div style={{ display: 'flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
           <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
           <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
-          <FormSegment   label={t('numero')}      value={numero}      onChange={setNumero}       placeholder="000000" />
-          <FormSegment   label={t('ano')}         value={ano}         onChange={setAno}          placeholder="2026"   width={90} last />
+          <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
+          <FormSegment   label={t('ano')}         value={ano}         onChange={v => setAno(v.replace(/\D/g, '').slice(0, 4))}       placeholder="2026"   width={88} center last />
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
           <Button size="md" variant="primary"   onClick={handleConsultar}>{t('consultar')}</Button>
@@ -1286,24 +1458,24 @@ function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => v
       </div>
 
       {/* Estado vazio */}
-      <div style={{ display: showEmpty ? 'flex' : 'none', background: 'white', border: '1px solid #dde3ee', borderRadius: 8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, padding: '48px 24px' }}>
-        <div style={{ width: 72, height: 72, background: '#f0f4fb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <i className="fa-regular fa-magnifying-glass-plus" style={{ fontSize: 28, color: '#0058db' }} />
+      <div style={{ display: showEmpty ? 'flex' : 'none', background: 'white', border: '1px solid #dde3ee', borderRadius: 8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '20px 24px' }}>
+        <div style={{ width: 56, height: 56, background: '#f0f4fb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <i className="fa-regular fa-magnifying-glass-plus" style={{ fontSize: 22, color: '#0058db' }} />
         </div>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222', marginBottom: 4 }}>{t('pesquiseProcesso')}</div>
-          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 13, color: '#7a8a9e', maxWidth: 420 }}>{t('pesquiseDesc')}</div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#222', marginBottom: 3 }}>{t('pesquiseProcesso')}</div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 12, color: '#7a8a9e', maxWidth: 420 }}>{t('pesquiseDesc')}</div>
         </div>
       </div>
 
       {/* Sem resultados */}
-      <div style={{ display: showNoResults ? 'flex' : 'none', background: 'white', border: '1px solid #dde3ee', borderRadius: 8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, padding: '48px 24px' }}>
-        <div style={{ width: 72, height: 72, background: '#f0f4fb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <i className="fa-regular fa-file-slash" style={{ fontSize: 28, color: '#0058db' }} />
+      <div style={{ display: showNoResults ? 'flex' : 'none', background: 'white', border: '1px solid #dde3ee', borderRadius: 8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '20px 24px' }}>
+        <div style={{ width: 56, height: 56, background: '#f0f4fb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <i className="fa-regular fa-file-slash" style={{ fontSize: 22, color: '#0058db' }} />
         </div>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222', marginBottom: 4 }}>{t('nenhumProcesso')}</div>
-          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 13, color: '#7a8a9e' }}>{t('nenhumDesc')}</div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#222', marginBottom: 3 }}>{t('nenhumProcesso')}</div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 12, color: '#7a8a9e' }}>{t('nenhumDesc')}</div>
         </div>
       </div>
 
@@ -1358,18 +1530,24 @@ function ConsultaDocumentos() {
 
         {/* Número do processo */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: 0 }}>{t('numeroProcesso')}</h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: 0 }}>{t('numeroProcesso')}</h2>
+            <InfoTooltip text={t('tooltipProcesso')} />
+          </div>
           <div style={{ display: 'flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
             <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
             <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
-            <FormSegment   label={t('numero')}      value={numero}      onChange={setNumero}       placeholder="000000" />
-            <FormSegment   label={t('ano')}         value={ano}         onChange={setAno}          placeholder="2026" width={90} last />
+            <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
+            <FormSegment   label={t('ano')}         value={ano}         onChange={v => setAno(v.replace(/\D/g, '').slice(0, 4))}       placeholder="2026" width={88} center last />
           </div>
         </div>
 
         {/* Código do documento */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: 0 }}>{t('codigoDoc')}</h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: 0 }}>{t('codigoDoc')}</h2>
+            <InfoTooltip text={t('tooltipDocumento')} />
+          </div>
           <div style={{ width: 390 }}>
             <Input
               placeholder="Ex: 00U61ULQ"
@@ -1454,11 +1632,30 @@ function ProcessoDetalhe() {
 
       {/* ── Cabeçalho do processo ── */}
       <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: 24, display: 'flex', flexDirection: 'column', gap: 8 }}>
-        <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#a3a3a3', lineHeight: '1.2' }}>
-          PMF2026/000418
-        </div>
-        <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#333', lineHeight: 1 }}>
-          Ranking de Sustentabilidade
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#a3a3a3', lineHeight: '1.2' }}>
+              PMF2026/000418
+            </div>
+            <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#333', lineHeight: 1 }}>
+              Ranking de Sustentabilidade
+            </div>
+          </div>
+          <button
+            onClick={() => window.print()}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0,
+              border: '1.5px solid #d5d5d5', borderRadius: 8, background: 'white', cursor: 'pointer',
+              padding: '8px 16px', height: 38,
+              fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, color: '#565656',
+              transition: 'all 0.12s',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#0058db'; (e.currentTarget as HTMLButtonElement).style.color = '#0058db'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5'; (e.currentTarget as HTMLButtonElement).style.color = '#565656'; }}
+          >
+            <FAIcon icon="fa-regular fa-print" style={{ fontSize: 14 }} />
+            {t('imprimir')}
+          </button>
         </div>
         <div style={{ display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -1589,67 +1786,22 @@ function ProcessoDetalhe() {
               </div>
             </div>
 
-            {/* Documentos (resumo) */}
-            <div style={cardStyle}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', fontSize: 16, whiteSpace: 'nowrap' }}>
-                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, color: '#353535', lineHeight: '1.2' }}>{t('documentos')}</span>
-                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, color: '#353535', lineHeight: '1.2', cursor: 'pointer' }}>{t('pdVerTodos')}</span>
-              </div>
-              {([
-                { name: 'Despacho_UN-SAOPAULO.pdf', vol: 'Vol. 1', date: '02/09/2025' },
-                { name: 'Despacho_DIGITAL.pdf',     vol: 'Vol. 1', date: '02/09/2025' },
-                { name: 'Despacho_SAUDE.pdf',       vol: 'Vol. 1', date: '02/09/2025' },
-              ] as { name: string; vol: string; date: string }[]).map(doc => (
-                <div key={doc.name} style={{ background: '#dce6f5', borderRadius: 8, padding: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                    <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <FAIcon icon="fa-regular fa-file-lines" style={{ fontSize: 13, color: '#333' }} />
-                </div>
-                    <div>
-                      <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#333', lineHeight: '24px', letterSpacing: '0.07px', whiteSpace: 'nowrap' }}>{doc.name}</div>
-                      <div style={{ display: 'flex', gap: 16, fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#333', lineHeight: '24px', letterSpacing: '0.07px' }}>
-                        <span>{doc.vol}</span>
-                        <span>{doc.date}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <FAIcon icon="fa-regular fa-down-to-line" style={{ fontSize: 13, color: '#333', cursor: 'pointer' }} />
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       )}
 
-      {/* ── Tab: Documentos ── */}
+      {/* ── Tab: Documentos (Pasta Digital) ── */}
       {activeTab === 'documentos' && (
-        <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: 24, display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={sectionTitle}>{t('documentos')}</div>
-          {([
-            { name: 'Despacho_UN-SAOPAULO.pdf', vol: 'Vol. 1', date: '02/09/2025' },
-            { name: 'Despacho_DIGITAL.pdf',     vol: 'Vol. 1', date: '02/09/2025' },
-            { name: 'Despacho_SAUDE.pdf',       vol: 'Vol. 1', date: '02/09/2025' },
-          ] as { name: string; vol: string; date: string }[]).map(doc => (
-            <div key={doc.name} style={{ background: '#dce6f5', borderRadius: 8, padding: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <FAIcon icon="fa-regular fa-file-lines" style={{ fontSize: 13, color: '#333' }} />
-                </div>
-                <div>
-                  <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#333', lineHeight: '24px', letterSpacing: '0.07px', whiteSpace: 'nowrap' }}>{doc.name}</div>
-                  <div style={{ display: 'flex', gap: 16, fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#333', lineHeight: '24px', letterSpacing: '0.07px' }}>
-                    <span>{doc.vol}</span>
-                    <span>{doc.date}</span>
-                  </div>
-                </div>
-              </div>
-              <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <FAIcon icon="fa-regular fa-down-to-line" style={{ fontSize: 13, color: '#333', cursor: 'pointer' }} />
-              </div>
-            </div>
-          ))}
+        <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '14px 20px', borderBottom: '1px solid #ebebeb', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <FAIcon icon="fa-regular fa-folder-open" style={{ fontSize: 15, color: '#0058db' }} />
+            <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#333' }}>Pasta Digital — PMF2026/000418</span>
+          </div>
+          <iframe
+            src="https://solar.florianopolis.sc.gov.br/solar/api/visualizadorDocumentos/visualizadorPublico?proc=PMF2026/000418"
+            style={{ width: '100%', height: 640, border: 'none', display: 'block' }}
+            title="Pasta Digital do Processo"
+          />
         </div>
       )}
 
@@ -4021,15 +4173,26 @@ function ServicoDetalhe({ service, onNavigateForm }: {
         <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#565656', margin: '0 0 20px 0', lineHeight: '22px' }}>
           {service.setor}
         </p>
-        <button
-          onClick={() => onNavigateForm(service)}
-          style={{ height: 44, padding: '0 32px', border: 'none', borderRadius: 8, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, transition: 'background 0.12s' }}
-          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0058db'; }}
-        >
-          <FAIcon icon="fa-regular fa-paper-plane" style={{ fontSize: 15 }} />
-          Solicitar serviço
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+          <button
+            onClick={() => onNavigateForm(service)}
+            style={{ height: 44, padding: '0 32px', border: 'none', borderRadius: 8, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, transition: 'background 0.12s' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0058db'; }}
+          >
+            <FAIcon icon="fa-regular fa-paper-plane" style={{ fontSize: 15 }} />
+            Solicitar serviço
+          </button>
+          <button
+            onClick={() => window.print()}
+            style={{ height: 44, padding: '0 20px', border: '1.5px solid #d5d5d5', borderRadius: 8, background: 'white', color: '#565656', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.12s' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#0058db'; (e.currentTarget as HTMLButtonElement).style.color = '#0058db'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5'; (e.currentTarget as HTMLButtonElement).style.color = '#565656'; }}
+          >
+            <FAIcon icon="fa-regular fa-file-arrow-down" style={{ fontSize: 14 }} />
+            {t('exportarDescritivo')}
+          </button>
+        </div>
       </div>
 
       <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
@@ -4124,6 +4287,7 @@ function ServicoDetalhe({ service, onNavigateForm }: {
 
 // ── Tela: Formulário de Solicitação ───────────────────────────────────────────
 function ServicoForm({ service }: { service: typeof MOCK_SERVICOS_AV[0] }) {
+  const t = useT();
   const [step,          setStep]          = useState(1);
   const [nome,          setNome]          = useState('CRISTIANDERSON ALVES DE LIMA');
   const [cpf]                             = useState('043.792.234-00');
@@ -4131,6 +4295,7 @@ function ServicoForm({ service }: { service: typeof MOCK_SERVICOS_AV[0] }) {
   const [telefone,      setTelefone]      = useState('(86) 99968-8687');
   const [descricao,     setDescricao]     = useState('');
   const [urgencia,      setUrgencia]      = useState('Normal');
+  const [destino,       setDestino]       = useState(service.destino[0] ?? 'Cidadão');
   const [submitted,     setSubmitted]     = useState(false);
 
   const totalSteps = 3;
@@ -4246,9 +4411,23 @@ function ServicoForm({ service }: { service: typeof MOCK_SERVICOS_AV[0] }) {
             <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 18, color: '#353535', margin: 0, paddingBottom: 12, borderBottom: '1px solid #ebebeb' }}>
               Detalhes da solicitação
             </h2>
-            <div>
-              <label style={lbl}>Serviço solicitado *</label>
-              <input value={service.servico} readOnly style={{ ...inp, background: '#f4f6f9', color: '#565656', cursor: 'default' }} />
+            <div style={{ display: 'flex', gap: 16 }}>
+              <div style={{ flex: 2 }}>
+                <label style={lbl}>Serviço solicitado *</label>
+                <input value={service.servico} readOnly style={{ ...inp, background: '#f4f6f9', color: '#565656', cursor: 'default' }} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label style={lbl}>A quem se destina *</label>
+                <select
+                  value={destino}
+                  onChange={e => setDestino(e.target.value)}
+                  style={{ ...inp, cursor: 'pointer', appearance: 'none', paddingRight: 36, backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'8\' viewBox=\'0 0 12 8\'%3E%3Cpath fill=\'%238a9ab5\' d=\'M1 1l5 5 5-5\'/%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'calc(100% - 12px) center' } as React.CSSProperties}
+                >
+                  <option value="Cidadão">{t('destinoCidadao')}</option>
+                  <option value="Empresa">{t('destinoEmpresa')}</option>
+                  <option value="Visitante">{t('destinoVisitante')}</option>
+                </select>
+              </div>
             </div>
             <div>
               <label style={lbl}>Nível de urgência</label>
@@ -4343,13 +4522,111 @@ function ServicoForm({ service }: { service: typeof MOCK_SERVICOS_AV[0] }) {
 }
 
 // ── Tela: Home ────────────────────────────────────────────────────────────────
-function HomePage({ onNavigateCat }: { onNavigateCat: (cat: { label: string; icon: string }) => void }) {
+const MOCK_DASH_ATIVIDADES = [
+  { icon: 'fa-regular fa-circle-check',     text: 'Pendência "Assinatura de documentos" concluída',   processo: 'PMF2026/000418', date: '20/04/2026', color: '#0f6b3e' },
+  { icon: 'fa-regular fa-file-circle-plus', text: 'Nova solicitação criada: Alvará de Obra',           processo: 'PMF2026/000501', date: '19/04/2026', color: '#0058db' },
+  { icon: 'fa-regular fa-triangle-exclamation', text: 'Pendência de assinatura aguardando ação',      processo: 'PMF2026/000392', date: '18/04/2026', color: '#c0182d' },
+  { icon: 'fa-regular fa-folder-open',      text: 'Processo acessado: Ranking de Sustentabilidade',   processo: 'PMF2026/000322', date: '17/04/2026', color: '#565656' },
+];
+
+function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
+  onNavigateCat: (cat: { label: string; icon: string }) => void;
+  isLoggedIn: boolean;
+  onNavigate: (p: Page) => void;
+}) {
   const t = useT();
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 48, padding: '16px 24px 48px 24px' }}>
-      <div style={{ height: 300, overflow: 'hidden', flexShrink: 0, margin: '-16px -24px 0 -24px' }}>
-        <img src={imgBannerFloripa} alt="Florianópolis" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }} />
-      </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: isLoggedIn ? 24 : 48, padding: '16px 24px 48px 24px' }}>
+
+      {/* ── Dashboard pós-login ── */}
+      {isLoggedIn && (
+        <>
+          {/* Saudação + stats */}
+          <div style={{ background: 'linear-gradient(135deg, #0046b5 0%, #0058db 60%, #1a75e8 100%)', borderRadius: 12, padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap', boxShadow: '0px 4px 16px rgba(0,88,219,0.28)' }}>
+            <div>
+              <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: 'rgba(255,255,255,0.80)', marginBottom: 4 }}>{t('dashOla')},</div>
+              <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 22, color: 'white', lineHeight: 1.2 }}>Cristianderson Alves de Lima</div>
+              <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 13, color: 'rgba(255,255,255,0.70)', marginTop: 4 }}>{t('bemVindo')}</div>
+            </div>
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              {([
+                { label: t('dashPendencias'), value: '3', icon: 'fa-regular fa-bell', onClick: () => onNavigate('minhaspendencias') },
+                { label: t('dashProcessos'),  value: '7', icon: 'fa-regular fa-folder-open', onClick: () => onNavigate('meusprocessos') },
+                { label: t('dashLiberados'),  value: '2', icon: 'fa-regular fa-unlock', onClick: () => onNavigate('processosliberados') },
+              ] as { label: string; value: string; icon: string; onClick: () => void }[]).map((stat, i) => (
+                <div
+                  key={i}
+                  onClick={stat.onClick}
+                  style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 10, padding: '14px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, minWidth: 110, cursor: 'pointer', transition: 'background 0.12s' }}
+                  onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.25)'}
+                  onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.15)'}
+                >
+                  <FAIcon icon={stat.icon} style={{ fontSize: 18, color: 'rgba(255,255,255,0.80)' }} />
+                  <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 28, color: 'white', lineHeight: 1 }}>{stat.value}</span>
+                  <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 11, color: 'rgba(255,255,255,0.75)', textAlign: 'center', lineHeight: 1.3 }}>{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Acesso rápido */}
+          <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', boxShadow: '0px 2px 8px rgba(24,39,75,0.07)' }}>
+            <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 13, color: '#353535', marginRight: 4, whiteSpace: 'nowrap' }}>{t('dashAcessoRapido')}:</span>
+            {([
+              { label: t('meusProcessos'),     icon: 'fa-regular fa-folder-open', page: 'meusprocessos' as Page },
+              { label: t('minhasPendencias'),  icon: 'fa-regular fa-bell',        page: 'minhaspendencias' as Page },
+              { label: t('processosLiberados'),icon: 'fa-regular fa-unlock',      page: 'processosliberados' as Page },
+              { label: t('solicitacaoServicos'),icon: 'fa-regular fa-file-circle-plus', page: 'solicitacao' as Page },
+            ]).map((item, i) => (
+              <button
+                key={i}
+                onClick={() => onNavigate(item.page)}
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', border: '1.5px solid #dde3ee', borderRadius: 20, background: 'white', cursor: 'pointer', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, color: '#333', whiteSpace: 'nowrap', transition: 'all 0.12s' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#0058db'; (e.currentTarget as HTMLButtonElement).style.color = '#0058db'; (e.currentTarget as HTMLButtonElement).style.background = '#f0f5ff'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#dde3ee'; (e.currentTarget as HTMLButtonElement).style.color = '#333'; (e.currentTarget as HTMLButtonElement).style.background = 'white'; }}
+              >
+                <FAIcon icon={item.icon} style={{ fontSize: 13 }} />
+                {item.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Últimas atividades */}
+          <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 20, boxShadow: '0px 2px 8px rgba(24,39,75,0.07)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+              <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#1a1a1a' }}>{t('dashHistoricoTitle')}</span>
+              <span onClick={() => onNavigate('meusprocessos')} style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, color: '#0058db', cursor: 'pointer', textDecoration: 'underline' }}>{t('dashVerTodos')}</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+              {MOCK_DASH_ATIVIDADES.map((at, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '11px 0', borderBottom: i < MOCK_DASH_ATIVIDADES.length - 1 ? '1px solid #f0f0f0' : 'none' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: at.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <FAIcon icon={at.icon} style={{ fontSize: 15, color: at.color }} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, color: '#222', lineHeight: 1.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{at.text}</div>
+                    <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: '#7d7d7d', marginTop: 2 }}>{at.processo} · {at.date}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Divisor */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ flex: 1, height: 1, background: '#dde3ee' }} />
+            <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#a3a3a3', whiteSpace: 'nowrap' }}>{t('encontreServico')}</span>
+            <div style={{ flex: 1, height: 1, background: '#dde3ee' }} />
+          </div>
+        </>
+      )}
+
+      {/* ── Conteúdo normal da Home ── */}
+      {!isLoggedIn && (
+        <div style={{ height: 300, overflow: 'hidden', flexShrink: 0, margin: '-16px -24px 0 -24px' }}>
+          <img src={imgBannerFloripa} alt="Florianópolis" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }} />
+        </div>
+      )}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
         <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#333', textAlign: 'center', margin: 0 }}>{t('encontreServico')}</h1>
         <SearchWithDropdown />
@@ -4428,7 +4705,7 @@ export default function App() {
             <Breadcrumb page={page} onNavigate={setPage} selectedCat={selectedCat} selectedService={selectedService} />
 
             <div style={{ flex: 1, overflowY: 'auto' }}>
-              {page === 'home'       && <HomePage onNavigateCat={cat => { setSelectedCat(cat); setPage('cat-servicos'); }} />}
+              {page === 'home'       && <HomePage onNavigateCat={cat => { setSelectedCat(cat); setPage('cat-servicos'); }} isLoggedIn={isLoggedIn} onNavigate={setPage} />}
               {page === 'consulta'   && <ConsultaProcessos onNavigateProcesso={() => setPage('processo')} />}
               {page === 'processo'   && <ProcessoDetalhe />}
               {page === 'documentos' && <ConsultaDocumentos />}
