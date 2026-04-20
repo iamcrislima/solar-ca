@@ -4127,6 +4127,7 @@ function ServicoDetalhe({ service, onNavigateForm }: {
   service: typeof MOCK_SERVICOS_AV[0];
   onNavigateForm: (service: typeof MOCK_SERVICOS_AV[0]) => void;
 }) {
+  const t = useT();
   // Informações genéricas que variam por categoria
   const descricoesPorCategoria: Record<string, string> = {
     'Impostos e taxas':                    'Serviço relacionado à emissão, consulta e pagamento de impostos e taxas municipais. Facilita o cumprimento das obrigações fiscais de forma digital, sem necessidade de comparecimento presencial.',
