@@ -9,7 +9,7 @@ const TRANS = {
     inicio: 'Início', consultaProcessos: 'Consulta de Processos',
     conferenciaDocumentos: 'Conferência de Documentos', solicitacaoServicos: 'Solicitação de serviços',
     meusProcessos: 'Meus processos', minhasPendencias: 'Minhas pendências',
-    processosLiberados: 'Processos liberados', meusDados: 'Meus Dados',
+    processosLiberados: 'Processos liberados', meusDados: 'Perfil',
     sair: 'Sair', ajuda: 'Ajuda', entrar: 'Entrar',
     // Header
     altoContraste: 'Alto Contraste', idioma: 'Idioma', modoEscuro: 'Modo Escuro', buscar: 'Buscar',
@@ -19,7 +19,7 @@ const TRANS = {
     consultar: 'Consultar', limpar: 'Limpar', salvarContinuar: 'Salvar e continuar',
     // Consulta Processos
     consultaTitle: 'Consulta de processos',
-    consultaDesc: 'Consulte o andamento de processos digitais informando o número do processo. Acesse processos nos quais você é parte interessada ou representante legal. Para processos sigilosos, é necessário autenticação.',
+    consultaDesc: 'Consulte o andamento de processos digitais informando o número. Processos sigilosos exigem autenticação.',
     numeroProcesso: 'Número do processo', orgao: 'Órgão', procedencia: 'Procedência',
     numero: 'Número', ano: 'Ano',
     pesquiseProcesso: 'Pesquise um processo',
@@ -28,7 +28,7 @@ const TRANS = {
     resultados: 'Resultados', consultasRecentes: 'Consultas recentes',
     // Consulta Documentos
     docTitle: 'Consulta de documentos',
-    docDesc: 'Confira se uma cópia impressa corresponde a um documento assinado digitalmente em um processo administrativo. Basta inserir o código localizado na lateral direita do documento.',
+    docDesc: 'Confira se uma cópia impressa corresponde ao documento assinado digitalmente. Informe o código localizado na lateral direita do documento.',
     codigoDoc: 'Código do documento',
     // Processo detalhe tabs
     dadosProcesso: 'Dados do processo', documentos: 'Documentos', tramitacoes: 'Tramitações',
@@ -44,7 +44,7 @@ const TRANS = {
     dadosPessoais: 'Dados Pessoais', endereco: 'Endereço',
     // Meus Processos
     meusProcessosTitle: 'Meus processos',
-    meusProcessosDesc: 'Acompanhe todos os seus processos municipais em um só lugar. Filtre por status, busque pelo número ou título e veja o histórico completo.',
+    meusProcessosDesc: 'Acompanhe seus processos municipais, filtre por status e veja o histórico completo.',
     mpTotal: 'Total de processos', mpAndamento: 'Em andamento', mpConcluidos: 'Concluídos', mpPendentes: 'Com pendências',
     mpBuscar: 'Buscar por número, título ou órgão...',
     mpTodos: 'Todos', mpExportarPdf: 'Exportar PDF', mpExportarXls: 'Exportar planilha',
@@ -52,22 +52,128 @@ const TRANS = {
     mpNenhumDesc: 'Ajuste os filtros ou busque por outro termo',
     mpVer: 'Ver detalhes',
     mpAtualizado: 'Atualizado em', mpOrgao: 'Órgão',
+    // Minhas Pendências
+    mpendTitle: 'Minhas pendências',
+    mpendDesc: 'Visualize e resolva pendências com prazos, assinaturas e solicitações que aguardam sua ação.',
+    mpendTotal: 'Total de pendências', mpendAberto: 'Em aberto', mpendVencendo: 'Vencendo em breve', mpendFinalizadas: 'Finalizadas',
+    mpendBuscar: 'Buscar por tipo, processo ou interessado...',
+    mpendResolver: 'Resolver', mpendVer: 'Ver', mpendPrazo: 'Prazo', mpendCriadaEm: 'Criada em',
+    mpendInteressado: 'Interessado', mpendSemPrazo: 'Sem prazo',
+    mpendNenhumTitle: 'Nenhuma pendência encontrada',
+    mpendNenhumDesc: 'Você está em dia! Ou ajuste os filtros para encontrar outras pendências.',
+    // Processos Liberados
+    plTitle: 'Processos liberados',
+    plDesc: 'Processos cujo acesso foi liberado a você para consulta. Acompanhe acessos ativos e expirados em um só lugar.',
+    plAtivos: 'Acesso ativo', plExpirados: 'Acesso expirado', plTotal: 'Total liberados',
+    plBuscar: 'Buscar por número, interessado ou órgão...',
+    plInteressado: 'Interessado', plLiberadoEm: 'Liberado em', plTerminaEm: 'Acesso termina em',
+    plSituacao: 'Situação', plAnexos: 'Anexos', plVer: 'Ver processo', plExpirado: 'Expirado',
+    plAtivo: 'Ativo', plNenhumTitle: 'Nenhum processo liberado',
+    plNenhumDesc: 'Quando algum processo tiver acesso liberado para você, ele aparecerá aqui.',
+    // Resolver Pendência
+    rpTitle: 'Resolver pendência',
+    rpAssinaturaTitle: 'Assinatura de documentos',
+    rpAssinaturaDesc: 'Revise os documentos abaixo e selecione quais deseja assinar. Você pode abrir cada arquivo para consultar o conteúdo antes de decidir.',
+    rpSelecionarTodos: 'Selecionar todos para assinar',
+    rpLimparSelecao: 'Limpar seleção',
+    rpAssinar: 'Assinar',
+    rpNaoAssinar: 'Não assinar',
+    rpSelecionado: 'Selecionado',
+    rpVisualizar: 'Visualizar',
+    rpDocumentosSelecionados: 'documento(s) selecionado(s) para assinatura',
+    rpParecer: 'Parecer ou observações',
+    rpParecerPlaceholder: 'Adicione observações ou justificativas (opcional)',
+    rpConcluir: 'Concluir tarefa',
+    rpCancelar: 'Cancelar',
+    rpVoltar: 'Voltar para pendências',
+    rpProcesso: 'Processo',
+    rpPrazo: 'Prazo',
+    rpTipo: 'Tipo',
     // Login
     boasVindas: 'Boas vindas ao FloripaOn', senha: 'Senha', esqueciSenha: 'Esqueci a senha',
     ouContinuar: 'Ou continuar com', redefinicaoSenha: 'Redefinição de senha',
     redefinirSenha: 'Redefinir senha', voltar: 'Voltar', emailCadastrado: 'Email cadastrado',
+    // Status de processo
+    statusConcluido: 'Concluído', statusAndamento: 'Em Andamento', statusPendente: 'Pendente',
+    // Status de pendência
+    pendAberta: 'Aberta', pendFinalizada: 'Finalizada',
+    // Tipos de pendência
+    tipoAssinatura: 'Assinatura de documentos', tipoVerificar: 'Verificar informações',
+    tipoComunique: 'Comunique-se', tipoAnalise: 'Análise de documentos', tipoComplementar: 'Complementar dados',
+    // PrazoBadge
+    prazoEm: 'em', prazoDia: 'dia', prazoDias: 'dias', prazoVenceHoje: 'vence hoje', prazoVencida: 'vencida',
+    // MinhasPendencias tabela
+    mpendProcesso: 'Processo',
+    // Meus Dados / Perfil
+    perfilAbaDados: 'Meus Dados', perfilAbaSenha: 'Trocar Senha',
+    mdCpf: 'CPF *', mdNomeCompleto: 'Nome completo *',
+    mdCompletarCadastro: 'Por favor, complete seu cadastro.',
+    mdEmailAcesso: 'E-mail de acesso', mdEmail: 'E-mail *', mdConfirmarEmail: 'Confirmar E-mail *',
+    mdEmailAdicional: 'E-mail Adicional', mdIncluir: 'Incluir', mdNovoEmail: 'Novo e-mail',
+    mdNovoEmailPh: 'Digite um e-mail adicional',
+    mdEmailCol: 'E-mail', mdAcoes: 'Ações',
+    mdSexo: 'Sexo *', mdDataNasc: 'Data de Nascimento *', mdNacionalidade: 'Nacionalidade *', mdTelefone: 'Telefone *',
+    mdMasculino: 'Masculino', mdFeminino: 'Feminino', mdNaoInformado: 'Não informado',
+    mdCep: 'CEP *', mdCepPh: '00000-000', mdConsultarCep: 'Consultar CEP',
+    mdEstado: 'Estado *', mdCidade: 'Cidade *', mdBairro: 'Bairro *', mdLogradouro: 'Logradouro *',
+    mdNumero: 'Número *', mdComplemento: 'Complemento',
+    mdResideFloripa: 'Reside no município de Florianópolis?',
+    mdSelecione: 'Selecione', mdSim: 'Sim', mdNao: 'Não',
+    mdTelefonePh: '(00) 00000-0000', mdNascPh: 'DD/MM/AAAA',
+    // Trocar Senha
+    tsTitle: 'Trocar senha',
+    tsDesc: 'Para sua segurança, escolha uma senha forte e diferente da anterior. Recomendamos pelo menos 8 caracteres com letras, números e um símbolo.',
+    tsSenhaAtual: 'Senha atual *', tsSenhaAtualPh: 'Digite sua senha atual',
+    tsNovaSenha: 'Nova senha *', tsNovaSenhaPh: 'Nova senha',
+    tsConfirmarSenha: 'Confirmar nova senha *', tsConfirmarSenhaPh: 'Confirme a nova senha',
+    tsDicas: 'Dicas de segurança',
+    tsDica1: 'Use pelo menos 8 caracteres',
+    tsDica2: 'Combine letras maiúsculas, minúsculas e números',
+    tsDica3: 'Inclua pelo menos um símbolo (! @ # $ %)',
+    tsDica4: 'Evite dados pessoais (nome, CPF, data de nascimento)',
+    tsCancelar: 'Cancelar', tsAlterar: 'Alterar senha',
+    // Home
+    boaTarde: 'Olá', bemVindo: 'Bem-vindo(a)!',
+    saudSegunda: 'segunda-feira', quickTitle: 'Acesso rápido',
+    servicoVerTodos: 'Ver todos',
+    // ProcessoDetalhe
+    pdEntradaEm: 'Entrada em:', pdProcessoDigital: 'Processo Digital',
+    pdDadosBasicos: 'Dados básicos', pdDetalhamento: 'Detalhamento',
+    pdTipo: 'Tipo', pdClassificacao: 'Classificação', pdDataEntrada: 'Data de entrada',
+    pdRecebido: 'Recebido em', pdOrgaoAbertura: 'Órgão de abertura', pdOrgaoAtual: 'Órgão atual', pdUnidadeAtual: 'Unidade atual',
+    pdSituacao: 'Situação', pdArquivado: 'Arquivado', pdAndamento: 'Andamento',
+    pdInteressados: 'Interessados', pdRequerente: 'Requerente',
+    pdVerTodos: 'Ver todos',
+    pdVol: 'VOL.', pdOrgaoSetor: 'ÓRGÃO / SETOR', pdRecebidoEm: 'RECEBIDO EM', pdEncaminhadoEm: 'ENCAMINHADO EM',
+    pdDespacho: 'DESPACHO',
+    pdTipoTarefa: 'TIPO DE TAREFA', pdDataCriacao: 'Data de Criação', pdSituacaoCol: 'Situação', pdAcoes: 'Ações',
+    pdArquivadoEm: 'ARQUIVADO EM', pdMotivoArq: 'MOTIVO DO ARQUIVAMENTO',
+    pdReabertoEm: 'REABERTO EM', pdMotivoReab: 'MOTIVO REABERTURA',
+    pdFinalizada: 'Finalizada',
+    pdAnalisarSustentabilidade: 'Analisar sustentabilidade',
+    // Solicitação / Categoria / Serviço
+    solTituloBusca: 'Buscar serviço nesta categoria...',
+    solMaisInfo: 'Mais informações', solSolicitar: 'Solicitar',
+    solOrgao: 'Órgão:', solPublico: 'Público:',
+    solNenhumTitle: 'Nenhum serviço encontrado', solNenhumDesc: 'Tente usar termos diferentes na busca',
+    solServicoDisp: 'serviço', solServicosDisp: 'serviços',
+    solDispSingular: 'disponível nesta categoria', solDispPlural: 'disponíveis nesta categoria',
+    // Header busca
+    buscarServico: 'Buscar serviço...', pressEnter: 'Pressione Enter para buscar',
+    // Consulta Row
+    crProcesso: 'Processo:', crData: 'Data:',
   },
   en: {
     inicio: 'Home', consultaProcessos: 'Process Inquiry',
     conferenciaDocumentos: 'Document Verification', solicitacaoServicos: 'Service Requests',
     meusProcessos: 'My Processes', minhasPendencias: 'My Pending Items',
-    processosLiberados: 'Released Processes', meusDados: 'My Profile',
+    processosLiberados: 'Released Processes', meusDados: 'Profile',
     sair: 'Sign Out', ajuda: 'Help', entrar: 'Sign In',
     altoContraste: 'High Contrast', idioma: 'Language', modoEscuro: 'Dark Mode', buscar: 'Search',
     breadInicio: 'Home',
     consultar: 'Search', limpar: 'Clear', salvarContinuar: 'Save and continue',
     consultaTitle: 'Process Inquiry',
-    consultaDesc: 'Check the status of digital processes by entering the process number. Access processes in which you are an interested party or legal representative. Authentication is required for confidential processes.',
+    consultaDesc: 'Check the status of digital processes by entering the process number. Confidential processes require authentication.',
     numeroProcesso: 'Process Number', orgao: 'Agency', procedencia: 'Origin',
     numero: 'Number', ano: 'Year',
     pesquiseProcesso: 'Search for a process',
@@ -75,7 +181,7 @@ const TRANS = {
     nenhumProcesso: 'No processes found', nenhumDesc: 'Check the information provided and try again',
     resultados: 'Results', consultasRecentes: 'Recent Queries',
     docTitle: 'Document Verification',
-    docDesc: 'Check whether a printed copy matches a digitally signed document in an administrative process. Just enter the code located on the right side of the document.',
+    docDesc: 'Check whether a printed copy matches a digitally signed document. Enter the code located on the right side of the document.',
     codigoDoc: 'Document Code',
     dadosProcesso: 'Process Data', documentos: 'Documents', tramitacoes: 'Routing',
     movimentacoes: 'Activities', arquivamentos: 'Archives',
@@ -88,7 +194,7 @@ const TRANS = {
     dadosPessoais: 'Personal Data', endereco: 'Address',
     // My Processes
     meusProcessosTitle: 'My processes',
-    meusProcessosDesc: 'Keep track of all your municipal processes in one place. Filter by status, search by number or title and see the full history.',
+    meusProcessosDesc: 'Track your municipal processes, filter by status and see the full history.',
     mpTotal: 'Total processes', mpAndamento: 'In progress', mpConcluidos: 'Completed', mpPendentes: 'With pending items',
     mpBuscar: 'Search by number, title or agency...',
     mpTodos: 'All', mpExportarPdf: 'Export PDF', mpExportarXls: 'Export spreadsheet',
@@ -96,9 +202,113 @@ const TRANS = {
     mpNenhumDesc: 'Adjust the filters or search for another term',
     mpVer: 'View details',
     mpAtualizado: 'Updated on', mpOrgao: 'Agency',
+    // My Pending Items
+    mpendTitle: 'My pending items',
+    mpendDesc: 'View and resolve pending items with deadlines, signatures and requests awaiting your action.',
+    mpendTotal: 'Total pending', mpendAberto: 'Open', mpendVencendo: 'Due soon', mpendFinalizadas: 'Completed',
+    mpendBuscar: 'Search by type, process or interested party...',
+    mpendResolver: 'Resolve', mpendVer: 'View', mpendPrazo: 'Deadline', mpendCriadaEm: 'Created on',
+    mpendInteressado: 'Interested party', mpendSemPrazo: 'No deadline',
+    mpendNenhumTitle: 'No pending items found',
+    mpendNenhumDesc: "You're all caught up! Or adjust the filters to find other pending items.",
+    // Released Processes
+    plTitle: 'Released processes',
+    plDesc: 'Processes whose access was released to you for review. Track active and expired access in one place.',
+    plAtivos: 'Active access', plExpirados: 'Expired access', plTotal: 'Total released',
+    plBuscar: 'Search by number, interested party or agency...',
+    plInteressado: 'Interested party', plLiberadoEm: 'Released on', plTerminaEm: 'Access ends on',
+    plSituacao: 'Status', plAnexos: 'Attachments', plVer: 'View process', plExpirado: 'Expired',
+    plAtivo: 'Active', plNenhumTitle: 'No released processes',
+    plNenhumDesc: 'When a process has access released to you, it will appear here.',
+    // Resolve Pending Item
+    rpTitle: 'Resolve pending item',
+    rpAssinaturaTitle: 'Document signing',
+    rpAssinaturaDesc: 'Review the documents below and select which ones you want to sign. You can open each file to review the content before deciding.',
+    rpSelecionarTodos: 'Select all to sign',
+    rpLimparSelecao: 'Clear selection',
+    rpAssinar: 'Sign',
+    rpNaoAssinar: "Don't sign",
+    rpSelecionado: 'Selected',
+    rpVisualizar: 'Preview',
+    rpDocumentosSelecionados: 'document(s) selected for signing',
+    rpParecer: 'Notes or remarks',
+    rpParecerPlaceholder: 'Add notes or justifications (optional)',
+    rpConcluir: 'Complete task',
+    rpCancelar: 'Cancel',
+    rpVoltar: 'Back to pending items',
+    rpProcesso: 'Process',
+    rpPrazo: 'Deadline',
+    rpTipo: 'Type',
     boasVindas: 'Welcome to FloripaOn', senha: 'Password', esqueciSenha: 'Forgot my password',
     ouContinuar: 'Or continue with', redefinicaoSenha: 'Password Reset',
     redefinirSenha: 'Reset Password', voltar: 'Back', emailCadastrado: 'Registered email',
+    // Process status
+    statusConcluido: 'Completed', statusAndamento: 'In Progress', statusPendente: 'Pending',
+    // Pending status
+    pendAberta: 'Open', pendFinalizada: 'Completed',
+    // Pending types
+    tipoAssinatura: 'Document signing', tipoVerificar: 'Verify information',
+    tipoComunique: 'Communication', tipoAnalise: 'Document review', tipoComplementar: 'Complete data',
+    // PrazoBadge
+    prazoEm: 'in', prazoDia: 'day', prazoDias: 'days', prazoVenceHoje: 'due today', prazoVencida: 'overdue',
+    mpendProcesso: 'Process',
+    // Profile tabs
+    perfilAbaDados: 'My Data', perfilAbaSenha: 'Change Password',
+    mdCpf: 'SSN *', mdNomeCompleto: 'Full name *',
+    mdCompletarCadastro: 'Please complete your registration.',
+    mdEmailAcesso: 'Login email', mdEmail: 'Email *', mdConfirmarEmail: 'Confirm email *',
+    mdEmailAdicional: 'Additional email', mdIncluir: 'Add', mdNovoEmail: 'New email',
+    mdNovoEmailPh: 'Enter an additional email',
+    mdEmailCol: 'Email', mdAcoes: 'Actions',
+    mdSexo: 'Gender *', mdDataNasc: 'Date of birth *', mdNacionalidade: 'Nationality *', mdTelefone: 'Phone *',
+    mdMasculino: 'Male', mdFeminino: 'Female', mdNaoInformado: 'Not informed',
+    mdCep: 'ZIP *', mdCepPh: '00000-000', mdConsultarCep: 'Look up ZIP',
+    mdEstado: 'State *', mdCidade: 'City *', mdBairro: 'Neighborhood *', mdLogradouro: 'Street *',
+    mdNumero: 'Number *', mdComplemento: 'Address line 2',
+    mdResideFloripa: 'Do you live in Florianópolis?',
+    mdSelecione: 'Select', mdSim: 'Yes', mdNao: 'No',
+    mdTelefonePh: '(00) 00000-0000', mdNascPh: 'MM/DD/YYYY',
+    // Change Password
+    tsTitle: 'Change password',
+    tsDesc: 'For your security, choose a strong password different from the previous one. We recommend at least 8 characters with letters, numbers and a symbol.',
+    tsSenhaAtual: 'Current password *', tsSenhaAtualPh: 'Enter your current password',
+    tsNovaSenha: 'New password *', tsNovaSenhaPh: 'New password',
+    tsConfirmarSenha: 'Confirm new password *', tsConfirmarSenhaPh: 'Confirm the new password',
+    tsDicas: 'Security tips',
+    tsDica1: 'Use at least 8 characters',
+    tsDica2: 'Combine upper and lower case letters and numbers',
+    tsDica3: 'Include at least one symbol (! @ # $ %)',
+    tsDica4: 'Avoid personal data (name, SSN, date of birth)',
+    tsCancelar: 'Cancel', tsAlterar: 'Change password',
+    // Home
+    boaTarde: 'Hello', bemVindo: 'Welcome!',
+    saudSegunda: 'Monday', quickTitle: 'Quick access',
+    servicoVerTodos: 'See all',
+    // ProcessoDetalhe
+    pdEntradaEm: 'Entered on:', pdProcessoDigital: 'Digital Process',
+    pdDadosBasicos: 'Basic data', pdDetalhamento: 'Details',
+    pdTipo: 'Type', pdClassificacao: 'Classification', pdDataEntrada: 'Entry date',
+    pdRecebido: 'Received on', pdOrgaoAbertura: 'Opening agency', pdOrgaoAtual: 'Current agency', pdUnidadeAtual: 'Current unit',
+    pdSituacao: 'Status', pdArquivado: 'Archived', pdAndamento: 'In progress',
+    pdInteressados: 'Interested parties', pdRequerente: 'Applicant',
+    pdVerTodos: 'See all',
+    pdVol: 'VOL.', pdOrgaoSetor: 'AGENCY / DEPARTMENT', pdRecebidoEm: 'RECEIVED ON', pdEncaminhadoEm: 'FORWARDED ON',
+    pdDespacho: 'DISPATCH',
+    pdTipoTarefa: 'TASK TYPE', pdDataCriacao: 'Creation date', pdSituacaoCol: 'Status', pdAcoes: 'Actions',
+    pdArquivadoEm: 'ARCHIVED ON', pdMotivoArq: 'ARCHIVING REASON',
+    pdReabertoEm: 'REOPENED ON', pdMotivoReab: 'REOPENING REASON',
+    pdFinalizada: 'Completed',
+    pdAnalisarSustentabilidade: 'Review sustainability',
+    // Service request
+    solTituloBusca: 'Search for a service in this category...',
+    solMaisInfo: 'More information', solSolicitar: 'Request',
+    solOrgao: 'Agency:', solPublico: 'Audience:',
+    solNenhumTitle: 'No services found', solNenhumDesc: 'Try different search terms',
+    solServicoDisp: 'service', solServicosDisp: 'services',
+    solDispSingular: 'available in this category', solDispPlural: 'available in this category',
+    // Header search
+    buscarServico: 'Search service...', pressEnter: 'Press Enter to search',
+    crProcesso: 'Process:', crData: 'Date:',
   },
 } as const;
 
@@ -123,19 +333,10 @@ function FAIcon({ icon, style, onClick }: { icon: string; style?: React.CSSPrope
 const imgBannerFloripa   = '/floripa.jpg';
 const imgFloripa         = '/Floripa 02.jpg';
 
-// Ícones do detalhe do processo
-const imgBuildingColumns = 'http://localhost:3845/assets/28f0f3f96e9121dc8c7cdd390da7e21ac41b7af1.svg';
-const imgCalendarIcon    = 'http://localhost:3845/assets/3f3d8ad8e8fdbbf83d15b3643683a2e7bafd918e.svg';
-const imgFolderClosed    = 'http://localhost:3845/assets/e8513ebcf8bcd05a28c2c5b92a56343029cfe04f.svg';
-const imgEyeSolid        = 'http://localhost:3845/assets/eb3c3e8d81f45b7c7213f3e2779d272ec2242141.svg';
-const imgFileLines       = 'http://localhost:3845/assets/4938efb98f1dd509cb825a72fae373d130a55be4.svg';
-const imgDownToLine      = 'http://localhost:3845/assets/6ec71a8441202dd2e3af69bd421865453eb71731.svg';
-const imgTimelineLine    = 'http://localhost:3845/assets/47758b7fc5133202301ceb3a5dc69b07e761e275.svg';
-const imgTimelineEnd     = 'http://localhost:3845/assets/d195b410caf516ddd8979525771220b9d566f9ab.svg';
-const imgLocationDot     = 'http://localhost:3845/assets/c7bfbd2db7dbf29fac74fea0b36e09c701fc1b3f.svg';
+// (Os ícones do detalhe do processo agora usam FontAwesome Pro via FAIcon)
 
 // ── Tipo de página ────────────────────────────────────────────────────────────
-type Page = 'home' | 'consulta' | 'processo' | 'documentos' | 'meusdados' | 'meusprocessos' | 'solicitacao' | 'cat-servicos' | 'servico-detalhe' | 'servico-form';
+type Page = 'home' | 'consulta' | 'processo' | 'documentos' | 'meusdados' | 'meusprocessos' | 'minhaspendencias' | 'pendencia-resolver' | 'processosliberados' | 'solicitacao' | 'cat-servicos' | 'servico-detalhe' | 'servico-form';
 
 // ── Serviços municipais para o dropdown de busca ──────────────────────────────
 const ALL_SERVICES = [
@@ -251,6 +452,10 @@ const STATUS_STYLE: Record<ProcessoStatus, { bg: string; color: string }> = {
 // ── Badge de status ───────────────────────────────────────────────────────────
 function StatusBadge({ status }: { status: ProcessoStatus }) {
   const s = STATUS_STYLE[status];
+  const t = useT();
+  const label = status === 'Concluído' ? t('statusConcluido')
+              : status === 'Em Andamento' ? t('statusAndamento')
+              : t('statusPendente');
   return (
     <span style={{
       display: 'inline-block',
@@ -264,13 +469,14 @@ function StatusBadge({ status }: { status: ProcessoStatus }) {
       lineHeight: '20px',
       whiteSpace: 'nowrap',
     }}>
-      {status}
+      {label}
     </span>
   );
 }
 
 // ── Card de consulta recente ──────────────────────────────────────────────────
 function ConsultaRow({ numero, data, descricao, status, onClick }: ConsultaRecente & { onClick?: () => void }) {
+  const t = useT();
   return (
     <div
       onClick={onClick}
@@ -296,10 +502,10 @@ function ConsultaRow({ numero, data, descricao, status, onClick }: ConsultaRecen
         </div>
         <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
           <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>
-            <strong style={{ color: '#565656' }}>Processo:</strong> {numero}
+            <strong style={{ color: '#565656' }}>{t('crProcesso')}</strong> {numero}
           </span>
           <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>
-            <strong style={{ color: '#565656' }}>Data:</strong> {data}
+            <strong style={{ color: '#565656' }}>{t('crData')}</strong> {data}
           </span>
         </div>
       </div>
@@ -747,8 +953,8 @@ function SideMenu({ activePage, onNavigate, expanded, onLogin, isLoggedIn, onLog
 
   const loggedInItems: { icon: string; label: string; page: Page | null }[] = [
     { icon: 'fa-regular fa-folder-user',  label: t('meusProcessos'),     page: 'meusprocessos' as Page },
-    { icon: 'fa-regular fa-clock',        label: t('minhasPendencias'),   page: null },
-    { icon: 'fa-regular fa-circle-check', label: t('processosLiberados'), page: null },
+    { icon: 'fa-regular fa-clock',        label: t('minhasPendencias'),   page: 'minhaspendencias' as Page },
+    { icon: 'fa-regular fa-circle-check', label: t('processosLiberados'), page: 'processosliberados' as Page },
   ];
 
   const items = isLoggedIn ? [...baseItems, ...loggedInItems] : baseItems;
@@ -914,6 +1120,22 @@ function Breadcrumb({ page, onNavigate, selectedCat, selectedService }: {
         <>{sep}<span style={{ ...txt, fontWeight: 400 }}>{t('meusProcessos')}</span></>
       )}
 
+      {/* Minhas pendências */}
+      {(page === 'minhaspendencias' || page === 'pendencia-resolver') && (
+        <>{sep}{page === 'pendencia-resolver'
+          ? link(t('minhasPendencias'), () => onNavigate('minhaspendencias'))
+          : <span style={{ ...txt, fontWeight: 400 }}>{t('minhasPendencias')}</span>
+        }</>
+      )}
+      {page === 'pendencia-resolver' && (
+        <>{sep}<span style={{ ...txt, fontWeight: 400 }}>{t('rpTitle')}</span></>
+      )}
+
+      {/* Processos Liberados */}
+      {page === 'processosliberados' && (
+        <>{sep}<span style={{ ...txt, fontWeight: 400 }}>{t('processosLiberados')}</span></>
+      )}
+
       {/* Solicitação de serviços + sub-páginas */}
       {inSolicitacao && (
         <>{sep}{page === 'solicitacao'
@@ -1006,6 +1228,7 @@ const ORGAOS       = ['PMF', 'SMTTU', 'FLORIPAMANHÃ', 'IPUF', 'SMDS'];
 const PROCEDENCIAS = ['Interno', 'Externo'];
 
 function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void }) {
+  const t = useT();
   const [orgao,       setOrgao]       = useState(ORGAOS[0]);
   const [procedencia, setProcedencia] = useState(PROCEDENCIAS[0]);
   const [numero,      setNumero]      = useState('');
@@ -1032,23 +1255,23 @@ function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => v
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
 
       <div>
-        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: '0 0 8px 0' }}>Consulta de processos</h1>
+        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: '0 0 8px 0' }}>{t('consultaTitle')}</h1>
         <p style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#565656', margin: 0, lineHeight: '22px', maxWidth: 820 }}>
-          Consulte o andamento de processos digitais informando o número do processo. Acesse processos nos quais você é parte interessada ou representante legal. Para processos sigilosos, é necessário autenticação.
+          {t('consultaDesc')}
         </p>
       </div>
 
       <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 8, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)' }}>
-        <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#222', margin: 0 }}>Número do processo</h2>
+        <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#222', margin: 0 }}>{t('numeroProcesso')}</h2>
         <div style={{ display: 'flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
-          <SelectSegment label="Órgão"       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
-          <SelectSegment label="Procedência" value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
-          <FormSegment   label="Número"      value={numero}      onChange={setNumero}       placeholder="000000" />
-          <FormSegment   label="Ano"         value={ano}         onChange={setAno}          placeholder="2026"   width={90} last />
+          <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
+          <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
+          <FormSegment   label={t('numero')}      value={numero}      onChange={setNumero}       placeholder="000000" />
+          <FormSegment   label={t('ano')}         value={ano}         onChange={setAno}          placeholder="2026"   width={90} last />
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
-          <Button size="md" variant="primary"   onClick={handleConsultar}>Consultar</Button>
-          <Button size="md" variant="secondary" onClick={handleLimpar}>Limpar</Button>
+          <Button size="md" variant="primary"   onClick={handleConsultar}>{t('consultar')}</Button>
+          <Button size="md" variant="secondary" onClick={handleLimpar}>{t('limpar')}</Button>
         </div>
       </div>
 
@@ -1058,8 +1281,8 @@ function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => v
           <i className="fa-regular fa-magnifying-glass-plus" style={{ fontSize: 28, color: '#0058db' }} />
         </div>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222', marginBottom: 4 }}>Pesquise um processo</div>
-          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 13, color: '#7a8a9e', maxWidth: 420 }}>Preencha os campos acima com o número do processo para consultar o andamento detalhado</div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222', marginBottom: 4 }}>{t('pesquiseProcesso')}</div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 13, color: '#7a8a9e', maxWidth: 420 }}>{t('pesquiseDesc')}</div>
         </div>
       </div>
 
@@ -1069,15 +1292,15 @@ function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => v
           <i className="fa-regular fa-file-slash" style={{ fontSize: 28, color: '#0058db' }} />
         </div>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222', marginBottom: 4 }}>Nenhum processo encontrado</div>
-          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 13, color: '#7a8a9e' }}>Verifique os dados informados e tente novamente</div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222', marginBottom: 4 }}>{t('nenhumProcesso')}</div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 13, color: '#7a8a9e' }}>{t('nenhumDesc')}</div>
         </div>
       </div>
 
       {/* Resultados */}
       {showResults && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#353535' }}>Resultados</span>
+          <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#353535' }}>{t('resultados')}</span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {consultasRecentes.filter(r => visibleNumeros.has(r.numero)).map(r => (
               <ConsultaRow key={r.numero} numero={r.numero} data={r.data} descricao={r.descricao} status={r.status} onClick={onNavigateProcesso} />
@@ -1088,7 +1311,7 @@ function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => v
 
       {/* Consultas recentes */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#353535' }}>Consultas recentes</span>
+        <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#353535' }}>{t('consultasRecentes')}</span>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {consultasRecentes.map(c => (
             <ConsultaRow key={c.numero} numero={c.numero} data={c.data} descricao={c.descricao} status={c.status} onClick={onNavigateProcesso} />
@@ -1101,6 +1324,7 @@ function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => v
 
 // ── Tela: Conferência de Documentos ──────────────────────────────────────────
 function ConsultaDocumentos() {
+  const t = useT();
   const [orgao,       setOrgao]       = useState(ORGAOS[0]);
   const [procedencia, setProcedencia] = useState(PROCEDENCIAS[0]);
   const [numero,      setNumero]      = useState('');
@@ -1114,9 +1338,9 @@ function ConsultaDocumentos() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
 
       <div>
-        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: '0 0 8px 0' }}>Consulta de documentos</h1>
+        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: '0 0 8px 0' }}>{t('docTitle')}</h1>
         <p style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#333', margin: 0, lineHeight: '24px', letterSpacing: '0.08px', maxWidth: 820 }}>
-          Confira se uma cópia impressa corresponde a um documento assinado digitalmente em um processo administrativo. Basta inserir o código localizado na lateral direita do documento.
+          {t('docDesc')}
         </p>
       </div>
 
@@ -1124,18 +1348,18 @@ function ConsultaDocumentos() {
 
         {/* Número do processo */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: 0 }}>Número do processo</h2>
+          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: 0 }}>{t('numeroProcesso')}</h2>
           <div style={{ display: 'flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
-            <SelectSegment label="Órgão"       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
-            <SelectSegment label="Procedência" value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
-            <FormSegment   label="Número"      value={numero}      onChange={setNumero}       placeholder="000000" />
-            <FormSegment   label="Ano"         value={ano}         onChange={setAno}          placeholder="2026" width={90} last />
+            <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
+            <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
+            <FormSegment   label={t('numero')}      value={numero}      onChange={setNumero}       placeholder="000000" />
+            <FormSegment   label={t('ano')}         value={ano}         onChange={setAno}          placeholder="2026" width={90} last />
           </div>
         </div>
 
         {/* Código do documento */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: 0 }}>Código do documento</h2>
+          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: 0 }}>{t('codigoDoc')}</h2>
           <div style={{ width: 390 }}>
             <Input
               placeholder="Ex: 00U61ULQ"
@@ -1149,8 +1373,8 @@ function ConsultaDocumentos() {
 
         {/* Botões */}
         <div style={{ display: 'flex', gap: 10 }}>
-          <Button size="md" variant="primary"   onClick={handleConsultar}>Consultar</Button>
-          <Button size="md" variant="secondary" onClick={handleLimpar}>Limpar</Button>
+          <Button size="md" variant="primary"   onClick={handleConsultar}>{t('consultar')}</Button>
+          <Button size="md" variant="secondary" onClick={handleLimpar}>{t('limpar')}</Button>
         </div>
       </div>
 
@@ -1185,14 +1409,15 @@ function TableHeader({ cols }: { cols: { label: string; width?: number | string;
 }
 
 function ProcessoDetalhe() {
+  const t = useT();
   const [activeTab, setActiveTab] = useState<ProcessoTab>('dados');
 
   const tabs: { key: ProcessoTab; label: string }[] = [
-    { key: 'dados',         label: 'Dados do processo' },
-    { key: 'documentos',    label: 'Documentos' },
-    { key: 'tramitacoes',   label: 'Tramitações' },
-    { key: 'movimentacoes', label: 'Movimentações' },
-    { key: 'arquivamentos', label: 'Arquivamentos' },
+    { key: 'dados',         label: t('dadosProcesso') },
+    { key: 'documentos',    label: t('documentos') },
+    { key: 'tramitacoes',   label: t('tramitacoes') },
+    { key: 'movimentacoes', label: t('movimentacoes') },
+    { key: 'arquivamentos', label: t('arquivamentos') },
   ];
 
   const cardStyle: React.CSSProperties = {
@@ -1228,22 +1453,22 @@ function ProcessoDetalhe() {
         <div style={{ display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <img src={imgBuildingColumns} style={{ width: 14, height: 16 }} alt="" />
+              <FAIcon icon="fa-regular fa-building-columns" style={{ fontSize: 14, color: '#a3a3a3' }} />
             </div>
             <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#a3a3a3', whiteSpace: 'nowrap' }}>SAUDE - Secretaria de Saúde</span>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <img src={imgCalendarIcon} style={{ width: 14, height: 16 }} alt="" />
+              <FAIcon icon="fa-regular fa-calendar" style={{ fontSize: 14, color: '#a3a3a3' }} />
             </div>
-            <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#a3a3a3', whiteSpace: 'nowrap' }}>Entrada em:</span>
+            <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#a3a3a3', whiteSpace: 'nowrap' }}>{t('pdEntradaEm')}</span>
             <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#a3a3a3', whiteSpace: 'nowrap' }}>02/09/2025</span>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <img src={imgFolderClosed} style={{ width: 14, height: 16 }} alt="" />
+              <FAIcon icon="fa-regular fa-folder" style={{ fontSize: 14, color: '#a3a3a3' }} />
             </div>
-            <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#a3a3a3', whiteSpace: 'nowrap' }}>Processo Digital</span>
+            <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#a3a3a3', whiteSpace: 'nowrap' }}>{t('pdProcessoDigital')}</span>
           </div>
         </div>
       </div>
@@ -1270,29 +1495,29 @@ function ProcessoDetalhe() {
 
             {/* Dados básicos + Detalhamento */}
             <div style={cardStyle}>
-              <div style={sectionTitle}>Dados básicos</div>
+              <div style={sectionTitle}>{t('pdDadosBasicos')}</div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {([
-                  { label: 'Tipo',             value: 'Processo Digital' },
-                  { label: 'Classificação',    value: 'Ranking de Sustentabilidade' },
-                  { label: 'Data de entrada',  value: '02/09/2025' },
-                  { label: 'Recebido em',      value: '02/09/2025' },
-                  { label: 'Órgão de abertura',value: 'USP - Universidade de São Paulo' },
-                  { label: 'Órgão atual',      value: 'SOF - Secretaria de Orçamento e Finanças' },
-                  { label: 'Unidade atual',    value: 'SolarBPM - Demonstração' },
+                  { label: t('pdTipo'),             value: 'Processo Digital' },
+                  { label: t('pdClassificacao'),    value: 'Ranking de Sustentabilidade' },
+                  { label: t('pdDataEntrada'),      value: '02/09/2025' },
+                  { label: t('pdRecebido'),         value: '02/09/2025' },
+                  { label: t('pdOrgaoAbertura'),    value: 'USP - Universidade de São Paulo' },
+                  { label: t('pdOrgaoAtual'),       value: 'SOF - Secretaria de Orçamento e Finanças' },
+                  { label: t('pdUnidadeAtual'),     value: 'SolarBPM - Demonstração' },
                 ] as { label: string; value: string }[]).map(row => (
                   <DadosRow key={row.label} label={row.label}>
                     <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#333', letterSpacing: '0.08px', whiteSpace: 'nowrap' }}>{row.value}</span>
                   </DadosRow>
                 ))}
-                <DadosRow label="Situação" last>
+                <DadosRow label={t('pdSituacao')} last>
                   <span style={{ background: '#ffe9d9', color: '#99470c', borderRadius: 6, padding: '4px 8px', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, lineHeight: '16px', letterSpacing: '0.06px', whiteSpace: 'nowrap' }}>
-                    Arquivado
+                    {t('pdArquivado')}
                   </span>
                 </DadosRow>
               </div>
 
-              <div style={sectionTitle}>Detalhamento</div>
+              <div style={sectionTitle}>{t('pdDetalhamento')}</div>
               <div style={{ background: '#f4f6f9', borderRadius: 8, padding: 10 }}>
                 <p style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#333', lineHeight: '16px', margin: 0, letterSpacing: '0.08px' }}>
                   Sustentabilidade da Unidade: SOF - Secretaria de Orçamento e Finanças referente ao mês de setembro
@@ -1302,7 +1527,7 @@ function ProcessoDetalhe() {
 
             {/* Andamento (timeline) */}
             <div style={cardStyle}>
-              <div style={sectionTitle}>Andamento</div>
+              <div style={sectionTitle}>{t('pdAndamento')}</div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {([
                   { date: '02/09/2025', title: 'Processo aberto',                          desc: 'Solicitação protocolada e recebida pela unidade UN - São Paulo',                              loc: 'UN - São Paulo',               isLast: false },
@@ -1310,18 +1535,17 @@ function ProcessoDetalhe() {
                   { date: '08/09/2025', title: 'Análise de sustentabilidade finalizada',    desc: 'Tarefa concluída pela unidade DIGITAL. Processo encaminhado à Secretaria de Saúde',          loc: 'SAUDE - Secretaria da Saúde',  isLast: false },
                   { date: '08/09/2025', title: 'Processo arquivado',                        desc: 'Arquivado pela unidade SAUDE - Secretaria da Saúde após conclusão da análise',               loc: 'SAUDE - Secretaria da Saúde',  isLast: true  },
                 ] as { date: string; title: string; desc: string; loc: string; isLast: boolean }[]).map((item, i) => (
-                  <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                    <div style={{ width: 10, height: 104, flexShrink: 0 }}>
-                      <img src={item.isLast ? imgTimelineEnd : imgTimelineLine} style={{ width: '100%', height: '100%' }} alt="" />
+                  <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'stretch' }}>
+                    <div style={{ width: 12, flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 8 }}>
+                      <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#0058db', flexShrink: 0, boxShadow: '0 0 0 3px #dce6f5' }} />
+                      {!item.isLast && <div style={{ width: 2, flex: 1, background: '#dce6f5', marginTop: 4 }} />}
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', paddingBottom: item.isLast ? 0 : 16 }}>
                       <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 12, color: '#333', lineHeight: '24px', letterSpacing: '0.06px' }}>{item.date}</span>
                       <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#333', lineHeight: '24px', letterSpacing: '0.07px', whiteSpace: 'nowrap' }}>{item.title}</span>
                       <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#333', lineHeight: '24px', letterSpacing: '0.07px', whiteSpace: 'nowrap' }}>{item.desc}</span>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <img src={imgLocationDot} style={{ width: 12, height: 12, objectFit: 'contain' }} alt="" />
-                        </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <FAIcon icon="fa-solid fa-location-dot" style={{ fontSize: 11, color: '#0058db' }} />
                         <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#333', lineHeight: '24px', letterSpacing: '0.07px', whiteSpace: 'nowrap' }}>{item.loc}</span>
                       </div>
                     </div>
@@ -1336,11 +1560,11 @@ function ProcessoDetalhe() {
 
             {/* Interessados */}
             <div style={cardStyle}>
-              <div style={sectionTitle}>Interessados</div>
+              <div style={sectionTitle}>{t('pdInteressados')}</div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {([
-                  { initials: 'FS', name: 'Fernando Naim Schmitz', role: 'Requerente' },
-                  { initials: 'CL', name: 'Cris Lima',             role: 'Requerente' },
+                  { initials: 'FS', name: 'Fernando Naim Schmitz', role: t('pdRequerente') },
+                  { initials: 'CL', name: 'Cris Lima',             role: t('pdRequerente') },
                 ] as { initials: string; name: string; role: string }[]).map((person, i, arr) => (
                   <div key={person.initials} style={{ borderBottom: i < arr.length - 1 ? '1px solid #d5d5d5' : 'none', display: 'flex', alignItems: 'center', padding: '8px 0', gap: 8 }}>
                     <div style={{ width: 42, height: 42, borderRadius: '50%', background: '#dce6f5', border: '1.5px solid white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -1358,8 +1582,8 @@ function ProcessoDetalhe() {
             {/* Documentos (resumo) */}
             <div style={cardStyle}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', fontSize: 16, whiteSpace: 'nowrap' }}>
-                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, color: '#353535', lineHeight: '1.2' }}>Documentos</span>
-                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, color: '#353535', lineHeight: '1.2', cursor: 'pointer' }}>Ver todos</span>
+                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, color: '#353535', lineHeight: '1.2' }}>{t('documentos')}</span>
+                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, color: '#353535', lineHeight: '1.2', cursor: 'pointer' }}>{t('pdVerTodos')}</span>
               </div>
               {([
                 { name: 'Despacho_UN-SAOPAULO.pdf', vol: 'Vol. 1', date: '02/09/2025' },
@@ -1369,7 +1593,7 @@ function ProcessoDetalhe() {
                 <div key={doc.name} style={{ background: '#dce6f5', borderRadius: 8, padding: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <img src={imgFileLines} style={{ width: 12, height: 14 }} alt="" />
+                  <FAIcon icon="fa-regular fa-file-lines" style={{ fontSize: 13, color: '#333' }} />
                 </div>
                     <div>
                       <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#333', lineHeight: '24px', letterSpacing: '0.07px', whiteSpace: 'nowrap' }}>{doc.name}</div>
@@ -1380,7 +1604,7 @@ function ProcessoDetalhe() {
                     </div>
                   </div>
                   <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <img src={imgDownToLine} style={{ width: 12, height: 14 }} alt="" />
+                    <FAIcon icon="fa-regular fa-down-to-line" style={{ fontSize: 13, color: '#333', cursor: 'pointer' }} />
                   </div>
                 </div>
               ))}
@@ -1392,7 +1616,7 @@ function ProcessoDetalhe() {
       {/* ── Tab: Documentos ── */}
       {activeTab === 'documentos' && (
         <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: 24, display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={sectionTitle}>Documentos</div>
+          <div style={sectionTitle}>{t('documentos')}</div>
           {([
             { name: 'Despacho_UN-SAOPAULO.pdf', vol: 'Vol. 1', date: '02/09/2025' },
             { name: 'Despacho_DIGITAL.pdf',     vol: 'Vol. 1', date: '02/09/2025' },
@@ -1401,7 +1625,7 @@ function ProcessoDetalhe() {
             <div key={doc.name} style={{ background: '#dce6f5', borderRadius: 8, padding: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                 <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <img src={imgFileLines} style={{ width: 12, height: 14 }} alt="" />
+                  <FAIcon icon="fa-regular fa-file-lines" style={{ fontSize: 13, color: '#333' }} />
                 </div>
                 <div>
                   <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#333', lineHeight: '24px', letterSpacing: '0.07px', whiteSpace: 'nowrap' }}>{doc.name}</div>
@@ -1412,7 +1636,7 @@ function ProcessoDetalhe() {
                 </div>
               </div>
               <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <img src={imgDownToLine} style={{ width: 12, height: 14 }} alt="" />
+                <FAIcon icon="fa-regular fa-down-to-line" style={{ fontSize: 13, color: '#333', cursor: 'pointer' }} />
               </div>
             </div>
           ))}
@@ -1425,7 +1649,7 @@ function ProcessoDetalhe() {
         const td: React.CSSProperties = { fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#333', lineHeight: '24px', letterSpacing: '0.08px', padding: '8px 0' };
         return (
           <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: 24 }}>
-            <div style={{ ...sectionTitle, marginBottom: 8 }}>Tramitações</div>
+            <div style={{ ...sectionTitle, marginBottom: 8 }}>{t('tramitacoes')}</div>
             <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
               <colgroup>
                 <col style={{ width: '5%' }} />
@@ -1436,11 +1660,11 @@ function ProcessoDetalhe() {
               </colgroup>
               <thead>
                 <tr>
-                  <th style={th}>VOL.</th>
-                  <th style={th}>ÓRGÃO / SETOR</th>
-                  <th style={th}>RECEBIDO EM</th>
-                  <th style={th}>ENCAMINHADO EM</th>
-                  <th style={{ ...th, textAlign: 'center' }}>DESPACHO</th>
+                  <th style={th}>{t('pdVol')}</th>
+                  <th style={th}>{t('pdOrgaoSetor')}</th>
+                  <th style={th}>{t('pdRecebidoEm')}</th>
+                  <th style={th}>{t('pdEncaminhadoEm')}</th>
+                  <th style={{ ...th, textAlign: 'center' }}>{t('pdDespacho')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -1456,7 +1680,7 @@ function ProcessoDetalhe() {
                     <td style={td}>{row.encaminhado}</td>
                     <td style={{ ...td, textAlign: 'center' }}>
                       <div style={{ width: 24, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <img src={imgEyeSolid} style={{ width: 18, height: 14, cursor: 'pointer' }} alt="Ver despacho" />
+                        <FAIcon icon="fa-solid fa-eye" style={{ fontSize: 14, color: '#0058db', cursor: 'pointer' }} />
                       </div>
                     </td>
                   </tr>
@@ -1473,7 +1697,7 @@ function ProcessoDetalhe() {
         const td: React.CSSProperties = { fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#333', lineHeight: '24px', letterSpacing: '0.08px', padding: '8px 0', borderBottom: '1px solid #d5d5d5' };
         return (
           <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: 24 }}>
-            <div style={{ ...sectionTitle, marginBottom: 8 }}>Movimentações</div>
+            <div style={{ ...sectionTitle, marginBottom: 8 }}>{t('movimentacoes')}</div>
             <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
               <colgroup>
                 <col style={{ width: '45%' }} />
@@ -1483,24 +1707,24 @@ function ProcessoDetalhe() {
               </colgroup>
               <thead>
                 <tr>
-                  <th style={th}>TIPO DE TAREFA</th>
-                  <th style={th}>Data de Criação</th>
-                  <th style={th}>Situação</th>
-                  <th style={{ ...th, textAlign: 'center' }}>Ações</th>
+                  <th style={th}>{t('pdTipoTarefa')}</th>
+                  <th style={th}>{t('pdDataCriacao')}</th>
+                  <th style={th}>{t('pdSituacaoCol')}</th>
+                  <th style={{ ...th, textAlign: 'center' }}>{t('pdAcoes')}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style={td}>Analisar sustentabilidade</td>
+                  <td style={td}>{t('pdAnalisarSustentabilidade')}</td>
                   <td style={td}>02/09/2025</td>
                   <td style={td}>
                     <span style={{ background: '#cef2e1', color: '#0f4c30', borderRadius: 6, padding: '4px 8px', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, lineHeight: '16px', letterSpacing: '0.06px', whiteSpace: 'nowrap' }}>
-                      Finalizada
+                      {t('pdFinalizada')}
                     </span>
                   </td>
                   <td style={{ ...td, textAlign: 'center' }}>
                     <div style={{ width: 24, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <img src={imgEyeSolid} style={{ width: 18, height: 14, cursor: 'pointer' }} alt="Ver detalhes" />
+                      <FAIcon icon="fa-solid fa-eye" style={{ fontSize: 14, color: '#0058db', cursor: 'pointer' }} />
                     </div>
                   </td>
                 </tr>
@@ -1516,7 +1740,7 @@ function ProcessoDetalhe() {
         const td: React.CSSProperties = { fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#333', lineHeight: '24px', letterSpacing: '0.08px', padding: '8px 0', borderBottom: '1px solid #d5d5d5' };
         return (
           <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: 24 }}>
-            <div style={{ ...sectionTitle, marginBottom: 8 }}>Arquivamentos e reaberturas</div>
+            <div style={{ ...sectionTitle, marginBottom: 8 }}>{t('arquivamentos')}</div>
             <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
               <colgroup>
                 <col style={{ width: '5%' }} />
@@ -1528,12 +1752,12 @@ function ProcessoDetalhe() {
               </colgroup>
               <thead>
                 <tr>
-                  <th style={th}>VOL.</th>
-                  <th style={th}>TIPO DE TAREFA</th>
-                  <th style={th}>ARQUIVADO EM</th>
-                  <th style={{ ...th, textAlign: 'center' }}>MOTIVO DO ARQUIVAMENTO</th>
-                  <th style={th}>REABERTO EM</th>
-                  <th style={th}>MOTIVO REABERTURA</th>
+                  <th style={th}>{t('pdVol')}</th>
+                  <th style={th}>{t('pdTipoTarefa')}</th>
+                  <th style={th}>{t('pdArquivadoEm')}</th>
+                  <th style={{ ...th, textAlign: 'center' }}>{t('pdMotivoArq')}</th>
+                  <th style={th}>{t('pdReabertoEm')}</th>
+                  <th style={th}>{t('pdMotivoReab')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -1543,7 +1767,7 @@ function ProcessoDetalhe() {
                   <td style={td}>02/09/2025</td>
                   <td style={{ ...td, textAlign: 'center' }}>
                     <div style={{ width: 24, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <img src={imgEyeSolid} style={{ width: 18, height: 14, cursor: 'pointer' }} alt="Ver motivo" />
+                      <FAIcon icon="fa-solid fa-eye" style={{ fontSize: 14, color: '#0058db', cursor: 'pointer' }} />
                     </div>
                   </td>
                   <td style={td}>02/09/2025</td>
@@ -1915,7 +2139,7 @@ function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }: {
                             <td style={{ padding: '11px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#0058db' }}>{row.destino.join(', ')}</td>
                             <td style={{ padding: '11px 14px', textAlign: 'center' }}>
                               <div style={{ width: 24, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <img src={imgEyeSolid} style={{ width: 18, height: 14, cursor: 'pointer' }} alt="Ver" />
+                                <FAIcon icon="fa-solid fa-eye" style={{ fontSize: 14, color: '#0058db', cursor: 'pointer' }} />
                               </div>
                             </td>
                           </tr>
@@ -2021,7 +2245,7 @@ function StatCard({ icon, label, value, color, bg, active, onClick }: {
   );
 }
 
-// ── Card de processo (linha detalhada) ────────────────────────────────────────
+// ── Card de processo ──────────────────────────────────────────────────────────
 function ProcessoCard({ processo, onClick }: { processo: MeuProcesso; onClick: () => void }) {
   const t = useT();
   return (
@@ -2029,7 +2253,7 @@ function ProcessoCard({ processo, onClick }: { processo: MeuProcesso; onClick: (
       onClick={onClick}
       style={{
         background: 'white', border: '1px solid #dde3ee', borderRadius: 10,
-        padding: '18px 22px', display: 'flex', alignItems: 'center', gap: 16,
+        padding: 20, display: 'flex', flexDirection: 'column', gap: 14,
         cursor: 'pointer',
         boxShadow: '0px 2px 8px rgba(24,39,75,0.07)',
         transition: 'box-shadow 0.15s, border-color 0.15s',
@@ -2037,31 +2261,43 @@ function ProcessoCard({ processo, onClick }: { processo: MeuProcesso; onClick: (
       onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 4px 16px rgba(24,39,75,0.13)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#b3c7e6'; }}
       onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 2px 8px rgba(24,39,75,0.07)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#dde3ee'; }}
     >
-      <div style={{ width: 48, height: 48, background: '#f0f4fb', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <FAIcon icon="fa-regular fa-folder-open" style={{ fontSize: 22, color: '#0058db' }} />
-      </div>
-
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222', marginBottom: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {processo.titulo}
-        </div>
-        <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'center' }}>
-          <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>
-            <strong style={{ color: '#565656' }}>Processo:</strong> {processo.numero}
-          </span>
-          <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>
-            <strong style={{ color: '#565656' }}>{t('mpOrgao')}:</strong> {processo.orgao}
-          </span>
-          <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-            <FAIcon icon="fa-regular fa-clock" style={{ fontSize: 11, color: '#a3a3a3' }} />
-            {t('mpAtualizado')} {processo.atualizadoEm}
-          </span>
-        </div>
-      </div>
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+      {/* Header: número em azul + status badge */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+        <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 13, color: '#0058db', letterSpacing: 0.2 }}>
+          {processo.numero}
+        </span>
         <StatusBadge status={processo.status} />
-        <FAIcon icon="fa-regular fa-angle-right" style={{ fontSize: 16, color: '#a3a3a3' }} />
+      </div>
+
+      {/* Título */}
+      <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', lineHeight: 1.35 }}>
+        {processo.titulo}
+      </div>
+
+      {/* Metadata em grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, fontFamily: 'Open Sans, sans-serif' }}>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8a9ab5', letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 2 }}>
+            {t('mpOrgao')}
+          </div>
+          <div style={{ fontSize: 13, color: '#333', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {processo.orgao}
+          </div>
+        </div>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8a9ab5', letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 2 }}>
+            {t('mpAtualizado')}
+          </div>
+          <div style={{ fontSize: 13, color: '#333', fontWeight: 600 }}>
+            {processo.atualizadoEm}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer: link "Ver detalhes" */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, paddingTop: 10, borderTop: '1px solid #f0f0f0', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, color: '#0058db' }}>
+        {t('mpVer')}
+        <FAIcon icon="fa-regular fa-arrow-right" style={{ fontSize: 11 }} />
       </div>
     </div>
   );
@@ -2106,7 +2342,7 @@ function MeusProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void 
           <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: 0 }}>
             {t('meusProcessosTitle')}
           </h1>
-          <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#565656', margin: '6px 0 0 0', maxWidth: 680, lineHeight: 1.5 }}>
+          <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#565656', margin: '6px 0 0 0', lineHeight: 1.5 }}>
             {t('meusProcessosDesc')}
           </p>
         </div>
@@ -2164,8 +2400,8 @@ function MeusProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void 
         />
       </div>
 
-      {/* Barra de busca + tabs (card único) */}
-      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 16, display: 'flex', flexDirection: 'column', gap: 14, boxShadow: '0px 2px 8px rgba(24,39,75,0.06)' }}>
+      {/* Busca (card isolado) */}
+      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 16, boxShadow: '0px 2px 8px rgba(24,39,75,0.06)' }}>
         <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #dce6f5', borderRadius: 8, height: 44, overflow: 'hidden', background: 'white' }}>
           <FAIcon icon="fa-regular fa-magnifying-glass" style={{ fontSize: 15, color: '#7d7d7d', marginLeft: 14 }} />
           <input
@@ -2182,43 +2418,42 @@ function MeusProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void 
             />
           )}
         </div>
-
-        {/* Tabs */}
-        <div style={{ display: 'flex', gap: 6, borderBottom: '1px solid #ebebeb', flexWrap: 'wrap' }}>
-          {tabs.map(tab => {
-            const active = filtro === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setFiltro(tab.id)}
-                style={{
-                  background: 'none', border: 'none',
-                  borderBottom: active ? '3px solid #0058db' : '3px solid transparent',
-                  padding: '10px 16px',
-                  fontFamily: 'Open Sans, sans-serif',
-                  fontSize: 13, fontWeight: active ? 700 : 500,
-                  color: active ? '#0058db' : '#565656',
-                  cursor: 'pointer',
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  marginBottom: -1,
-                }}
-              >
-                {tab.label}
-                <span style={{
-                  background: active ? '#0058db' : '#ebebeb',
-                  color: active ? 'white' : '#565656',
-                  fontSize: 11, fontWeight: 700,
-                  padding: '2px 8px', borderRadius: 100, lineHeight: 1.2,
-                }}>{tab.count}</span>
-              </button>
-            );
-          })}
-        </div>
       </div>
 
-      {/* Lista de processos */}
+      {/* Tabs (card isolado) */}
+      <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '4px 8px', display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+        {tabs.map(tab => {
+          const active = filtro === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setFiltro(tab.id)}
+              style={{
+                background: 'none', border: 'none',
+                borderBottom: active ? '3px solid #0058db' : '3px solid transparent',
+                padding: '10px 16px',
+                fontFamily: 'Open Sans, sans-serif',
+                fontSize: 13, fontWeight: active ? 700 : 500,
+                color: active ? '#0058db' : '#565656',
+                cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+              }}
+            >
+              {tab.label}
+              <span style={{
+                background: active ? '#0058db' : '#ebebeb',
+                color: active ? 'white' : '#565656',
+                fontSize: 11, fontWeight: 700,
+                padding: '2px 8px', borderRadius: 100, lineHeight: 1.2,
+              }}>{tab.count}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Lista de processos — grid 2 colunas */}
       {filtrados.length > 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(480px, 1fr))', gap: 12 }}>
           {filtrados.map(p => (
             <ProcessoCard key={p.numero} processo={p} onClick={onNavigateProcesso} />
           ))}
@@ -2240,11 +2475,970 @@ function MeusProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void 
   );
 }
 
+// ── Mock: pendências do usuário ───────────────────────────────────────────────
+type PendenciaStatus = 'Aberta' | 'Finalizada';
+type PendenciaTipo = 'Assinatura de documentos' | 'Verificar informações' | 'Comunique-se' | 'Análise de documentos' | 'Complementar dados';
+
+function pendenciaTipoKey(tipo: PendenciaTipo): keyof typeof TRANS['pt'] {
+  switch (tipo) {
+    case 'Assinatura de documentos': return 'tipoAssinatura';
+    case 'Verificar informações':    return 'tipoVerificar';
+    case 'Comunique-se':             return 'tipoComunique';
+    case 'Análise de documentos':    return 'tipoAnalise';
+    case 'Complementar dados':       return 'tipoComplementar';
+  }
+}
+
+interface Pendencia {
+  id: string;
+  tipo: PendenciaTipo;
+  criadaEm: string;        // dd/mm/yyyy
+  prazo: string | null;    // dd/mm/yyyy ou null
+  diasRestantes: number | null;  // negativo = vencida, null = sem prazo
+  status: PendenciaStatus;
+  processo: string;
+  interessado: string;
+  titulo: string;
+}
+
+const MOCK_PENDENCIAS: Pendencia[] = [
+  { id: 'p1', tipo: 'Verificar informações', criadaEm: '15/04/2026', prazo: '22/04/2026', diasRestantes: 2,  status: 'Aberta',      processo: 'PMF2026/000418', interessado: 'Fernando Naim Schmitz', titulo: 'Verificar informações solicitadas sobre renda' },
+  { id: 'p2', tipo: 'Assinatura de documentos', criadaEm: '14/04/2026', prazo: '21/04/2026', diasRestantes: 1,  status: 'Aberta',      processo: 'PMF2026/000392', interessado: 'Empresa de Transportes', titulo: 'Assinatura de contrato de prestação' },
+  { id: 'p3', tipo: 'Comunique-se', criadaEm: '12/04/2026', prazo: '19/04/2026', diasRestantes: -1, status: 'Aberta',      processo: 'PMF2026/000367', interessado: 'Fernando Naim Schmitz', titulo: 'Responder questionamento sobre documentação' },
+  { id: 'p4', tipo: 'Assinatura de documentos', criadaEm: '11/04/2026', prazo: '25/04/2026', diasRestantes: 5,  status: 'Aberta',      processo: 'PMF2026/000341', interessado: 'Filipe Otávio Reis',      titulo: 'Assinatura de declaração de residência' },
+  { id: 'p5', tipo: 'Complementar dados', criadaEm: '10/04/2026', prazo: null,        diasRestantes: null, status: 'Aberta',     processo: 'PMF2026/000298', interessado: 'Fernando Naim Schmitz', titulo: 'Anexar comprovante de endereço atualizado' },
+  { id: 'p6', tipo: 'Análise de documentos', criadaEm: '08/04/2026', prazo: '28/04/2026', diasRestantes: 8,  status: 'Aberta',      processo: 'PMF2026/000275', interessado: 'Fernando Naim Schmitz', titulo: 'Analisar parecer técnico da vistoria' },
+  { id: 'p7', tipo: 'Assinatura de documentos', criadaEm: '05/04/2026', prazo: '12/04/2026', diasRestantes: -8, status: 'Aberta',      processo: 'PMF2026/000244', interessado: 'Fernando Naim Schmitz', titulo: 'Assinatura de termo de compromisso' },
+  { id: 'p8', tipo: 'Comunique-se', criadaEm: '02/04/2026', prazo: '09/04/2026', diasRestantes: -11, status: 'Finalizada', processo: 'PMF2026/000221', interessado: 'Fernando Naim Schmitz', titulo: 'Responder sobre histórico escolar' },
+  { id: 'p9', tipo: 'Verificar informações', criadaEm: '28/03/2026', prazo: '04/04/2026', diasRestantes: -16, status: 'Finalizada', processo: 'PMF2026/000198', interessado: 'Fernando Naim Schmitz', titulo: 'Verificar dados cadastrais' },
+];
+
+// Ícone e cor para cada tipo de pendência
+const PENDENCIA_ICON: Record<PendenciaTipo, { icon: string; color: string; bg: string }> = {
+  'Assinatura de documentos': { icon: 'fa-regular fa-signature',           color: '#0058db', bg: '#edf2ff' },
+  'Verificar informações':    { icon: 'fa-regular fa-magnifying-glass',    color: '#b35c00', bg: '#fff4e5' },
+  'Comunique-se':             { icon: 'fa-regular fa-comment-dots',        color: '#6639ba', bg: '#f2ecfc' },
+  'Análise de documentos':    { icon: 'fa-regular fa-file-magnifying-glass', color: '#0f6b3e', bg: '#e6f9f0' },
+  'Complementar dados':       { icon: 'fa-regular fa-file-arrow-up',       color: '#c0182d', bg: '#fff0f2' },
+};
+
+// Badge de situação (Aberta / Finalizada)
+function PendenciaStatusBadge({ status }: { status: PendenciaStatus }) {
+  const t = useT();
+  const s = status === 'Aberta'
+    ? { bg: '#fff4e5', color: '#b35c00' }
+    : { bg: '#e6f9f0', color: '#0f6b3e' };
+  const label = status === 'Aberta' ? t('pendAberta') : t('pendFinalizada');
+  return (
+    <span style={{
+      display: 'inline-block', background: s.bg, color: s.color,
+      borderRadius: 100, padding: '2px 12px',
+      fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, lineHeight: '20px',
+      whiteSpace: 'nowrap',
+    }}>
+      {label}
+    </span>
+  );
+}
+
+// Badge de prazo (calcula urgência pelos diasRestantes)
+function PrazoBadge({ prazo, diasRestantes, finalizada }: { prazo: string | null; diasRestantes: number | null; finalizada: boolean }) {
+  const t = useT();
+  if (finalizada) {
+    return <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>{prazo || '-'}</span>;
+  }
+  if (prazo === null || diasRestantes === null) {
+    return <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#a3a3a3', fontStyle: 'italic' }}>{t('mpendSemPrazo')}</span>;
+  }
+  let bg = '#e6f9f0', color = '#0f6b3e', label = `${prazo} · ${t('prazoEm')} ${diasRestantes} ${t('prazoDias')}`;
+  if (diasRestantes < 0) { bg = '#fff0f2'; color = '#c0182d'; label = `${prazo} · ${Math.abs(diasRestantes)} ${Math.abs(diasRestantes) === 1 ? t('prazoDia') : t('prazoDias')} ${t('prazoVencida')}`; }
+  else if (diasRestantes <= 3) { bg = '#fff4e5'; color = '#b35c00'; label = `${prazo} · ${diasRestantes === 0 ? t('prazoVenceHoje') : `${t('prazoEm')} ${diasRestantes} ${diasRestantes === 1 ? t('prazoDia') : t('prazoDias')}`}`; }
+
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 6,
+      background: bg, color,
+      borderRadius: 6, padding: '4px 10px',
+      fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11,
+      whiteSpace: 'nowrap',
+    }}>
+      <FAIcon icon="fa-regular fa-clock" style={{ fontSize: 10 }} />
+      {label}
+    </span>
+  );
+}
+
+// ── Card de pendência ─────────────────────────────────────────────────────────
+function PendenciaCard({ pendencia, onResolver, onVer }: { pendencia: Pendencia; onResolver: () => void; onVer: () => void }) {
+  const t = useT();
+  const iconInfo = PENDENCIA_ICON[pendencia.tipo];
+  const finalizada = pendencia.status === 'Finalizada';
+
+  return (
+    <div
+      style={{
+        background: 'white', border: '1px solid #dde3ee', borderRadius: 10,
+        padding: 20, display: 'flex', flexDirection: 'column', gap: 14,
+        boxShadow: '0px 2px 8px rgba(24,39,75,0.07)',
+        transition: 'box-shadow 0.15s, border-color 0.15s',
+      }}
+      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 4px 16px rgba(24,39,75,0.13)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#b3c7e6'; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 2px 8px rgba(24,39,75,0.07)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#dde3ee'; }}
+    >
+      {/* Linha 1: tipo + situação + prazo */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: iconInfo.color,
+            fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.3,
+            background: iconInfo.bg, borderRadius: 6, padding: '4px 10px',
+          }}>
+            {t(pendenciaTipoKey(pendencia.tipo))}
+          </span>
+          <PendenciaStatusBadge status={pendencia.status} />
+        </div>
+        <PrazoBadge prazo={pendencia.prazo} diasRestantes={pendencia.diasRestantes} finalizada={finalizada} />
+      </div>
+
+      {/* Título */}
+      <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', lineHeight: 1.35 }}>
+        {pendencia.titulo}
+      </div>
+
+      {/* Metadata em grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, fontFamily: 'Open Sans, sans-serif' }}>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8a9ab5', letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 2 }}>
+            {t('mpendProcesso')}
+          </div>
+          <div style={{ fontSize: 13, color: '#333', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {pendencia.processo}
+          </div>
+        </div>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8a9ab5', letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 2 }}>
+            {t('mpendInteressado')}
+          </div>
+          <div style={{ fontSize: 13, color: '#333', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {pendencia.interessado}
+          </div>
+        </div>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8a9ab5', letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 2 }}>
+            {t('mpendCriadaEm')}
+          </div>
+          <div style={{ fontSize: 13, color: '#333', fontWeight: 600 }}>
+            {pendencia.criadaEm}
+          </div>
+        </div>
+      </div>
+
+      {/* Ação — largura total, destaque */}
+      {finalizada ? (
+        <button
+          onClick={onVer}
+          style={{
+            marginTop: 4,
+            height: 42, width: '100%', borderRadius: 8, background: 'white',
+            border: '1.5px solid #d5d5d5', color: '#565656',
+            fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13,
+            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f4f6f9'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#a3a3a3'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'white'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5'; }}
+        >
+          <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 13 }} />
+          {t('mpendVer')}
+        </button>
+      ) : (
+        <button
+          onClick={onResolver}
+          style={{
+            marginTop: 4,
+            height: 44, width: '100%', borderRadius: 8,
+            background: '#0058db', border: '1.5px solid #0058db', color: 'white',
+            fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14,
+            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            boxShadow: '0px 2px 6px rgba(0,88,219,0.24)',
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = '#0058db'}
+        >
+          <FAIcon icon="fa-regular fa-circle-check" style={{ fontSize: 14 }} />
+          {t('mpendResolver')}
+        </button>
+      )}
+    </div>
+  );
+}
+
+// ── Tela: Minhas Pendências ──────────────────────────────────────────────────
+function MinhasPendencias({ onNavigateProcesso, onResolverPendencia }: { onNavigateProcesso: () => void; onResolverPendencia: (p: Pendencia) => void }) {
+  const t = useT();
+  const [query, setQuery]   = useState('');
+  const [filtro, setFiltro] = useState<'todas' | 'aberto' | 'vencendo' | 'finalizadas'>('aberto');
+
+  const total        = MOCK_PENDENCIAS.length;
+  const emAberto     = MOCK_PENDENCIAS.filter(p => p.status === 'Aberta').length;
+  const vencendo     = MOCK_PENDENCIAS.filter(p => p.status === 'Aberta' && p.diasRestantes !== null && p.diasRestantes <= 3).length;
+  const finalizadas  = MOCK_PENDENCIAS.filter(p => p.status === 'Finalizada').length;
+
+  const filtradas = MOCK_PENDENCIAS.filter(p => {
+    if (filtro === 'aberto'      && p.status !== 'Aberta') return false;
+    if (filtro === 'finalizadas' && p.status !== 'Finalizada') return false;
+    if (filtro === 'vencendo'    && !(p.status === 'Aberta' && p.diasRestantes !== null && p.diasRestantes <= 3)) return false;
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      return (
+        p.tipo.toLowerCase().includes(q) ||
+        p.titulo.toLowerCase().includes(q) ||
+        p.processo.toLowerCase().includes(q) ||
+        p.interessado.toLowerCase().includes(q)
+      );
+    }
+    return true;
+  }).sort((a, b) => {
+    // Aberto primeiro; dentro do aberto, ordenar por prazo (vencidas e próximas antes)
+    if (a.status !== b.status) return a.status === 'Aberta' ? -1 : 1;
+    const da = a.diasRestantes ?? 9999;
+    const db = b.diasRestantes ?? 9999;
+    return da - db;
+  });
+
+  const tabs: { id: typeof filtro; label: string; count: number }[] = [
+    { id: 'todas',       label: t('mpTodos'),           count: total },
+    { id: 'aberto',      label: t('mpendAberto'),       count: emAberto },
+    { id: 'vencendo',    label: t('mpendVencendo'),     count: vencendo },
+    { id: 'finalizadas', label: t('mpendFinalizadas'),  count: finalizadas },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
+      {/* Título + descrição + ações */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 280 }}>
+          <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: 0 }}>
+            {t('mpendTitle')}
+          </h1>
+          <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#565656', margin: '6px 0 0 0', lineHeight: 1.5 }}>
+            {t('mpendDesc')}
+          </p>
+        </div>
+        <div style={{ display: 'flex', gap: 10, flexShrink: 0 }}>
+          <button style={{
+            height: 40, padding: '0 16px', borderRadius: 8, background: 'white',
+            border: '1.5px solid #0058db', color: '#0058db',
+            fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13,
+            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}>
+            <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 14 }} />
+            {t('mpExportarPdf')}
+          </button>
+          <button style={{
+            height: 40, padding: '0 16px', borderRadius: 8, background: '#0058db',
+            border: '1.5px solid #0058db', color: 'white',
+            fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13,
+            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = '#0058db'}>
+            <FAIcon icon="fa-regular fa-file-spreadsheet" style={{ fontSize: 14 }} />
+            {t('mpExportarXls')}
+          </button>
+        </div>
+      </div>
+
+      {/* Big numbers */}
+      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+        <StatCard
+          icon="fa-regular fa-list-check" label={t('mpendTotal')} value={total}
+          color="#0058db" bg="#edf2ff"
+          active={filtro === 'todas'}
+          onClick={() => setFiltro('todas')}
+        />
+        <StatCard
+          icon="fa-regular fa-hourglass-half" label={t('mpendAberto')} value={emAberto}
+          color="#b35c00" bg="#fff4e5"
+          active={filtro === 'aberto'}
+          onClick={() => setFiltro('aberto')}
+        />
+        <StatCard
+          icon="fa-regular fa-triangle-exclamation" label={t('mpendVencendo')} value={vencendo}
+          color="#c0182d" bg="#fff0f2"
+          active={filtro === 'vencendo'}
+          onClick={() => setFiltro('vencendo')}
+        />
+        <StatCard
+          icon="fa-regular fa-circle-check" label={t('mpendFinalizadas')} value={finalizadas}
+          color="#0f6b3e" bg="#e6f9f0"
+          active={filtro === 'finalizadas'}
+          onClick={() => setFiltro('finalizadas')}
+        />
+      </div>
+
+      {/* Busca (card isolado) */}
+      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 16, boxShadow: '0px 2px 8px rgba(24,39,75,0.06)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #dce6f5', borderRadius: 8, height: 44, overflow: 'hidden', background: 'white' }}>
+          <FAIcon icon="fa-regular fa-magnifying-glass" style={{ fontSize: 15, color: '#7d7d7d', marginLeft: 14 }} />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder={t('mpendBuscar')}
+            style={{ flex: 1, border: 'none', outline: 'none', padding: '0 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', background: 'transparent', height: '100%' }}
+          />
+          {query && (
+            <FAIcon
+              icon="fa-regular fa-xmark"
+              onClick={() => setQuery('')}
+              style={{ fontSize: 14, color: '#7d7d7d', cursor: 'pointer', marginRight: 14 }}
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Tabs (card isolado) */}
+      <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '4px 8px', display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+        {tabs.map(tab => {
+          const active = filtro === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setFiltro(tab.id)}
+              style={{
+                background: 'none', border: 'none',
+                borderBottom: active ? '3px solid #0058db' : '3px solid transparent',
+                padding: '10px 16px',
+                fontFamily: 'Open Sans, sans-serif',
+                fontSize: 13, fontWeight: active ? 700 : 500,
+                color: active ? '#0058db' : '#333',
+                cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+              }}
+            >
+              {tab.label}
+              <span style={{
+                background: active ? '#0058db' : '#ebebeb',
+                color: active ? 'white' : '#565656',
+                fontSize: 11, fontWeight: 700,
+                padding: '2px 8px', borderRadius: 100, lineHeight: 1.2,
+              }}>{tab.count}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Lista — grid (2 colunas quando couber) */}
+      {filtradas.length > 0 ? (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(520px, 1fr))', gap: 12 }}>
+          {filtradas.map(p => (
+            <PendenciaCard
+              key={p.id}
+              pendencia={p}
+              onResolver={() => onResolverPendencia(p)}
+              onVer={onNavigateProcesso}
+            />
+          ))}
+        </div>
+      ) : (
+        <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: '48px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 64, height: 64, background: '#e6f9f0', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <FAIcon icon="fa-regular fa-circle-check" style={{ fontSize: 24, color: '#0f6b3e' }} />
+          </div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222' }}>
+            {t('mpendNenhumTitle')}
+          </div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#7a8a9e', textAlign: 'center', maxWidth: 380 }}>
+            {t('mpendNenhumDesc')}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Mock & Tela: Processos Liberados ────────────────────────────────────────
+interface ProcessoLiberado {
+  id: string;
+  numero: string;
+  interessado: string;
+  cpf: string;
+  liberadoEm: string;
+  terminaEm: string | null;
+  ativo: boolean;
+  anexos: number;
+  orgao: string;
+}
+
+const MOCK_LIBERADOS: ProcessoLiberado[] = [
+  { id: 'l1', numero: 'SolarBPM 2026/000848', interessado: 'Fernando Naim Schmitz',  cpf: '006.334.989-20', liberadoEm: '29/03/2026', terminaEm: '29/04/2026', ativo: true,  anexos: 3, orgao: 'SAUDE - Secretaria da Saúde' },
+  { id: 'l2', numero: 'PMF 2026/000721',      interessado: 'Filipe Otávio Reis',      cpf: '123.456.789-00', liberadoEm: '15/03/2026', terminaEm: '15/04/2026', ativo: true,  anexos: 1, orgao: 'SEFAZ - Secretaria da Fazenda' },
+  { id: 'l3', numero: 'PMF 2025/009812',      interessado: 'Fernando Naim Schmitz',  cpf: '006.334.989-20', liberadoEm: '10/10/2025', terminaEm: '10/11/2025', ativo: false, anexos: 5, orgao: 'IPUF - Instituto de Planejamento Urbano' },
+  { id: 'l4', numero: 'PMF 2025/008234',      interessado: 'Cris Lima',               cpf: '043.792.234-00', liberadoEm: '22/08/2025', terminaEm: '22/09/2025', ativo: false, anexos: 2, orgao: 'SMC - Secretaria de Mobilidade' },
+  { id: 'l5', numero: 'PMF 2025/007109',      interessado: 'Fernando Naim Schmitz',  cpf: '006.334.989-20', liberadoEm: '12/07/2025', terminaEm: '12/08/2025', ativo: false, anexos: 4, orgao: 'SMDU - Desenvolvimento Urbano' },
+  { id: 'l6', numero: 'PMF 2025/006055',      interessado: 'Cris Lima',               cpf: '043.792.234-00', liberadoEm: '03/06/2025', terminaEm: '03/07/2025', ativo: false, anexos: 1, orgao: 'SAUDE - Secretaria da Saúde' },
+];
+
+function ProcessoLiberadoCard({ item, onVer }: { item: ProcessoLiberado; onVer: () => void }) {
+  const t = useT();
+  return (
+    <div
+      style={{
+        background: 'white', border: '1px solid #dde3ee', borderRadius: 10,
+        padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 14,
+        boxShadow: '0px 2px 8px rgba(24,39,75,0.07)',
+        transition: 'box-shadow 0.15s, border-color 0.15s',
+      }}
+      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 4px 16px rgba(24,39,75,0.13)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#b3c7e6'; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 2px 8px rgba(24,39,75,0.07)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#dde3ee'; }}
+    >
+      {/* Header: número + badge */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+          <div style={{ width: 42, height: 42, background: item.ativo ? '#e6f9f0' : '#f4f6f9', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <FAIcon icon={item.ativo ? 'fa-regular fa-folder-open' : 'fa-regular fa-folder-xmark'} style={{ fontSize: 17, color: item.ativo ? '#0f6b3e' : '#7d7d7d' }} />
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#0058db', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {item.numero}
+            </div>
+            <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {item.orgao}
+            </div>
+          </div>
+        </div>
+        <span style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          background: item.ativo ? '#e6f9f0' : '#f4f6f9',
+          color: item.ativo ? '#0f6b3e' : '#7d7d7d',
+          borderRadius: 100, padding: '3px 10px',
+          fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11,
+          whiteSpace: 'nowrap', flexShrink: 0,
+        }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: item.ativo ? '#0f6b3e' : '#a3a3a3' }} />
+          {item.ativo ? t('plAtivo') : t('plExpirado')}
+        </span>
+      </div>
+
+      {/* Metadata em grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, fontFamily: 'Open Sans, sans-serif' }}>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8a9ab5', letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 2 }}>
+            {t('plInteressado')}
+          </div>
+          <div style={{ fontSize: 13, color: '#333', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {item.interessado}
+          </div>
+          <div style={{ fontSize: 11, color: '#7d7d7d' }}>{item.cpf}</div>
+        </div>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#8a9ab5', letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 2 }}>
+            {item.ativo ? t('plTerminaEm') : t('plLiberadoEm')}
+          </div>
+          <div style={{ fontSize: 13, color: '#333', fontWeight: 600 }}>
+            {item.ativo ? (item.terminaEm || '-') : item.liberadoEm}
+          </div>
+          <div style={{ fontSize: 11, color: '#7d7d7d' }}>
+            {item.ativo ? `Liberado em ${item.liberadoEm}` : `Encerrado em ${item.terminaEm || '-'}`}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer: anexos + ação */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 10, borderTop: '1px solid #f0f0f0' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#565656' }}>
+          <FAIcon icon="fa-regular fa-paperclip" style={{ fontSize: 12, color: '#7d7d7d' }} />
+          {item.anexos} {t('plAnexos').toLowerCase()}
+        </div>
+        <button
+          onClick={onVer}
+          style={{
+            height: 34, padding: '0 14px', borderRadius: 6, background: 'white',
+            border: '1.5px solid #0058db', color: '#0058db',
+            fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12,
+            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6,
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
+        >
+          <FAIcon icon="fa-regular fa-arrow-right" style={{ fontSize: 11 }} />
+          {t('plVer')}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ProcessosLiberados({ onNavigateProcesso }: { onNavigateProcesso: () => void }) {
+  const t = useT();
+  const [query, setQuery]   = useState('');
+  const [filtro, setFiltro] = useState<'todos' | 'ativos' | 'expirados'>('ativos');
+
+  const total     = MOCK_LIBERADOS.length;
+  const ativos    = MOCK_LIBERADOS.filter(i => i.ativo).length;
+  const expirados = MOCK_LIBERADOS.filter(i => !i.ativo).length;
+
+  const filtrados = MOCK_LIBERADOS.filter(i => {
+    if (filtro === 'ativos'    && !i.ativo) return false;
+    if (filtro === 'expirados' && i.ativo)  return false;
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      return (
+        i.numero.toLowerCase().includes(q) ||
+        i.interessado.toLowerCase().includes(q) ||
+        i.orgao.toLowerCase().includes(q) ||
+        i.cpf.includes(q)
+      );
+    }
+    return true;
+  });
+
+  const tabs: { id: typeof filtro; label: string; count: number }[] = [
+    { id: 'todos',     label: t('mpTodos'),       count: total },
+    { id: 'ativos',    label: t('plAtivos'),      count: ativos },
+    { id: 'expirados', label: t('plExpirados'),   count: expirados },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
+      {/* Título + descrição + ações */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 280 }}>
+          <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: 0 }}>
+            {t('plTitle')}
+          </h1>
+          <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#565656', margin: '6px 0 0 0', lineHeight: 1.5 }}>
+            {t('plDesc')}
+          </p>
+        </div>
+        <div style={{ display: 'flex', gap: 10, flexShrink: 0 }}>
+          <button style={{
+            height: 40, padding: '0 16px', borderRadius: 8, background: 'white',
+            border: '1.5px solid #0058db', color: '#0058db',
+            fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13,
+            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}>
+            <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 14 }} />
+            {t('mpExportarPdf')}
+          </button>
+          <button style={{
+            height: 40, padding: '0 16px', borderRadius: 8, background: '#0058db',
+            border: '1.5px solid #0058db', color: 'white',
+            fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13,
+            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = '#0058db'}>
+            <FAIcon icon="fa-regular fa-file-spreadsheet" style={{ fontSize: 14 }} />
+            {t('mpExportarXls')}
+          </button>
+        </div>
+      </div>
+
+      {/* Big numbers */}
+      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+        <StatCard icon="fa-regular fa-folder-open"   label={t('plTotal')}     value={total}     color="#0058db" bg="#edf2ff"
+          active={filtro === 'todos'}     onClick={() => setFiltro('todos')} />
+        <StatCard icon="fa-regular fa-circle-check"  label={t('plAtivos')}    value={ativos}    color="#0f6b3e" bg="#e6f9f0"
+          active={filtro === 'ativos'}    onClick={() => setFiltro('ativos')} />
+        <StatCard icon="fa-regular fa-clock-rotate-left" label={t('plExpirados')} value={expirados} color="#7d7d7d" bg="#f4f6f9"
+          active={filtro === 'expirados'} onClick={() => setFiltro('expirados')} />
+      </div>
+
+      {/* Busca (card isolado) */}
+      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 16, boxShadow: '0px 2px 8px rgba(24,39,75,0.06)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #dce6f5', borderRadius: 8, height: 44, overflow: 'hidden', background: 'white' }}>
+          <FAIcon icon="fa-regular fa-magnifying-glass" style={{ fontSize: 15, color: '#7d7d7d', marginLeft: 14 }} />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder={t('plBuscar')}
+            style={{ flex: 1, border: 'none', outline: 'none', padding: '0 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', background: 'transparent', height: '100%' }}
+          />
+          {query && (
+            <FAIcon icon="fa-regular fa-xmark" onClick={() => setQuery('')}
+              style={{ fontSize: 14, color: '#7d7d7d', cursor: 'pointer', marginRight: 14 }} />
+          )}
+        </div>
+      </div>
+
+      {/* Tabs (card isolado) */}
+      <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '4px 8px', display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+        {tabs.map(tab => {
+          const active = filtro === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setFiltro(tab.id)}
+              style={{
+                background: 'none', border: 'none',
+                borderBottom: active ? '3px solid #0058db' : '3px solid transparent',
+                padding: '10px 16px',
+                fontFamily: 'Open Sans, sans-serif',
+                fontSize: 13, fontWeight: active ? 700 : 500,
+                color: active ? '#0058db' : '#333',
+                cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+              }}
+            >
+              {tab.label}
+              <span style={{
+                background: active ? '#0058db' : '#ebebeb',
+                color: active ? 'white' : '#565656',
+                fontSize: 11, fontWeight: 700,
+                padding: '2px 8px', borderRadius: 100, lineHeight: 1.2,
+              }}>{tab.count}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Lista em grid */}
+      {filtrados.length > 0 ? (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: 14 }}>
+          {filtrados.map(i => (
+            <ProcessoLiberadoCard key={i.id} item={i} onVer={onNavigateProcesso} />
+          ))}
+        </div>
+      ) : (
+        <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: '48px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 64, height: 64, background: '#edf2ff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <FAIcon icon="fa-regular fa-folder-open" style={{ fontSize: 24, color: '#0058db' }} />
+          </div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222' }}>
+            {t('plNenhumTitle')}
+          </div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#7a8a9e', textAlign: 'center', maxWidth: 380 }}>
+            {t('plNenhumDesc')}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Tela: Resolver Pendência ─────────────────────────────────────────────────
+interface DocParaAssinar {
+  id: string;
+  nome: string;
+  descricao: string;
+  tipo: string;  // PDF, DOCX, etc.
+  paginas: number;
+  tamanho: string;
+}
+
+const MOCK_DOCUMENTOS_ASSINATURA: DocParaAssinar[] = [
+  { id: 'd1', nome: 'Contrato de prestação de serviços',   descricao: 'Termo principal que estabelece obrigações e condições', tipo: 'PDF',  paginas: 12, tamanho: '380 KB' },
+  { id: 'd2', nome: 'Anexo I — Termo de responsabilidade', descricao: 'Responsabilidades do contratante',                        tipo: 'PDF',  paginas: 3,  tamanho: '98 KB'  },
+  { id: 'd3', nome: 'Anexo II — Cronograma de entregas',   descricao: 'Prazos e marcos do projeto',                              tipo: 'PDF',  paginas: 2,  tamanho: '64 KB'  },
+  { id: 'd4', nome: 'Declaração de ciência',               descricao: 'Confirma que leu e concorda com os termos',              tipo: 'PDF',  paginas: 1,  tamanho: '45 KB'  },
+];
+
+function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pendencia | null; onVoltar: () => void; onConcluir: () => void }) {
+  const t = useT();
+  const [selecionados, setSelecionados] = useState<Set<string>>(new Set());
+  const [parecer, setParecer] = useState('');
+
+  const docs = MOCK_DOCUMENTOS_ASSINATURA;
+  const totalSelecionados = selecionados.size;
+  const todosSelecionados = totalSelecionados === docs.length && docs.length > 0;
+
+  function toggleDoc(id: string) {
+    setSelecionados(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function selecionarTodos() {
+    if (todosSelecionados) setSelecionados(new Set());
+    else setSelecionados(new Set(docs.map(d => d.id)));
+  }
+
+  const iconInfo = pendencia ? PENDENCIA_ICON[pendencia.tipo] : PENDENCIA_ICON['Assinatura de documentos'];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
+      {/* Botão voltar */}
+      <button
+        onClick={onVoltar}
+        style={{
+          alignSelf: 'flex-start',
+          background: 'none', border: 'none', cursor: 'pointer',
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+          padding: '4px 0', color: '#0058db',
+          fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13,
+        }}
+      >
+        <FAIcon icon="fa-regular fa-arrow-left" style={{ fontSize: 13 }} />
+        {t('rpVoltar')}
+      </button>
+
+      {/* Cabeçalho da pendência */}
+      <div style={{
+        background: 'white', border: '1px solid #dde3ee', borderRadius: 10,
+        padding: '20px 24px', display: 'flex', alignItems: 'center', gap: 16,
+        boxShadow: '0px 2px 8px rgba(24,39,75,0.06)',
+      }}>
+        <div style={{
+          width: 56, height: 56, borderRadius: 12,
+          background: iconInfo.bg,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        }}>
+          <FAIcon icon={iconInfo.icon} style={{ fontSize: 22, color: iconInfo.color }} />
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 20, color: '#1a1a1a', margin: 0 }}>
+            {pendencia?.titulo || t('rpAssinaturaTitle')}
+          </h1>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 6, fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#565656' }}>
+            <span><strong style={{ color: '#7d7d7d' }}>{t('rpTipo')}:</strong> {pendencia?.tipo || '-'}</span>
+            <span>·</span>
+            <span><strong style={{ color: '#7d7d7d' }}>{t('rpProcesso')}:</strong> {pendencia?.processo || '-'}</span>
+            {pendencia?.prazo && (
+              <>
+                <span>·</span>
+                <PrazoBadge prazo={pendencia.prazo} diasRestantes={pendencia.diasRestantes} finalizada={pendencia.status === 'Finalizada'} />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Card de assinatura */}
+      <div style={{
+        background: 'white', border: '1px solid #dde3ee', borderRadius: 10,
+        padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)',
+        display: 'flex', flexDirection: 'column', gap: 16,
+      }}>
+        {/* Descrição e ações de seleção */}
+        <div>
+          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', margin: 0 }}>
+            {t('rpAssinaturaTitle')}
+          </h2>
+          <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', margin: '4px 0 0 0', lineHeight: 1.5 }}>
+            {t('rpAssinaturaDesc')}
+          </p>
+        </div>
+
+        {/* Barra de resumo + selecionar todos */}
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          gap: 12, flexWrap: 'wrap',
+          background: totalSelecionados > 0 ? '#edf2ff' : '#f4f6f9',
+          border: `1px solid ${totalSelecionados > 0 ? '#b3c7e6' : '#ebebeb'}`,
+          borderRadius: 8, padding: '10px 14px',
+          transition: 'background 0.15s, border-color 0.15s',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 28, height: 28, borderRadius: '50%',
+              background: totalSelecionados > 0 ? '#0058db' : '#d5d5d5',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 12, color: 'white',
+            }}>
+              {totalSelecionados}
+            </div>
+            <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333', fontWeight: 500 }}>
+              {totalSelecionados} de {docs.length} {t('rpDocumentosSelecionados')}
+            </span>
+          </div>
+          <button
+            onClick={selecionarTodos}
+            style={{
+              background: 'white', border: '1.5px solid #0058db',
+              color: '#0058db', borderRadius: 6, height: 34, padding: '0 14px',
+              fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12,
+              cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
+            }}
+            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'}
+            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
+          >
+            <FAIcon icon={todosSelecionados ? 'fa-regular fa-square-xmark' : 'fa-regular fa-square-check'} style={{ fontSize: 13 }} />
+            {todosSelecionados ? t('rpLimparSelecao') : t('rpSelecionarTodos')}
+          </button>
+        </div>
+
+        {/* Lista de documentos selecionáveis */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {docs.map(doc => {
+            const sel = selecionados.has(doc.id);
+            return (
+              <div
+                key={doc.id}
+                onClick={() => toggleDoc(doc.id)}
+                style={{
+                  background: sel ? '#f5f9ff' : 'white',
+                  border: `2px solid ${sel ? '#0058db' : '#dde3ee'}`,
+                  borderRadius: 10, padding: '14px 16px',
+                  display: 'flex', alignItems: 'center', gap: 14,
+                  cursor: 'pointer',
+                  transition: 'background 0.15s, border-color 0.15s, box-shadow 0.15s',
+                  boxShadow: sel ? '0px 2px 8px rgba(0,88,219,0.12)' : 'none',
+                }}
+                onMouseEnter={e => {
+                  if (!sel) (e.currentTarget as HTMLDivElement).style.borderColor = '#b3c7e6';
+                }}
+                onMouseLeave={e => {
+                  if (!sel) (e.currentTarget as HTMLDivElement).style.borderColor = '#dde3ee';
+                }}
+              >
+                {/* Checkbox customizado */}
+                <div style={{
+                  width: 24, height: 24, borderRadius: 6, flexShrink: 0,
+                  border: `2px solid ${sel ? '#0058db' : '#a3a3a3'}`,
+                  background: sel ? '#0058db' : 'white',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'background 0.15s, border-color 0.15s',
+                }}>
+                  {sel && <FAIcon icon="fa-solid fa-check" style={{ fontSize: 12, color: 'white' }} />}
+                </div>
+
+                {/* Ícone do arquivo */}
+                <div style={{
+                  width: 44, height: 44, borderRadius: 8,
+                  background: '#fff0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                }}>
+                  <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 18, color: '#c0182d' }} />
+                </div>
+
+                {/* Conteúdo */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#1a1a1a', marginBottom: 2 }}>
+                    {doc.nome}
+                  </div>
+                  <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7a8a9e', marginBottom: 4 }}>
+                    {doc.descricao}
+                  </div>
+                  <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: '#a3a3a3', display: 'flex', gap: 10 }}>
+                    <span>{doc.tipo}</span>
+                    <span>·</span>
+                    <span>{doc.paginas} {doc.paginas === 1 ? 'página' : 'páginas'}</span>
+                    <span>·</span>
+                    <span>{doc.tamanho}</span>
+                  </div>
+                </div>
+
+                {/* Status / ação visualizar */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+                  {sel && (
+                    <span style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      background: '#0058db', color: 'white',
+                      borderRadius: 100, padding: '4px 10px',
+                      fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11,
+                    }}>
+                      <FAIcon icon="fa-regular fa-signature" style={{ fontSize: 11 }} />
+                      {t('rpAssinar')}
+                    </span>
+                  )}
+                  <button
+                    onClick={e => { e.stopPropagation(); /* preview */ }}
+                    title={t('rpVisualizar')}
+                    style={{
+                      background: 'white', border: '1px solid #d5d5d5', borderRadius: 6,
+                      width: 34, height: 34, cursor: 'pointer',
+                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      color: '#565656',
+                    }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff';
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = '#0058db';
+                      (e.currentTarget as HTMLButtonElement).style.color = '#0058db';
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLButtonElement).style.background = 'white';
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5';
+                      (e.currentTarget as HTMLButtonElement).style.color = '#565656';
+                    }}
+                  >
+                    <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 13 }} />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Parecer */}
+        <div style={{ marginTop: 8 }}>
+          <label style={{
+            display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11,
+            color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6,
+          }}>
+            {t('rpParecer')}
+          </label>
+          <textarea
+            value={parecer}
+            onChange={e => setParecer(e.target.value)}
+            placeholder={t('rpParecerPlaceholder')}
+            rows={4}
+            style={{
+              width: '100%', boxSizing: 'border-box',
+              background: 'white', border: '1px solid #d5d5d5', borderRadius: 8,
+              padding: '10px 14px',
+              fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333',
+              outline: 'none', resize: 'vertical', minHeight: 88,
+              transition: 'border-color 0.15s',
+            }}
+            onFocus={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#0058db'}
+            onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#d5d5d5'}
+          />
+        </div>
+      </div>
+
+      {/* Barra de ações */}
+      <div style={{
+        display: 'flex', justifyContent: 'flex-end', gap: 10, flexWrap: 'wrap',
+      }}>
+        <button
+          onClick={onVoltar}
+          style={{
+            height: 44, padding: '0 20px', borderRadius: 8, background: 'white',
+            border: '1.5px solid #d5d5d5', color: '#565656',
+            fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14,
+            cursor: 'pointer',
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#f4f6f9'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
+        >
+          {t('rpCancelar')}
+        </button>
+        <button
+          onClick={onConcluir}
+          style={{
+            height: 44, padding: '0 24px', borderRadius: 8,
+            background: '#0058db', border: '1.5px solid #0058db', color: 'white',
+            fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14,
+            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
+            boxShadow: '0px 2px 6px rgba(0,88,219,0.24)',
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = '#0058db'}
+        >
+          <FAIcon icon="fa-regular fa-circle-check" style={{ fontSize: 15 }} />
+          {t('rpConcluir')}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ── Tela: Meus Dados ─────────────────────────────────────────────────────────
 function MeusDados() {
+  const t = useT();
+  const [activeTab,        setActiveTab]        = useState<'dados' | 'senha'>('dados');
   const [nome,             setNome]             = useState('CRISTIANDERSON ALVES DE LIMA');
+  const [senhaAtual,       setSenhaAtual]       = useState('');
   const [senha,            setSenha]            = useState('');
   const [confirmarSenha,   setConfirmarSenha]   = useState('');
+  const [showSenhaAtual,   setShowSenhaAtual]   = useState(false);
   const [showSenha,        setShowSenha]        = useState(false);
   const [showConfSenha,    setShowConfSenha]    = useState(false);
   const [email,            setEmail]            = useState('emaildoandersonalves@gmail.com');
@@ -2297,49 +3491,62 @@ function MeusDados() {
     );
   }
 
+  const tabBtn = (id: 'dados' | 'senha', label: string, icon: string) => {
+    const active = activeTab === id;
+    return (
+      <button
+        key={id}
+        onClick={() => setActiveTab(id)}
+        style={{
+          background: 'none', border: 'none',
+          borderBottom: active ? '3px solid #0058db' : '3px solid transparent',
+          padding: '10px 16px',
+          fontFamily: 'Open Sans, sans-serif', fontSize: 13, fontWeight: active ? 700 : 500,
+          color: active ? '#0058db' : '#333',
+          cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
+        }}
+      >
+        <FAIcon icon={icon} style={{ fontSize: 13 }} />
+        {label}
+      </button>
+    );
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
-      <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: 0 }}>Meus Dados</h1>
+      <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: 0 }}>{t('meusDados')}</h1>
 
+      {/* Tabs (card isolado) */}
+      <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '4px 8px', display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+        {tabBtn('dados', t('perfilAbaDados'), 'fa-regular fa-id-card')}
+        {tabBtn('senha', t('perfilAbaSenha'), 'fa-regular fa-lock')}
+      </div>
+
+      {activeTab === 'dados' && (
       <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 8, padding: '24px', display: 'flex', flexDirection: 'column', gap: 20, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)' }}>
 
         {/* ── Identificação ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#353535', margin: 0, paddingBottom: 8, borderBottom: '1px solid #ebebeb' }}>Identificação</h2>
-          {alertBanner('Por favor, complete seu cadastro.')}
+          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#353535', margin: 0, paddingBottom: 8, borderBottom: '1px solid #ebebeb' }}>{t('identificacao')}</h2>
+          {alertBanner(t('mdCompletarCadastro'))}
           <div style={{ display: 'flex', gap: 16 }}>
-            <Field label="CPF *" flex={1}>
+            <Field label={t('mdCpf')} flex={1}>
               <input value="043.792.234-00" readOnly style={inpReadOnly} />
             </Field>
-            <Field label="Nome completo *" flex={2}>
+            <Field label={t('mdNomeCompleto')} flex={2}>
               <input value={nome} onChange={e => setNome(e.target.value)} style={inp} />
             </Field>
           </div>
         </div>
 
-        {/* ── Acesso ── */}
+        {/* ── Acesso (e-mails) ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#353535', margin: 0, paddingBottom: 8, borderBottom: '1px solid #ebebeb' }}>Acesso</h2>
-          {alertBanner('Para assinar documentos ou acessar o sistema, atualize seu cadastro e senha.')}
+          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#353535', margin: 0, paddingBottom: 8, borderBottom: '1px solid #ebebeb' }}>{t('mdEmailAcesso')}</h2>
           <div style={{ display: 'flex', gap: 16 }}>
-            <Field label="Senha *">
-              <div style={passwordBox}>
-                <input type={showSenha ? 'text' : 'password'} value={senha} onChange={e => setSenha(e.target.value)} placeholder="Nova senha" style={inpPassword} />
-                <FAIcon icon={showSenha ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} style={{ fontSize: 15, color: '#7d7d7d', cursor: 'pointer', flexShrink: 0 }} />
-              </div>
-            </Field>
-            <Field label="Confirmar Senha *">
-              <div style={passwordBox}>
-                <input type={showConfSenha ? 'text' : 'password'} value={confirmarSenha} onChange={e => setConfirmarSenha(e.target.value)} placeholder="Confirmar senha" style={inpPassword} />
-                <FAIcon icon={showConfSenha ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} style={{ fontSize: 15, color: '#7d7d7d', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowConfSenha(v => !v)} />
-              </div>
-            </Field>
-          </div>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <Field label="E-mail *">
+            <Field label={t('mdEmail')}>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} style={inp} />
             </Field>
-            <Field label="Confirmar E-mail *">
+            <Field label={t('mdConfirmarEmail')}>
               <input type="email" value={confirmarEmail} onChange={e => setConfirmarEmail(e.target.value)} style={inp} />
             </Field>
           </div>
@@ -2348,14 +3555,14 @@ function MeusDados() {
         {/* ── E-mails adicionais ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 8, borderBottom: '1px solid #ebebeb' }}>
-            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#353535', margin: 0 }}>E-mail Adicional</h2>
+            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#353535', margin: 0 }}>{t('mdEmailAdicional')}</h2>
             <Button size="sm" variant="primary" onClick={() => { if (novoEmail.trim()) { setEmailsAdicionais(v => [...v, novoEmail.trim()]); setNovoEmail(''); } }}>
-              <FAIcon icon="fa-regular fa-plus" style={{ fontSize: 13, marginRight: 4 }} />Incluir
+              <FAIcon icon="fa-regular fa-plus" style={{ fontSize: 13, marginRight: 4 }} />{t('mdIncluir')}
             </Button>
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'flex-end' }}>
-            <Field label="Novo e-mail" flex={1}>
-              <input type="email" value={novoEmail} onChange={e => setNovoEmail(e.target.value)} placeholder="Digite um e-mail adicional" style={inp} />
+            <Field label={t('mdNovoEmail')} flex={1}>
+              <input type="email" value={novoEmail} onChange={e => setNovoEmail(e.target.value)} placeholder={t('mdNovoEmailPh')} style={inp} />
             </Field>
           </div>
           {emailsAdicionais.length > 0 && (
@@ -2363,8 +3570,8 @@ function MeusDados() {
               <colgroup><col style={{ width: '85%' }} /><col style={{ width: '15%' }} /></colgroup>
               <thead>
                 <tr style={{ borderBottom: '1px solid #d5d5d5' }}>
-                  <th style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, color: '#7d7d7d', padding: '6px 0', textAlign: 'left' }}>E-mail</th>
-                  <th style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, color: '#7d7d7d', padding: '6px 0', textAlign: 'center' }}>Ações</th>
+                  <th style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, color: '#7d7d7d', padding: '6px 0', textAlign: 'left' }}>{t('mdEmailCol')}</th>
+                  <th style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, color: '#7d7d7d', padding: '6px 0', textAlign: 'center' }}>{t('mdAcoes')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -2383,68 +3590,70 @@ function MeusDados() {
 
         {/* ── Dados pessoais ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#353535', margin: 0, paddingBottom: 8, borderBottom: '1px solid #ebebeb' }}>Dados Pessoais</h2>
+          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#353535', margin: 0, paddingBottom: 8, borderBottom: '1px solid #ebebeb' }}>{t('dadosPessoais')}</h2>
           <div style={{ display: 'flex', gap: 16 }}>
-            <Field label="Sexo *">
+            <Field label={t('mdSexo')}>
               <div style={{ position: 'relative' }}>
                 <select value={sexo} onChange={e => setSexo(e.target.value)} style={{ ...inp, appearance: 'none', WebkitAppearance: 'none', paddingRight: 32, cursor: 'pointer' }}>
-                  {['Masculino', 'Feminino', 'Não informado'].map(o => <option key={o}>{o}</option>)}
+                  <option value="Masculino">{t('mdMasculino')}</option>
+                  <option value="Feminino">{t('mdFeminino')}</option>
+                  <option value="Não informado">{t('mdNaoInformado')}</option>
                 </select>
                 <FAIcon icon="fa-regular fa-chevron-down" style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 11, color: '#8a9ab5', pointerEvents: 'none' }} />
               </div>
             </Field>
-            <Field label="Data de Nascimento *">
-              <input value={nascimento} onChange={e => setNascimento(e.target.value)} placeholder="DD/MM/AAAA" style={inp} />
+            <Field label={t('mdDataNasc')}>
+              <input value={nascimento} onChange={e => setNascimento(e.target.value)} placeholder={t('mdNascPh')} style={inp} />
             </Field>
           </div>
           <div style={{ display: 'flex', gap: 16 }}>
-            <Field label="Nacionalidade *">
+            <Field label={t('mdNacionalidade')}>
               <input value={nacionalidade} onChange={e => setNacionalidade(e.target.value)} style={inp} />
             </Field>
-            <Field label="Telefone *">
-              <input value={telefone} onChange={e => setTelefone(e.target.value)} placeholder="(00) 00000-0000" style={inp} />
+            <Field label={t('mdTelefone')}>
+              <input value={telefone} onChange={e => setTelefone(e.target.value)} placeholder={t('mdTelefonePh')} style={inp} />
             </Field>
           </div>
         </div>
 
         {/* ── Endereço ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#353535', margin: 0, paddingBottom: 8, borderBottom: '1px solid #ebebeb' }}>Endereço</h2>
+          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#353535', margin: 0, paddingBottom: 8, borderBottom: '1px solid #ebebeb' }}>{t('endereco')}</h2>
           <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end' }}>
-            <Field label="CEP *" flex="none">
+            <Field label={t('mdCep')} flex="none">
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <input value={cep} onChange={e => setCep(e.target.value)} placeholder="00000-000" style={{ ...inp, width: 140 }} />
-                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, color: '#0058db', whiteSpace: 'nowrap', cursor: 'pointer', textDecoration: 'underline' }}>Consultar CEP</span>
+                <input value={cep} onChange={e => setCep(e.target.value)} placeholder={t('mdCepPh')} style={{ ...inp, width: 140 }} />
+                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, color: '#0058db', whiteSpace: 'nowrap', cursor: 'pointer', textDecoration: 'underline' }}>{t('mdConsultarCep')}</span>
               </div>
             </Field>
-            <Field label="Estado *" flex="none">
+            <Field label={t('mdEstado')} flex="none">
               <input value={estado} onChange={e => setEstado(e.target.value)} style={{ ...inp, width: 80 }} />
             </Field>
-            <Field label="Cidade *">
+            <Field label={t('mdCidade')}>
               <input value={cidade} onChange={e => setCidade(e.target.value)} style={inp} />
             </Field>
           </div>
           <div style={{ display: 'flex', gap: 16 }}>
-            <Field label="Bairro *">
+            <Field label={t('mdBairro')}>
               <input value={bairro} onChange={e => setBairro(e.target.value)} style={inp} />
             </Field>
-            <Field label="Logradouro *">
+            <Field label={t('mdLogradouro')}>
               <input value={logradouro} onChange={e => setLogradouro(e.target.value)} style={inp} />
             </Field>
           </div>
           <div style={{ display: 'flex', gap: 16 }}>
-            <Field label="Número *" flex="none">
+            <Field label={t('mdNumero')} flex="none">
               <input value={numero} onChange={e => setNumero(e.target.value)} style={{ ...inp, width: 120 }} />
             </Field>
-            <Field label="Complemento">
+            <Field label={t('mdComplemento')}>
               <input value={complemento} onChange={e => setComplemento(e.target.value)} style={inp} />
             </Field>
-            <Field label="Reside no município de Florianópolis?">
+            <Field label={t('mdResideFloripa')}>
               <div style={{ position: 'relative' }}>
                 <select value={resideFloripa} onChange={e => setResideFloripa(e.target.value)} style={{ ...inp, appearance: 'none', WebkitAppearance: 'none', paddingRight: 32, cursor: 'pointer' }}>
-                  <option value="">Selecione</option>
-                  <option value="sim">Sim</option>
-                  <option value="nao">Não</option>
+                  <option value="">{t('mdSelecione')}</option>
+                  <option value="sim">{t('mdSim')}</option>
+                  <option value="nao">{t('mdNao')}</option>
                 </select>
                 <FAIcon icon="fa-regular fa-chevron-down" style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 11, color: '#8a9ab5', pointerEvents: 'none' }} />
               </div>
@@ -2454,10 +3663,73 @@ function MeusDados() {
 
         {/* ── Botão salvar ── */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: 8 }}>
-          <Button size="md" variant="primary" style={{ minWidth: 200 }}>Salvar e continuar</Button>
+          <Button size="md" variant="primary" style={{ minWidth: 200 }}>{t('salvarContinuar')}</Button>
         </div>
 
       </div>
+      )}
+
+      {activeTab === 'senha' && (
+      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 8, padding: 24, display: 'flex', flexDirection: 'column', gap: 20, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)', maxWidth: 640 }}>
+        <div>
+          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', margin: 0 }}>{t('tsTitle')}</h2>
+          <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', margin: '4px 0 0 0', lineHeight: 1.5 }}>
+            {t('tsDesc')}
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <Field label={t('tsSenhaAtual')}>
+            <div style={passwordBox}>
+              <input type={showSenhaAtual ? 'text' : 'password'} value={senhaAtual} onChange={e => setSenhaAtual(e.target.value)} placeholder={t('tsSenhaAtualPh')} style={inpPassword} />
+              <FAIcon icon={showSenhaAtual ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} style={{ fontSize: 15, color: '#7d7d7d', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowSenhaAtual(v => !v)} />
+            </div>
+          </Field>
+          <Field label={t('tsNovaSenha')}>
+            <div style={passwordBox}>
+              <input type={showSenha ? 'text' : 'password'} value={senha} onChange={e => setSenha(e.target.value)} placeholder={t('tsNovaSenhaPh')} style={inpPassword} />
+              <FAIcon icon={showSenha ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} style={{ fontSize: 15, color: '#7d7d7d', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowSenha(v => !v)} />
+            </div>
+          </Field>
+          <Field label={t('tsConfirmarSenha')}>
+            <div style={passwordBox}>
+              <input type={showConfSenha ? 'text' : 'password'} value={confirmarSenha} onChange={e => setConfirmarSenha(e.target.value)} placeholder={t('tsConfirmarSenhaPh')} style={inpPassword} />
+              <FAIcon icon={showConfSenha ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} style={{ fontSize: 15, color: '#7d7d7d', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowConfSenha(v => !v)} />
+            </div>
+          </Field>
+        </div>
+
+        {/* Dicas de segurança */}
+        <div style={{ background: '#f4f6f9', border: '1px solid #ebebeb', borderRadius: 8, padding: '12px 14px' }}>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 12, color: '#565656', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <FAIcon icon="fa-regular fa-shield-check" style={{ fontSize: 12, color: '#0058db' }} />
+            {t('tsDicas')}
+          </div>
+          <ul style={{ margin: 0, padding: '0 0 0 18px', fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#565656', lineHeight: 1.7 }}>
+            <li>{t('tsDica1')}</li>
+            <li>{t('tsDica2')}</li>
+            <li>{t('tsDica3')}</li>
+            <li>{t('tsDica4')}</li>
+          </ul>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, paddingTop: 4 }}>
+          <button
+            onClick={() => { setSenhaAtual(''); setSenha(''); setConfirmarSenha(''); }}
+            style={{
+              height: 44, padding: '0 20px', borderRadius: 8, background: 'white',
+              border: '1.5px solid #d5d5d5', color: '#565656',
+              fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, cursor: 'pointer',
+            }}
+            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#f4f6f9'}
+            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
+          >
+            {t('tsCancelar')}
+          </button>
+          <Button size="md" variant="primary" style={{ minWidth: 200 }}>{t('tsAlterar')}</Button>
+        </div>
+      </div>
+      )}
     </div>
   );
 }
@@ -2469,6 +3741,7 @@ function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNavigateForm }: {
   onNavigateDetalhe: (service: typeof MOCK_SERVICOS_AV[0]) => void;
   onNavigateForm:    (service: typeof MOCK_SERVICOS_AV[0]) => void;
 }) {
+  const t = useT();
   const [search, setSearch] = useState('');
 
   const catServices = MOCK_SERVICOS_AV.filter(s => s.categoria === catLabel);
@@ -2487,7 +3760,7 @@ function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNavigateForm }: {
         <div>
           <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: 0 }}>{catLabel}</h1>
           <p style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#7d7d7d', margin: '4px 0 0 0' }}>
-            {filtered.length} serviço{filtered.length !== 1 ? 's' : ''} disponíve{filtered.length !== 1 ? 'is' : 'l'} nesta categoria
+            {filtered.length} {filtered.length !== 1 ? t('solServicosDisp') : t('solServicoDisp')} {filtered.length !== 1 ? t('solDispPlural') : t('solDispSingular')}
           </p>
         </div>
       </div>
@@ -2496,7 +3769,7 @@ function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNavigateForm }: {
       <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', height: 48 }}>
         <input
           value={search}
-          placeholder="Buscar serviço nesta categoria..."
+          placeholder={t('solTituloBusca')}
           onChange={e => setSearch(e.target.value)}
           style={{ flex: 1, border: 'none', outline: 'none', padding: '0 16px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', background: 'transparent' }}
         />
@@ -2511,8 +3784,8 @@ function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNavigateForm }: {
           <div style={{ width: 64, height: 64, background: '#edf2ff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <FAIcon icon="fa-regular fa-file-slash" style={{ fontSize: 24, color: '#0058db' }} />
           </div>
-          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222' }}>Nenhum serviço encontrado</div>
-          <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#7a8a9e' }}>Tente usar termos diferentes na busca</div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222' }}>{t('solNenhumTitle')}</div>
+          <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#7a8a9e' }}>{t('solNenhumDesc')}</div>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -2532,10 +3805,10 @@ function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNavigateForm }: {
                 <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222', marginBottom: 5 }}>{svc.servico}</div>
                 <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
                   <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>
-                    <strong style={{ color: '#565656' }}>Órgão:</strong> {svc.setor.split('/')[0]}
+                    <strong style={{ color: '#565656' }}>{t('solOrgao')}</strong> {svc.setor.split('/')[0]}
                   </span>
                   <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>
-                    <strong style={{ color: '#565656' }}>Público:</strong> {svc.destino.join(', ')}
+                    <strong style={{ color: '#565656' }}>{t('solPublico')}</strong> {svc.destino.join(', ')}
                   </span>
                 </div>
               </div>
@@ -2547,14 +3820,14 @@ function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNavigateForm }: {
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'white'; }}
                 >
-                  Mais informações
+                  {t('solMaisInfo')}
                 </button>
                 <button onClick={() => onNavigateForm(svc)}
                   style={{ height: 36, padding: '0 16px', border: 'none', borderRadius: 6, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'background 0.12s' }}
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0058db'; }}
                 >
-                  Solicitar
+                  {t('solSolicitar')}
                 </button>
               </div>
             </div>
@@ -2939,26 +4212,27 @@ function ServicoForm({ service }: { service: typeof MOCK_SERVICOS_AV[0] }) {
 
 // ── Tela: Home ────────────────────────────────────────────────────────────────
 function HomePage({ onNavigateCat }: { onNavigateCat: (cat: { label: string; icon: string }) => void }) {
+  const t = useT();
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 48, padding: '16px 24px 48px 24px' }}>
       <div style={{ height: 300, overflow: 'hidden', flexShrink: 0, margin: '-16px -24px 0 -24px' }}>
         <img src={imgBannerFloripa} alt="Florianópolis" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
-        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#333', textAlign: 'center', margin: 0 }}>Encontre o serviço que você precisa</h1>
+        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#333', textAlign: 'center', margin: 0 }}>{t('encontreServico')}</h1>
         <SearchWithDropdown />
       </div>
       <div style={{ background: '#dce6f5', border: '1px solid #6393db', borderRadius: 8, padding: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)' }}>
         <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#333', lineHeight: '24px', textAlign: 'center' }}>
-          Pague o seu IPTU com até 20% de desconto até o dia 30/04/2026
+          {t('iptuDesc')}
         </span>
       </div>
       <div style={{ display: 'flex', gap: 24 }}>
-        <ServiceCard title="Serviços mais acessados" items={popularServices} />
-        <ServiceCard title="Serviços em destaque"   items={featuredServices} />
+        <ServiceCard title={t('maisAcessados')} items={popularServices} />
+        <ServiceCard title={t('emDestaque')}   items={featuredServices} />
       </div>
       <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '24px 24px 48px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)' }}>
-        <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#353535', lineHeight: 1.2, margin: 0 }}>Serviços por assunto</h2>
+        <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#353535', lineHeight: 1.2, margin: 0 }}>{t('porAssunto')}</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 15 }}>
           {categories.map((cat, i) => <CategoryCard key={i} icon={cat.icon} label={cat.label} onClick={() => onNavigateCat({ label: cat.label, icon: cat.icon })} />)}
         </div>
@@ -2978,6 +4252,7 @@ export default function App() {
   const [highContrast,    setHighContrast]    = useState(false);
   const [selectedCat,     setSelectedCat]     = useState<{ label: string; icon: string } | null>(null);
   const [selectedService, setSelectedService] = useState<typeof MOCK_SERVICOS_AV[0] | null>(null);
+  const [selectedPendencia, setSelectedPendencia] = useState<Pendencia | null>(null);
 
   function handleLogin()  { setIsLoggedIn(true);  setShowLogin(false); }
   function handleLogout() { setIsLoggedIn(false); setPage('home'); }
@@ -3027,6 +4302,20 @@ export default function App() {
               {page === 'documentos' && <ConsultaDocumentos />}
               {page === 'meusdados'  && <MeusDados />}
               {page === 'meusprocessos' && <MeusProcessos onNavigateProcesso={() => setPage('processo')} />}
+              {page === 'minhaspendencias' && (
+                <MinhasPendencias
+                  onNavigateProcesso={() => setPage('processo')}
+                  onResolverPendencia={p => { setSelectedPendencia(p); setPage('pendencia-resolver'); }}
+                />
+              )}
+              {page === 'processosliberados' && <ProcessosLiberados onNavigateProcesso={() => setPage('processo')} />}
+              {page === 'pendencia-resolver' && (
+                <ResolverPendencia
+                  pendencia={selectedPendencia}
+                  onVoltar={() => setPage('minhaspendencias')}
+                  onConcluir={() => setPage('minhaspendencias')}
+                />
+              )}
               {page === 'solicitacao' && (
                 <SolicitacaoServicos
                   onNavigateCat={cat => { setSelectedCat(cat); setPage('cat-servicos'); }}
