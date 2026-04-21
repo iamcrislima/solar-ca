@@ -693,7 +693,7 @@ function LoginModal({ onClose, onLogin }: { onClose: () => void; onLogin: () => 
 
               {/* ── gov.br PRIMEIRO (opção principal) ── */}
               <a
-                href="https://sso.acesso.gov.br/login?client_id=p-autenticacao-ecidadao.curitiba.pr.gov.br&authorization_id=19dacd624bf"
+                href="https://sso.acesso.gov.br/login?client_id=floripa.sc.gov.br&authorization_id=19dadc40977"
                 target="_blank" rel="noopener noreferrer"
                 style={{ textDecoration: 'none' }}
               >
@@ -879,8 +879,9 @@ function HeaderSearch() {
   );
 }
 
-function Header({ onToggle, onLogin, isLoggedIn, onLogout, darkMode, onToggleDark, highContrast, onToggleContrast, lang, onSetLang }: {
+function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavigate, darkMode, onToggleDark, highContrast, onToggleContrast, lang, onSetLang }: {
   onToggle: () => void; onLogin: () => void; isLoggedIn: boolean; onLogout: () => void;
+  onNavigate: (p: Page) => void;
   darkMode: boolean; onToggleDark: () => void;
   highContrast: boolean; onToggleContrast: () => void;
   lang: Lang; onSetLang: (l: Lang) => void;
@@ -920,7 +921,7 @@ function Header({ onToggle, onLogin, isLoggedIn, onLogout, darkMode, onToggleDar
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
           <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 28, color: '#0059db', letterSpacing: '-0.5px' }}>FloripaOn</span>
           <div style={{ width: 1, height: 28, background: '#dce6f5' }} />
-          <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 13, color: '#565656', whiteSpace: 'nowrap' }}>{t('municipio')}</span>
+          <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#1a1a1a', whiteSpace: 'nowrap', letterSpacing: '-0.2px' }}>{t('municipio')}</span>
         </div>
 
         <div style={{ flex: 1 }} />
@@ -989,6 +990,14 @@ function Header({ onToggle, onLogin, isLoggedIn, onLogout, darkMode, onToggleDar
                 <div style={{ padding: '12px 16px', borderBottom: '1px solid #f0f0f0', fontFamily: 'Open Sans, sans-serif', fontSize: 13 }}>
                   <div style={{ fontWeight: 700, color: '#222' }}>Cris Lima</div>
                   <div style={{ fontWeight: 400, color: '#7d7d7d', fontSize: 11 }}>043.792.234-00</div>
+                </div>
+                <div onClick={() => { setAvatarOpen(false); onNavigate('meusdados'); }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', cursor: 'pointer', fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#333', transition: 'background 0.1s', borderBottom: '1px solid #f0f0f0' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = '#f0f5ff'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'transparent'; }}
+                >
+                  <FAIcon icon="fa-regular fa-user" style={{ fontSize: 14, color: '#0058db' }} />
+                  {t('meusDados')}
                 </div>
                 <div onClick={() => { setAvatarOpen(false); onLogout(); }}
                   style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', cursor: 'pointer', fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#c0182d', transition: 'background 0.1s' }}
@@ -1216,7 +1225,10 @@ function SideMenu({ activePage, onNavigate, expanded, onLogin, isLoggedIn, onLog
           <img src="/solarBPM_principal_horizontal_fundoescuro.png" alt="SolarBPM"
             style={{ height: 28, objectFit: 'contain', maxWidth: '100%' }} />
         ) : (
-          <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 800, fontSize: 16, color: '#4db8ff', letterSpacing: '-0.5px' }}>S</span>
+          <div style={{ width: 24, height: 24, overflow: 'hidden', flexShrink: 0 }}>
+            <img src="/solarBPM_principal_horizontal_fundoescuro.png" alt="SolarBPM"
+              style={{ height: 24, maxWidth: 'none', objectFit: 'cover', objectPosition: 'left center' }} />
+          </div>
         )}
       </div>
 
@@ -1356,15 +1368,16 @@ function InfoTooltip({ text }: { text: string }) {
       </span>
       {show && (
         <div style={{
-          position: 'absolute', bottom: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)',
-          background: '#222', color: 'white', borderRadius: 8, padding: '10px 14px',
-          fontSize: 12, fontFamily: 'Open Sans, sans-serif', lineHeight: '18px',
-          whiteSpace: 'pre-wrap', maxWidth: 300, zIndex: 500,
+          position: 'absolute', top: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)',
+          background: '#222', color: 'white', borderRadius: 8, padding: '10px 16px',
+          fontSize: 12, fontFamily: 'Open Sans, sans-serif', lineHeight: '19px',
+          whiteSpace: 'pre-wrap', width: 360, zIndex: 500,
           boxShadow: '0px 4px 16px rgba(0,0,0,0.22)',
           pointerEvents: 'none',
         }}>
+          {/* setinha apontando para cima */}
+          <div style={{ position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '6px solid transparent', borderRight: '6px solid transparent', borderBottom: '6px solid #222' }} />
           {text}
-          <div style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '6px solid transparent', borderRight: '6px solid transparent', borderTop: '6px solid #222' }} />
         </div>
       )}
     </span>
@@ -1445,7 +1458,7 @@ function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => v
           <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#222', margin: 0 }}>{t('numeroProcesso')}</h2>
           <InfoTooltip text={t('tooltipProcesso')} />
         </div>
-        <div style={{ display: 'flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+        <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
           <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
           <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
           <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
@@ -1534,7 +1547,7 @@ function ConsultaDocumentos() {
             <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: 0 }}>{t('numeroProcesso')}</h2>
             <InfoTooltip text={t('tooltipProcesso')} />
           </div>
-          <div style={{ display: 'flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
             <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
             <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
             <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
@@ -1737,10 +1750,10 @@ function ProcessoDetalhe() {
               <div style={sectionTitle}>{t('pdAndamento')}</div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {([
-                  { date: '02/09/2025', title: 'Processo aberto',                          desc: 'Solicitação protocolada e recebida pela unidade UN - São Paulo',                              loc: 'UN - São Paulo',               isLast: false },
-                  { date: '02/09/2025', title: 'Encaminhamento para unidade digital',       desc: 'Processo encaminhado e recebido pela unidade DIGITAL para análise',                          loc: 'Digital',                      isLast: false },
+                  { date: '08/09/2025', title: 'Processo arquivado',                        desc: 'Arquivado pela unidade SAUDE - Secretaria da Saúde após conclusão da análise',               loc: 'SAUDE - Secretaria da Saúde',  isLast: false },
                   { date: '08/09/2025', title: 'Análise de sustentabilidade finalizada',    desc: 'Tarefa concluída pela unidade DIGITAL. Processo encaminhado à Secretaria de Saúde',          loc: 'SAUDE - Secretaria da Saúde',  isLast: false },
-                  { date: '08/09/2025', title: 'Processo arquivado',                        desc: 'Arquivado pela unidade SAUDE - Secretaria da Saúde após conclusão da análise',               loc: 'SAUDE - Secretaria da Saúde',  isLast: true  },
+                  { date: '02/09/2025', title: 'Encaminhamento para unidade digital',       desc: 'Processo encaminhado e recebido pela unidade DIGITAL para análise',                          loc: 'Digital',                      isLast: false },
+                  { date: '02/09/2025', title: 'Processo aberto',                          desc: 'Solicitação protocolada e recebida pela unidade UN - São Paulo',                              loc: 'UN - São Paulo',               isLast: true  },
                 ] as { date: string; title: string; desc: string; loc: string; isLast: boolean }[]).map((item, i) => (
                   <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'stretch' }}>
                     <div style={{ width: 12, flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 8 }}>
@@ -1988,7 +2001,7 @@ function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }: {
   const [avCategoria,  setAvCategoria]  = useState('');
   const [avCatQuery,   setAvCatQuery]   = useState('');
   const [avCatOpen,    setAvCatOpen]    = useState(false);
-  const [avDestino,    setAvDestino]    = useState<string[]>([]);
+  const [avDestino,    setAvDestino]    = useState('');
   const [avResultados, setAvResultados] = useState<typeof MOCK_SERVICOS_AV | null>(null);
   const [avPage,       setAvPage]       = useState(1);
   const [avPerPage,    setAvPerPage]    = useState(10);
@@ -2000,18 +2013,17 @@ function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }: {
     return () => document.removeEventListener('mousedown', onOut);
   }, []);
 
-  function toggleDestino(d: string) { setAvDestino(prev => prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d]); }
 
   function handleAvConsultar() {
     let res = MOCK_SERVICOS_AV;
     if (avServico.trim()) res = res.filter(r => r.servico.toLowerCase().includes(avServico.toLowerCase()));
     if (avCategoria) res = res.filter(r => r.categoria === avCategoria);
-    if (avDestino.length > 0) res = res.filter(r => avDestino.some(d => r.destino.includes(d)));
+    if (avDestino) res = res.filter(r => r.destino.includes(avDestino));
     setAvResultados(res);
     setAvPage(1);
   }
 
-  function handleAvLimpar() { setAvServico(''); setAvCategoria(''); setAvCatQuery(''); setAvDestino([]); setAvResultados(null); setAvPage(1); }
+  function handleAvLimpar() { setAvServico(''); setAvCategoria(''); setAvCatQuery(''); setAvDestino(''); setAvResultados(null); setAvPage(1); }
 
   const catOptions = categories.map(c => c.label).filter(l => !avCatQuery || l.toLowerCase().includes(avCatQuery.toLowerCase()));
   const totalAv    = avResultados?.length ?? 0;
@@ -2201,16 +2213,18 @@ function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }: {
                 {/* A quem se destina */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 5 }}>
                   <label style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase' }}>A quem se destina</label>
-                  <div style={{ display: 'flex', alignItems: 'stretch', border: '1.5px solid #d5d5d5', borderRadius: 6, overflow: 'hidden', height: 44 }}>
-                    {(['Cidadão', 'Empresa', 'Visitante'] as const).map((d, i) => {
-                      const active = avDestino.includes(d);
-                      return (
-                        <div key={d} onClick={() => toggleDestino(d)}
-                          style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: active ? '#0058db' : 'white', color: active ? 'white' : '#555', fontFamily: 'Open Sans, sans-serif', fontSize: 13, fontWeight: active ? 600 : 400, borderRight: i < 2 ? '1px solid #d5d5d5' : 'none', transition: 'all 0.15s', userSelect: 'none' }}>
-                          {d}
-                        </div>
-                      );
-                    })}
+                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center', height: 44, border: '1px solid #d5d5d5', borderRadius: 6, background: 'white', overflow: 'hidden' }}>
+                    <select
+                      value={avDestino}
+                      onChange={e => setAvDestino(e.target.value)}
+                      style={{ width: '100%', height: '100%', border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: avDestino ? '#333' : '#a3a3a3', padding: '0 36px 0 12px', appearance: 'none', WebkitAppearance: 'none', cursor: 'pointer' }}
+                    >
+                      <option value="">Todos os públicos</option>
+                      <option value="Cidadão">{t('destinoCidadao')}</option>
+                      <option value="Empresa">{t('destinoEmpresa')}</option>
+                      <option value="Visitante">{t('destinoVisitante')}</option>
+                    </select>
+                    <FAIcon icon="fa-regular fa-chevron-down" style={{ position: 'absolute', right: 12, fontSize: 11, color: '#8a9ab5', pointerEvents: 'none' }} />
                   </div>
                 </div>
               </div>
@@ -4684,6 +4698,7 @@ export default function App() {
           onLogin={() => setShowLogin(true)}
           isLoggedIn={isLoggedIn}
           onLogout={handleLogout}
+          onNavigate={setPage}
           darkMode={darkMode}
           onToggleDark={() => setDarkMode(d => !d)}
           highContrast={highContrast}
