@@ -1534,49 +1534,58 @@ function ConsultaDocumentos() {
 
       <div>
         <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: '0 0 8px 0' }}>{t('docTitle')}</h1>
-        <p style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#333', margin: 0, lineHeight: '24px', letterSpacing: '0.08px', maxWidth: 820 }}>
+        <p style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#565656', margin: 0, lineHeight: '22px', maxWidth: 820 }}>
           {t('docDesc')}
         </p>
       </div>
 
-      <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 24, boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)' }}>
+      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 8, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)' }}>
 
-        {/* Número do processo */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: 0 }}>{t('numeroProcesso')}</h2>
-            <InfoTooltip text={t('tooltipProcesso')} />
-          </div>
-          <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
-            <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
-            <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
-            <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
-            <FormSegment   label={t('ano')}         value={ano}         onChange={v => setAno(v.replace(/\D/g, '').slice(0, 4))}       placeholder="2026" width={88} center last />
-          </div>
-        </div>
+          {/* Linha: Número do processo + Código do documento (mesma altura) */}
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, flexWrap: 'wrap' }}>
 
-        {/* Código do documento */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: 0 }}>{t('codigoDoc')}</h2>
-            <InfoTooltip text={t('tooltipDocumento')} />
-          </div>
-          <div style={{ width: 390 }}>
-            <Input
-              placeholder="Ex: 00U61ULQ"
-              fullWidth size="md" type="text"
-              value={codigo}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCodigo(e.target.value)}
-              iconsRight={[{ icon: <i className="fa-regular fa-barcode-scan" style={{ color: '#7d7d7d' }} /> }]}
-            />
-          </div>
-        </div>
+            {/* Número do processo */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#222' }}>{t('numeroProcesso')}</span>
+                <InfoTooltip text={t('tooltipProcesso')} />
+              </div>
+              <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+                <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
+                <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
+                <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
+                <FormSegment   label={t('ano')}         value={ano}         onChange={v => setAno(v.replace(/\D/g, '').slice(0, 4))}       placeholder="2026" width={88} center last />
+              </div>
+            </div>
 
-        {/* Botões */}
-        <div style={{ display: 'flex', gap: 10 }}>
-          <Button size="md" variant="primary"   onClick={handleConsultar}>{t('consultar')}</Button>
-          <Button size="md" variant="secondary" onClick={handleLimpar}>{t('limpar')}</Button>
-        </div>
+            {/* Código do documento (mesma altura: 58px) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#222' }}>{t('codigoDoc')}</span>
+                <InfoTooltip text={t('tooltipDocumento')} />
+              </div>
+              <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '8px 14px', width: 200 }}>
+                  <label style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 10, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{t('codigoDoc')}</label>
+                  <input
+                    value={codigo}
+                    onChange={e => setCodigo(e.target.value)}
+                    placeholder="Ex: 00U61ULQ"
+                    style={{ border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 15, color: '#222', padding: 0, width: '100%' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', padding: '0 14px', borderLeft: '1px solid #b3c7e6', color: '#7d7d7d', fontSize: 15 }}>
+                  <i className="fa-regular fa-barcode-scan" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Botões */}
+          <div style={{ display: 'flex', gap: 10 }}>
+            <Button size="md" variant="primary"   onClick={handleConsultar}>{t('consultar')}</Button>
+            <Button size="md" variant="secondary" onClick={handleLimpar}>{t('limpar')}</Button>
+          </div>
       </div>
 
     </div>
