@@ -186,6 +186,10 @@ const TRANS = {
     dashOla: 'Olá', dashAcessoRapido: 'Acesso rápido',
     dashPendencias: 'Pendências abertas', dashProcessos: 'Processos ativos', dashLiberados: 'Processos liberados',
     dashHistoricoTitle: 'Últimas atividades', dashVerTodos: 'Ver todos',
+    // Certificado Digital
+    certDigital: 'Entrar com Certificado Digital', certDigitalDesc: 'Acesso seguro com seu certificado ICP-Brasil',
+    // Processos Liberados — ver anexos
+    plVerAnexos: 'Ver anexos',
   },
   en: {
     inicio: 'Home', consultaProcessos: 'Process Inquiry',
@@ -350,6 +354,10 @@ const TRANS = {
     dashOla: 'Hello', dashAcessoRapido: 'Quick access',
     dashPendencias: 'Open pending items', dashProcessos: 'Active processes', dashLiberados: 'Released processes',
     dashHistoricoTitle: 'Recent activity', dashVerTodos: 'See all',
+    // Digital Certificate
+    certDigital: 'Sign in with Digital Certificate', certDigitalDesc: 'Secure access with your ICP-Brasil certificate',
+    // Released Processes — see attachments
+    plVerAnexos: 'See attachments',
   },
 } as const;
 
@@ -358,6 +366,10 @@ function useT() {
   const lang = useContext(LangContext);
   return (key: keyof typeof TRANS['pt']) => TRANS[lang][key];
 }
+
+// ── Mobile detection ──────────────────────────────────────────────────────────
+const IsMobileContext = createContext(false);
+function useIsMobile() { return useContext(IsMobileContext); }
 
 // ── FAIcon — ícone que bypassa o reconciliador do React ───────────────────────
 function FAIcon({ icon, style, onClick }: { icon: string; style?: React.CSSProperties; onClick?: () => void }) {
@@ -637,6 +649,8 @@ function SearchWithDropdown() {
 
 // ── Modal de Login ────────────────────────────────────────────────────────────
 function LoginModal({ onClose, onLogin }: { onClose: () => void; onLogin: () => void }) {
+  const t = useT();
+  const isMobile = useIsMobile();
   const [view,          setView]          = useState<'login' | 'recovery'>('login');
   const [email,         setEmail]         = useState('');
   const [senha,         setSenha]         = useState('');
@@ -659,30 +673,39 @@ function LoginModal({ onClose, onLogin }: { onClose: () => void; onLogin: () => 
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 1000,
-      background: 'rgba(0,0,0,0.45)',
+      background: isMobile ? 'white' : 'rgba(0,0,0,0.45)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: 32,
-    }} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+      padding: isMobile ? 0 : 32,
+    }} onClick={e => { if (!isMobile && e.target === e.currentTarget) onClose(); }}>
 
-      <div style={{ display: 'flex', width: '100%', maxWidth: 1100, height: '90vh', maxHeight: 800, borderRadius: 16, overflow: 'hidden', boxShadow: '0px 10px 40px rgba(0,0,0,0.25)' }}>
+      <div style={{ display: 'flex', width: '100%', maxWidth: isMobile ? '100%' : 1100, height: isMobile ? '100%' : '90vh', maxHeight: isMobile ? '100%' : 800, borderRadius: isMobile ? 0 : 16, overflow: 'hidden', boxShadow: isMobile ? 'none' : '0px 10px 40px rgba(0,0,0,0.25)' }}>
 
-        {/* ── Foto Florianópolis ── */}
-        <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
-          <img src={imgFloripa} alt="Florianópolis" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-        </div>
+        {/* ── Foto Florianópolis (hidden on mobile) ── */}
+        {!isMobile && (
+          <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
+            <img src={imgFloripa} alt="Florianópolis" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
+        )}
 
         {/* ── Card de formulário ── */}
         <div style={{
-          width: 470, flexShrink: 0,
+          width: isMobile ? '100%' : 470, flexShrink: 0,
           background: 'white', border: '1px solid #f6f6f6',
-          display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-          padding: '40px 40px 24px 40px', overflowY: 'auto',
+          display: 'flex', flexDirection: 'column', justifyContent: isMobile ? 'flex-start' : 'space-between',
+          padding: isMobile ? '24px 24px 32px 24px' : '40px 40px 24px 40px', overflowY: 'auto',
         }}>
 
-          {/* Logo FloripaOn */}
-          <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 28, color: '#0059db', letterSpacing: '-0.5px', lineHeight: 1 }}>
-            FloripaOn
-          </span>
+          {/* Logo FloripaOn + botão fechar (mobile) */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isMobile ? 8 : 0 }}>
+            <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 28, color: '#0059db', letterSpacing: '-0.5px', lineHeight: 1 }}>
+              FloripaOn
+            </span>
+            {isMobile && (
+              <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#7d7d7d', padding: 8, display: 'flex', alignItems: 'center' }}>
+                <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 20 }} />
+              </button>
+            )}
+          </div>
 
           {view === 'login' ? (
             /* ── LOGIN ── */
@@ -716,7 +739,33 @@ function LoginModal({ onClose, onLogin }: { onClose: () => void; onLogin: () => 
                 Acesso seguro via conta gov.br — recomendado
               </p>
 
-              {/* Divider */}
+              {/* Divider gov.br / Certificado */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                <div style={{ flex: 1, height: 1, background: '#d5d5d5' }} />
+                <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 12, color: '#565656', whiteSpace: 'nowrap' }}>ou</span>
+                <div style={{ flex: 1, height: 1, background: '#d5d5d5' }} />
+              </div>
+
+              {/* ── Certificado Digital ── */}
+              <button
+                style={{
+                  width: '100%', height: 48, borderRadius: 10,
+                  background: 'white', border: '1.5px solid #22a06b',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                  fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#22a06b',
+                  transition: 'background 0.12s',
+                }}
+                onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#f0faf5'}
+                onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
+              >
+                <FAIcon icon="fa-regular fa-certificate" style={{ fontSize: 18, color: '#22a06b' }} />
+                {t('certDigital')}
+              </button>
+              <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d', textAlign: 'center', margin: 0, lineHeight: '18px' }}>
+                {t('certDigitalDesc')}
+              </p>
+
+              {/* Divider gov.br / Login sistema */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 <div style={{ flex: 1, height: 1, background: '#d5d5d5' }} />
                 <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 12, color: '#565656', whiteSpace: 'nowrap' }}>
@@ -1218,15 +1267,15 @@ function SideMenu({ activePage, onNavigate, expanded, onLogin, isLoggedIn, onLog
         borderTop: '1px solid #dce6f5',
         padding: expanded ? '10px 12px' : '10px 6px',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: '#1a2940',
+        background: '#f8f9fb',
         transition: 'padding 0.2s ease',
       }}>
         {expanded ? (
-          <img src="/solarBPM_principal_horizontal_fundoescuro.png" alt="SolarBPM"
+          <img src="/solarBPM_principal_horizontal_fundoclaro.png" alt="SolarBPM"
             style={{ height: 28, objectFit: 'contain', maxWidth: '100%' }} />
         ) : (
           <div style={{ width: 24, height: 24, overflow: 'hidden', flexShrink: 0 }}>
-            <img src="/solarBPM_principal_horizontal_fundoescuro.png" alt="SolarBPM"
+            <img src="/solarBPM_principal_horizontal_fundoclaro.png" alt="SolarBPM"
               style={{ height: 24, maxWidth: 'none', objectFit: 'cover', objectPosition: 'left center' }} />
           </div>
         )}
@@ -1331,7 +1380,10 @@ function ServiceCard({ title, items }: { title: string; items: string[] }) {
       <div>
         {items.map((item, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: i < items.length - 1 ? '1px solid #d5d5d5' : 'none', cursor: 'pointer' }}>
-            <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#333', lineHeight: '24px' }}>{item}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <FAIcon icon="fa-regular fa-file-lines" style={{ fontSize: 13, color: '#0058db', flexShrink: 0 }} />
+              <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#333', lineHeight: '24px' }}>{item}</span>
+            </div>
             <i className="fa-regular fa-angle-right" style={{ color: '#7d7d7d', fontSize: 16 }} />
           </div>
         ))}
@@ -1415,12 +1467,78 @@ function SelectSegment({ label, value, onChange, options, width }: {
   );
 }
 
+// ── Select com busca integrada ────────────────────────────────────────────────
+function SearchableSelect({ label, value, onChange, options, placeholder, width }: {
+  label: string; value: string; onChange: (v: string) => void;
+  options: string[]; placeholder?: string; width?: number;
+}) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onOut(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener('mousedown', onOut);
+    return () => document.removeEventListener('mousedown', onOut);
+  }, []);
+
+  const filtered = options.filter(o => o.toLowerCase().includes(search.toLowerCase()));
+  const selected = value || (placeholder ?? options[0]);
+  const isPlaceholder = !value;
+
+  return (
+    <div ref={ref} style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 2, flex: 'none', width: width ?? undefined, borderRight: '1px solid #b3c7e6', padding: '8px 14px' }}>
+      <label style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 10, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{label}</label>
+      <div onClick={() => { setOpen(o => !o); setSearch(''); }} style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer', minWidth: 0 }}>
+        <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 15, color: isPlaceholder ? '#a3a3a3' : '#222', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>
+          {selected}
+        </span>
+        <FAIcon icon="fa-regular fa-chevron-down" style={{ fontSize: 11, color: '#8a9ab5', flexShrink: 0 }} />
+      </div>
+      {open && (
+        <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, zIndex: 200, background: 'white', border: '1.5px solid #0058db', borderRadius: 8, boxShadow: '0px 8px 24px rgba(0,0,0,0.12)', minWidth: 200, overflow: 'hidden' }}>
+          <div style={{ padding: '8px 10px', borderBottom: '1px solid #f0f0f0' }}>
+            <input autoFocus value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar..." style={{ width: '100%', border: '1px solid #dce6f5', borderRadius: 6, padding: '5px 8px', fontFamily: 'Open Sans, sans-serif', fontSize: 13, outline: 'none', background: '#f8f9fb', color: '#333' }} />
+          </div>
+          <div style={{ maxHeight: 180, overflowY: 'auto' }}>
+            {filtered.map(o => (
+              <div key={o} onClick={() => { onChange(o); setOpen(false); setSearch(''); }}
+                style={{ padding: '9px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: o === value ? '#0058db' : '#333', fontWeight: o === value ? 700 : 400, cursor: 'pointer', background: o === value ? '#edf2ff' : 'white' }}
+                onMouseEnter={e => { if (o !== value) (e.currentTarget as HTMLDivElement).style.background = '#f0f5ff'; }}
+                onMouseLeave={e => { if (o !== value) (e.currentTarget as HTMLDivElement).style.background = 'white'; }}
+              >
+                {o}
+              </div>
+            ))}
+            {filtered.length === 0 && (
+              <div style={{ padding: '12px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#a3a3a3', textAlign: 'center' }}>Nenhum resultado</div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Campo de formulário mobile (bordas arredondadas, empilhado) ──────────────
+function MobileFormField({ label, children, style }: { label: string; children: React.ReactNode; style?: React.CSSProperties }) {
+  return (
+    <div style={{ border: '1.5px solid #0058db', borderRadius: 8, background: 'white', padding: '8px 14px', display: 'flex', flexDirection: 'column', gap: 3, ...style }}>
+      <label style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 10, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{label}</label>
+      {children}
+    </div>
+  );
+}
+
 // ── Tela: Consulta de Processos ───────────────────────────────────────────────
 const ORGAOS       = ['PMF', 'SMTTU', 'FLORIPAMANHÃ', 'IPUF', 'SMDS'];
 const PROCEDENCIAS = ['Interno', 'Externo'];
 
 function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void }) {
   const t = useT();
+  const isMobile = useIsMobile();
   const [orgao,       setOrgao]       = useState(ORGAOS[0]);
   const [procedencia, setProcedencia] = useState(PROCEDENCIAS[0]);
   const [numero,      setNumero]      = useState('');
@@ -1444,26 +1562,50 @@ function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => v
   const showResults   = resultados !== null && resultados.length > 0;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: isMobile ? '16px 16px 48px 16px' : '24px 24px 48px 24px' }}>
 
       <div>
-        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: '0 0 8px 0' }}>{t('consultaTitle')}</h1>
+        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 20 : 24, color: '#1a1a1a', margin: '0 0 8px 0' }}>{t('consultaTitle')}</h1>
         <p style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#565656', margin: 0, lineHeight: '22px', maxWidth: 820 }}>
           {t('consultaDesc')}
         </p>
       </div>
 
-      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 8, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)' }}>
+      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 8, padding: isMobile ? '16px' : '20px 24px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#222', margin: 0 }}>{t('numeroProcesso')}</h2>
           <InfoTooltip text={t('tooltipProcesso')} />
         </div>
-        <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
-          <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
-          <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
-          <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
-          <FormSegment   label={t('ano')}         value={ano}         onChange={v => setAno(v.replace(/\D/g, '').slice(0, 4))}       placeholder="2026"   width={88} center last />
-        </div>
+        {isMobile ? (
+          /* Mobile: campos empilhados */
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <MobileFormField label={t('orgao')}>
+              <select value={orgao} onChange={e => setOrgao(e.target.value)} style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontSize: 15, color: '#222', padding: 0 }}>
+                {ORGAOS.map(o => <option key={o} value={o}>{o}</option>)}
+              </select>
+            </MobileFormField>
+            <MobileFormField label={t('procedencia')}>
+              <select value={procedencia} onChange={e => setProcedencia(e.target.value)} style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontSize: 15, color: '#222', padding: 0 }}>
+                {PROCEDENCIAS.map(p => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </MobileFormField>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <MobileFormField label={t('numero')} style={{ flex: 1 }}>
+                <input value={numero} onChange={e => setNumero(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="000000" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontSize: 15, color: '#222', padding: 0 }} />
+              </MobileFormField>
+              <MobileFormField label={t('ano')} style={{ width: 90 }}>
+                <input value={ano} onChange={e => setAno(e.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="2026" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontSize: 15, color: '#222', padding: 0 }} />
+              </MobileFormField>
+            </div>
+          </div>
+        ) : (
+          <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+            <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
+            <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
+            <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
+            <FormSegment   label={t('ano')}         value={ano}         onChange={v => setAno(v.replace(/\D/g, '').slice(0, 4))}       placeholder="2026"   width={72} center last />
+          </div>
+        )}
         <div style={{ display: 'flex', gap: 10 }}>
           <Button size="md" variant="primary"   onClick={handleConsultar}>{t('consultar')}</Button>
           <Button size="md" variant="secondary" onClick={handleLimpar}>{t('limpar')}</Button>
@@ -1520,6 +1662,7 @@ function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => v
 // ── Tela: Conferência de Documentos ──────────────────────────────────────────
 function ConsultaDocumentos() {
   const t = useT();
+  const isMobile = useIsMobile();
   const [orgao,       setOrgao]       = useState(ORGAOS[0]);
   const [procedencia, setProcedencia] = useState(PROCEDENCIAS[0]);
   const [numero,      setNumero]      = useState('');
@@ -1530,19 +1673,19 @@ function ConsultaDocumentos() {
   function handleConsultar() { /* busca */ }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: isMobile ? '16px 16px 48px 16px' : '24px 24px 48px 24px' }}>
 
       <div>
-        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: '0 0 8px 0' }}>{t('docTitle')}</h1>
+        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 20 : 24, color: '#1a1a1a', margin: '0 0 8px 0' }}>{t('docTitle')}</h1>
         <p style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#565656', margin: 0, lineHeight: '22px', maxWidth: 820 }}>
           {t('docDesc')}
         </p>
       </div>
 
-      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 8, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)' }}>
+      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 8, padding: isMobile ? '16px' : '20px 24px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)' }}>
 
           {/* Linha: Número do processo + Código do documento (mesma altura) */}
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : 'flex-end', gap: 16, flexWrap: isMobile ? 'nowrap' : 'wrap' }}>
 
             {/* Número do processo */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -1550,34 +1693,61 @@ function ConsultaDocumentos() {
                 <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#222' }}>{t('numeroProcesso')}</span>
                 <InfoTooltip text={t('tooltipProcesso')} />
               </div>
-              <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
-                <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
-                <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
-                <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
-                <FormSegment   label={t('ano')}         value={ano}         onChange={v => setAno(v.replace(/\D/g, '').slice(0, 4))}       placeholder="2026" width={88} center last />
-              </div>
+              {isMobile ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <MobileFormField label={t('orgao')}>
+                    <select value={orgao} onChange={e => setOrgao(e.target.value)} style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontSize: 15, color: '#222', padding: 0 }}>
+                      {ORGAOS.map(o => <option key={o} value={o}>{o}</option>)}
+                    </select>
+                  </MobileFormField>
+                  <MobileFormField label={t('procedencia')}>
+                    <select value={procedencia} onChange={e => setProcedencia(e.target.value)} style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontSize: 15, color: '#222', padding: 0 }}>
+                      {PROCEDENCIAS.map(p => <option key={p} value={p}>{p}</option>)}
+                    </select>
+                  </MobileFormField>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <MobileFormField label={t('numero')} style={{ flex: 1 }}>
+                      <input value={numero} onChange={e => setNumero(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="000000" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontSize: 15, color: '#222', padding: 0 }} />
+                    </MobileFormField>
+                    <MobileFormField label={t('ano')} style={{ width: 90 }}>
+                      <input value={ano} onChange={e => setAno(e.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="2026" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontSize: 15, color: '#222', padding: 0 }} />
+                    </MobileFormField>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+                  <SearchableSelect label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
+                  <SearchableSelect label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
+                  <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
+                  <FormSegment   label={t('ano')}         value={ano}         onChange={v => setAno(v.replace(/\D/g, '').slice(0, 4))}       placeholder="2026" width={72} center last />
+                </div>
+              )}
             </div>
 
-            {/* Código do documento (mesma altura: 58px) */}
+            {/* Código do documento */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#222' }}>{t('codigoDoc')}</span>
                 <InfoTooltip text={t('tooltipDocumento')} />
               </div>
-              <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '8px 14px', width: 200 }}>
-                  <label style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 10, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{t('codigoDoc')}</label>
-                  <input
-                    value={codigo}
-                    onChange={e => setCodigo(e.target.value)}
-                    placeholder="Ex: 00U61ULQ"
-                    style={{ border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 15, color: '#222', padding: 0, width: '100%' }}
-                  />
+              {isMobile ? (
+                <MobileFormField label={t('codigoDoc')}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <input value={codigo} onChange={e => setCodigo(e.target.value)} placeholder="Ex: 00U61ULQ" style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontSize: 15, color: '#222', padding: 0 }} />
+                    <i className="fa-regular fa-barcode-scan" style={{ color: '#7d7d7d', fontSize: 16 }} />
+                  </div>
+                </MobileFormField>
+              ) : (
+                <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '8px 14px', width: 200 }}>
+                    <label style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 10, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{t('codigoDoc')}</label>
+                    <input value={codigo} onChange={e => setCodigo(e.target.value)} placeholder="Ex: 00U61ULQ" style={{ border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 15, color: '#222', padding: 0, width: '100%' }} />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '0 14px', borderLeft: '1px solid #b3c7e6', color: '#7d7d7d', fontSize: 15 }}>
+                    <i className="fa-regular fa-barcode-scan" />
+                  </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', padding: '0 14px', borderLeft: '1px solid #b3c7e6', color: '#7d7d7d', fontSize: 15 }}>
-                  <i className="fa-regular fa-barcode-scan" />
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -1588,6 +1758,32 @@ function ConsultaDocumentos() {
           </div>
       </div>
 
+    </div>
+  );
+}
+
+// ── Modal: Despacho ────────────────────────────────────────────────────────────
+function DespachoModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.40)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div style={{ background: 'white', borderRadius: 12, padding: '28px 32px', width: '100%', maxWidth: 560, boxShadow: '0px 10px 40px rgba(0,0,0,0.18)', display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'Open Sans, sans-serif' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2 style={{ fontWeight: 700, fontSize: 18, color: '#1a1a1a', margin: 0 }}>Despacho</h2>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#7d7d7d', padding: 4 }}>
+            <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 18 }} />
+          </button>
+        </div>
+        <div style={{ height: 1, background: '#ebebeb' }} />
+        <div style={{ fontSize: 14, color: '#333', lineHeight: '22px', whiteSpace: 'pre-wrap' }}>
+          {`Processo analisado e aprovado pela unidade responsável. Todas as informações foram verificadas e estão em conformidade com os requisitos estabelecidos.\n\nA análise de sustentabilidade foi concluída com êxito, demonstrando que os critérios ambientais e de eficiência energética foram atendidos conforme exigido pela legislação municipal vigente.\n\nEncaminha-se o processo para arquivamento definitivo.`}
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button onClick={onClose} style={{ height: 36, padding: '0 20px', border: 'none', borderRadius: 6, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+            Fechar
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -1618,9 +1814,11 @@ function TableHeader({ cols }: { cols: { label: string; width?: number | string;
   );
 }
 
-function ProcessoDetalhe() {
+function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: { onVoltar?: () => void; liberadoItem?: ProcessoLiberado | null; initialTab?: ProcessoTab }) {
   const t = useT();
-  const [activeTab, setActiveTab] = useState<ProcessoTab>('dados');
+  const isMobile = useIsMobile();
+  const [activeTab, setActiveTab] = useState<ProcessoTab>(initialTab ?? 'dados');
+  const [showDespacho, setShowDespacho] = useState(false);
 
   const tabs: { key: ProcessoTab; label: string }[] = [
     { key: 'dados',         label: t('dadosProcesso') },
@@ -1650,20 +1848,28 @@ function ProcessoDetalhe() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: '24px 24px 48px 24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 12 : 24, padding: isMobile ? '16px 16px 48px 16px' : '24px 24px 48px 24px' }}>
+
+      {/* ── Botão voltar mobile ── */}
+      {isMobile && onVoltar && (
+        <button onClick={onVoltar} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, color: '#0058db', padding: 0 }}>
+          <FAIcon icon="fa-regular fa-arrow-left" style={{ fontSize: 14, color: '#0058db' }} />
+          {t('consultar')}
+        </button>
+      )}
 
       {/* ── Cabeçalho do processo ── */}
-      <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: 24, display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: isMobile ? 16 : 24, display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#a3a3a3', lineHeight: '1.2' }}>
+            <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 13 : 16, color: '#a3a3a3', lineHeight: '1.2' }}>
               PMF2026/000418
             </div>
-            <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#333', lineHeight: 1 }}>
+            <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 18 : 24, color: '#333', lineHeight: 1 }}>
               Ranking de Sustentabilidade
             </div>
           </div>
-          <button
+          {!isMobile && <button
             onClick={() => window.print()}
             style={{
               display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0,
@@ -1677,8 +1883,22 @@ function ProcessoDetalhe() {
           >
             <FAIcon icon="fa-regular fa-print" style={{ fontSize: 14 }} />
             {t('imprimir')}
-          </button>
+          </button>}
         </div>
+        {liberadoItem && (
+          <div style={{ background: '#e8f5e9', border: '1px solid #a5d6a7', borderRadius: 8, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12, marginTop: 12 }}>
+            <FAIcon icon="fa-regular fa-circle-check" style={{ fontSize: 18, color: '#0f6b3e', flexShrink: 0 }} />
+            <div>
+              <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 13, color: '#0f6b3e' }}>
+                Acesso liberado para: {liberadoItem.interessado} ({liberadoItem.cpf})
+              </div>
+              <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#1b5e20', marginTop: 2 }}>
+                Liberado em {liberadoItem.liberadoEm}{liberadoItem.terminaEm ? ` · Acesso até ${liberadoItem.terminaEm}` : ''}
+              </div>
+            </div>
+          </div>
+        )}
+
         <div style={{ display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -1703,12 +1923,12 @@ function ProcessoDetalhe() {
       </div>
 
       {/* ── Barra de tabs ── */}
-      <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '8px 24px', display: 'flex', gap: 0 }}>
+      <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: isMobile ? '4px 8px' : '8px 24px', display: 'flex', gap: 0, overflowX: 'auto', WebkitOverflowScrolling: 'touch' as any }}>
         {tabs.map(tab => {
           const isActive = tab.key === activeTab;
           return (
             <button key={tab.key} onClick={() => setActiveTab(tab.key)}
-              style={{ background: 'none', border: 'none', borderBottom: isActive ? '3px solid #0058db' : '3px solid transparent', padding: '10px 16px', fontFamily: 'Open Sans, sans-serif', fontWeight: isActive ? 700 : 400, fontSize: 14, color: isActive ? '#0058db' : '#333', cursor: 'pointer', lineHeight: 1.5, whiteSpace: 'nowrap', transition: 'color 0.12s' }}>
+              style={{ background: 'none', border: 'none', borderBottom: isActive ? '3px solid #0058db' : '3px solid transparent', padding: isMobile ? '8px 12px' : '10px 16px', fontFamily: 'Open Sans, sans-serif', fontWeight: isActive ? 700 : 400, fontSize: isMobile ? 13 : 14, color: isActive ? '#0058db' : '#333', cursor: 'pointer', lineHeight: 1.5, whiteSpace: 'nowrap', transition: 'color 0.12s' }}>
               {tab.label}
             </button>
           );
@@ -1717,10 +1937,10 @@ function ProcessoDetalhe() {
 
       {/* ── Tab: Dados do Processo ── */}
       {activeTab === 'dados' && (
-        <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 24, alignItems: 'flex-start' }}>
 
           {/* Coluna esquerda */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24, flex: '0 0 65%' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24, flex: isMobile ? 'none' : '0 0 65%', width: isMobile ? '100%' : undefined }}>
 
             {/* Dados básicos + Detalhamento */}
             <div style={cardStyle}>
@@ -1819,9 +2039,15 @@ function ProcessoDetalhe() {
             <FAIcon icon="fa-regular fa-folder-open" style={{ fontSize: 15, color: '#0058db' }} />
             <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#333' }}>Pasta Digital — PMF2026/000418</span>
           </div>
+          <div style={{ background: '#fff3e0', border: '1px solid #ffb74d', borderRadius: 6, padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 10, margin: '12px 16px 0', flexShrink: 0 }}>
+            <FAIcon icon="fa-regular fa-triangle-exclamation" style={{ fontSize: 14, color: '#e65100', flexShrink: 0 }} />
+            <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#bf360c', lineHeight: '18px' }}>
+              {liberadoItem ? `Exibindo apenas os documentos liberados para: ${liberadoItem.interessado}` : 'Visualizando todos os documentos do processo via Sistema Solar BPM.'}
+            </span>
+          </div>
           <iframe
             src="https://solar.florianopolis.sc.gov.br/solar/api/visualizadorDocumentos/visualizadorPublico?proc=PMF2026/000418"
-            style={{ width: '100%', height: 640, border: 'none', display: 'block' }}
+            style={{ width: '100%', height: 640, border: 'none', display: 'block', marginTop: 12 }}
             title="Pasta Digital do Processo"
           />
         </div>
@@ -1864,7 +2090,7 @@ function ProcessoDetalhe() {
                     <td style={td}>{row.encaminhado}</td>
                     <td style={{ ...td, textAlign: 'center' }}>
                       <div style={{ width: 24, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <FAIcon icon="fa-solid fa-eye" style={{ fontSize: 14, color: '#0058db', cursor: 'pointer' }} />
+                        <FAIcon icon="fa-solid fa-eye" style={{ fontSize: 14, color: '#0058db', cursor: 'pointer' }} onClick={() => setShowDespacho(true)} />
                       </div>
                     </td>
                   </tr>
@@ -1963,6 +2189,7 @@ function ProcessoDetalhe() {
         );
       })()}
 
+      {showDespacho && <DespachoModal onClose={() => setShowDespacho(false)} />}
     </div>
   );
 }
@@ -2491,6 +2718,7 @@ function ProcessoCard({ processo, onClick }: { processo: MeuProcesso; onClick: (
 // ── Tela: Meus Processos ─────────────────────────────────────────────────────
 function MeusProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void }) {
   const t = useT();
+  const isMobile = useIsMobile();
   const [query, setQuery]     = useState('');
   const [filtro, setFiltro]   = useState<'todos' | ProcessoStatus>('todos');
 
@@ -2520,18 +2748,18 @@ function MeusProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void 
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: isMobile ? '16px 16px 48px 16px' : '24px 24px 48px 24px' }}>
       {/* Título + descrição + ações de exportação */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, minWidth: 280 }}>
-          <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#1a1a1a', margin: 0 }}>
+        <div style={{ flex: 1, minWidth: 200 }}>
+          <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 20 : 24, color: '#1a1a1a', margin: 0 }}>
             {t('meusProcessosTitle')}
           </h1>
           <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#565656', margin: '6px 0 0 0', lineHeight: 1.5 }}>
             {t('meusProcessosDesc')}
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 10, flexShrink: 0 }}>
+        {!isMobile && <div style={{ display: 'flex', gap: 10, flexShrink: 0 }}>
           <button style={{
             height: 40, padding: '0 16px', borderRadius: 8, background: 'white',
             border: '1.5px solid #0058db', color: '#0058db',
@@ -2554,11 +2782,11 @@ function MeusProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void 
             <FAIcon icon="fa-regular fa-file-spreadsheet" style={{ fontSize: 14 }} />
             {t('mpExportarXls')}
           </button>
-        </div>
+        </div>}
       </div>
 
       {/* Big numbers (stat cards) */}
-      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: isMobile ? 10 : 14 }}>
         <StatCard
           icon="fa-regular fa-folder-user" label={t('mpTotal')} value={total}
           color="#0058db" bg="#edf2ff"
@@ -3066,7 +3294,7 @@ const MOCK_LIBERADOS: ProcessoLiberado[] = [
   { id: 'l6', numero: 'PMF 2025/006055',      interessado: 'Cris Lima',               cpf: '043.792.234-00', liberadoEm: '03/06/2025', terminaEm: '03/07/2025', ativo: false, anexos: 1, orgao: 'SAUDE - Secretaria da Saúde' },
 ];
 
-function ProcessoLiberadoCard({ item, onVer }: { item: ProcessoLiberado; onVer: () => void }) {
+function ProcessoLiberadoCard({ item, onVerAnexos }: { item: ProcessoLiberado; onVerAnexos: () => void }) {
   const t = useT();
   return (
     <div
@@ -3138,7 +3366,7 @@ function ProcessoLiberadoCard({ item, onVer }: { item: ProcessoLiberado; onVer: 
           {item.anexos} {t('plAnexos').toLowerCase()}
         </div>
         <button
-          onClick={onVer}
+          onClick={onVerAnexos}
           style={{
             height: 34, padding: '0 14px', borderRadius: 6, background: 'white',
             border: '1.5px solid #0058db', color: '#0058db',
@@ -3148,15 +3376,15 @@ function ProcessoLiberadoCard({ item, onVer }: { item: ProcessoLiberado; onVer: 
           onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'}
           onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
         >
-          <FAIcon icon="fa-regular fa-arrow-right" style={{ fontSize: 11 }} />
-          {t('plVer')}
+          <FAIcon icon="fa-regular fa-paperclip" style={{ fontSize: 11 }} />
+          {t('plVerAnexos')}
         </button>
       </div>
     </div>
   );
 }
 
-function ProcessosLiberados({ onNavigateProcesso }: { onNavigateProcesso: () => void }) {
+function ProcessosLiberados({ onVerAnexos }: { onVerAnexos: (item: ProcessoLiberado) => void }) {
   const t = useT();
   const [query, setQuery]   = useState('');
   const [filtro, setFiltro] = useState<'todos' | 'ativos' | 'expirados'>('ativos');
@@ -3286,7 +3514,7 @@ function ProcessosLiberados({ onNavigateProcesso }: { onNavigateProcesso: () => 
       {filtrados.length > 0 ? (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: 14 }}>
           {filtrados.map(i => (
-            <ProcessoLiberadoCard key={i.id} item={i} onVer={onNavigateProcesso} />
+            <ProcessoLiberadoCard key={i.id} item={i} onVerAnexos={() => onVerAnexos(i)} />
           ))}
         </div>
       ) : (
@@ -4098,30 +4326,40 @@ function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNavigateForm }: {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {filtered.map((svc, i) => (
             <div key={i}
-              style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: '18px 22px', display: 'flex', alignItems: 'center', gap: 16, boxShadow: '0px 2px 8px rgba(24,39,75,0.07)', transition: 'box-shadow 0.15s, border-color 0.15s' }}
+              style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 20, display: 'flex', flexDirection: 'column', gap: 14, boxShadow: '0px 2px 8px rgba(24,39,75,0.07)', transition: 'box-shadow 0.15s, border-color 0.15s' }}
               onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 4px 16px rgba(24,39,75,0.13)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#b3c7e6'; }}
               onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 2px 8px rgba(24,39,75,0.07)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#dde3ee'; }}
             >
-              {/* Ícone */}
-              <div style={{ width: 48, height: 48, background: '#f0f4fb', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <FAIcon icon="fa-regular fa-file-lines" style={{ fontSize: 22, color: '#0058db' }} />
-              </div>
-
-              {/* Info */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222', marginBottom: 5 }}>{svc.servico}</div>
-                <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-                  <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>
-                    <strong style={{ color: '#565656' }}>{t('solOrgao')}</strong> {svc.setor.split('/')[0]}
-                  </span>
-                  <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>
-                    <strong style={{ color: '#565656' }}>{t('solPublico')}</strong> {svc.destino.join(', ')}
-                  </span>
+              {/* Linha 1: ícone + título */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 48, height: 48, background: '#f0f4fb', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <FAIcon icon="fa-regular fa-file-lines" style={{ fontSize: 22, color: '#0058db' }} />
                 </div>
+                <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222' }}>{svc.servico}</div>
               </div>
 
-              {/* Ações */}
-              <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+              {/* Linha 2: chips de meta */}
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: '#565656', background: '#f4f6f9', borderRadius: 100, padding: '3px 10px', fontWeight: 600 }}>
+                  {svc.setor.split('/')[0]}
+                </span>
+                {svc.destino.map((d, di) => (
+                  <span key={di} style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: '#565656', background: '#f4f6f9', borderRadius: 100, padding: '3px 10px', fontWeight: 600 }}>
+                    {d}
+                  </span>
+                ))}
+              </div>
+
+              {/* Linha 3: descrição */}
+              <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', lineHeight: '20px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                Serviço municipal disponível para solicitação digital via FloripaOn. Acompanhe o andamento em tempo real.
+              </div>
+
+              {/* Divider */}
+              <div style={{ height: 1, background: '#f0f0f0' }} />
+
+              {/* Linha 4: botões alinhados à direita */}
+              <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
                 <button onClick={() => onNavigateDetalhe(svc)}
                   style={{ height: 36, padding: '0 16px', border: '1.5px solid #0058db', borderRadius: 6, background: 'white', color: '#0058db', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'background 0.12s' }}
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'; }}
@@ -4151,6 +4389,7 @@ function ServicoDetalhe({ service, onNavigateForm }: {
   onNavigateForm: (service: typeof MOCK_SERVICOS_AV[0]) => void;
 }) {
   const t = useT();
+  const isMobile = useIsMobile();
   // Informações genéricas que variam por categoria
   const descricoesPorCategoria: Record<string, string> = {
     'Impostos e taxas':                    'Serviço relacionado à emissão, consulta e pagamento de impostos e taxas municipais. Facilita o cumprimento das obrigações fiscais de forma digital, sem necessidade de comparecimento presencial.',
@@ -4183,46 +4422,48 @@ function ServicoDetalhe({ service, onNavigateForm }: {
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: isMobile ? '16px 16px 80px 16px' : '24px 24px 48px 24px' }}>
 
       {/* Cabeçalho */}
-      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 28, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)' }}>
+      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: isMobile ? '20px' : 28, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)' }}>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
           <span style={{ background: '#dce6f5', color: '#0058db', borderRadius: 100, padding: '3px 12px', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12 }}>{service.categoria}</span>
           {service.destino.map(d => (
             <span key={d} style={{ background: '#f0f0f0', color: '#555', borderRadius: 100, padding: '3px 12px', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12 }}>{d}</span>
           ))}
         </div>
-        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 28, color: '#1a1a1a', margin: '0 0 8px 0' }}>{service.servico}</h1>
+        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 20 : 28, color: '#1a1a1a', margin: '0 0 8px 0' }}>{service.servico}</h1>
         <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#565656', margin: '0 0 20px 0', lineHeight: '22px' }}>
           {service.setor}
         </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-          <button
-            onClick={() => onNavigateForm(service)}
-            style={{ height: 44, padding: '0 32px', border: 'none', borderRadius: 8, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, transition: 'background 0.12s' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0058db'; }}
-          >
-            <FAIcon icon="fa-regular fa-paper-plane" style={{ fontSize: 15 }} />
-            Solicitar serviço
-          </button>
-          <button
-            onClick={() => window.print()}
-            style={{ height: 44, padding: '0 20px', border: '1.5px solid #d5d5d5', borderRadius: 8, background: 'white', color: '#565656', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.12s' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#0058db'; (e.currentTarget as HTMLButtonElement).style.color = '#0058db'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5'; (e.currentTarget as HTMLButtonElement).style.color = '#565656'; }}
-          >
-            <FAIcon icon="fa-regular fa-file-arrow-down" style={{ fontSize: 14 }} />
-            {t('exportarDescritivo')}
-          </button>
-        </div>
+        {!isMobile && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <button
+              onClick={() => onNavigateForm(service)}
+              style={{ height: 44, padding: '0 32px', border: 'none', borderRadius: 8, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, transition: 'background 0.12s' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0058db'; }}
+            >
+              <FAIcon icon="fa-regular fa-paper-plane" style={{ fontSize: 15 }} />
+              Solicitar serviço
+            </button>
+            <button
+              onClick={() => window.print()}
+              style={{ height: 44, padding: '0 20px', border: '1.5px solid #d5d5d5', borderRadius: 8, background: 'white', color: '#565656', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.12s' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#0058db'; (e.currentTarget as HTMLButtonElement).style.color = '#0058db'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5'; (e.currentTarget as HTMLButtonElement).style.color = '#565656'; }}
+            >
+              <FAIcon icon="fa-regular fa-file-arrow-down" style={{ fontSize: 14 }} />
+              {t('exportarDescritivo')}
+            </button>
+          </div>
+        )}
       </div>
 
-      <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 20, alignItems: 'flex-start' }}>
 
         {/* Coluna esquerda */}
-        <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 16, width: isMobile ? '100%' : undefined }}>
 
           {/* O que é */}
           <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24 }}>
@@ -4559,20 +4800,21 @@ function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
   onNavigate: (p: Page) => void;
 }) {
   const t = useT();
+  const isMobile = useIsMobile();
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: isLoggedIn ? 24 : 48, padding: '16px 24px 48px 24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: isLoggedIn ? 24 : (isMobile ? 24 : 48), padding: isMobile ? '16px 16px 48px 16px' : '16px 24px 48px 24px' }}>
 
       {/* ── Dashboard pós-login ── */}
       {isLoggedIn && (
         <>
           {/* Saudação + stats */}
-          <div style={{ background: 'linear-gradient(135deg, #0046b5 0%, #0058db 60%, #1a75e8 100%)', borderRadius: 12, padding: '24px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap', boxShadow: '0px 4px 16px rgba(0,88,219,0.28)' }}>
+          <div style={{ background: 'linear-gradient(135deg, #0046b5 0%, #0058db 60%, #1a75e8 100%)', borderRadius: 12, padding: isMobile ? '20px 20px' : '24px 28px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : 'center', justifyContent: 'space-between', gap: isMobile ? 16 : 24, flexWrap: 'wrap', boxShadow: '0px 4px 16px rgba(0,88,219,0.28)' }}>
             <div>
               <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: 'rgba(255,255,255,0.80)', marginBottom: 4 }}>{t('dashOla')},</div>
-              <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 22, color: 'white', lineHeight: 1.2 }}>Cristianderson Alves de Lima</div>
+              <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 18 : 22, color: 'white', lineHeight: 1.2 }}>Cristianderson Alves de Lima</div>
               <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 13, color: 'rgba(255,255,255,0.70)', marginTop: 4 }}>{t('bemVindo')}</div>
             </div>
-            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: isMobile ? 10 : 16, flexWrap: 'nowrap' }}>
               {([
                 { label: t('dashPendencias'), value: '3', icon: 'fa-regular fa-bell', onClick: () => onNavigate('minhaspendencias') },
                 { label: t('dashProcessos'),  value: '7', icon: 'fa-regular fa-folder-open', onClick: () => onNavigate('meusprocessos') },
@@ -4581,13 +4823,13 @@ function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
                 <div
                   key={i}
                   onClick={stat.onClick}
-                  style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 10, padding: '14px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, minWidth: 110, cursor: 'pointer', transition: 'background 0.12s' }}
+                  style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 10, padding: isMobile ? '10px 12px' : '14px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flex: isMobile ? 1 : 'none', minWidth: isMobile ? 0 : 110, cursor: 'pointer', transition: 'background 0.12s' }}
                   onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.25)'}
                   onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.15)'}
                 >
-                  <FAIcon icon={stat.icon} style={{ fontSize: 18, color: 'rgba(255,255,255,0.80)' }} />
-                  <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 28, color: 'white', lineHeight: 1 }}>{stat.value}</span>
-                  <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 11, color: 'rgba(255,255,255,0.75)', textAlign: 'center', lineHeight: 1.3 }}>{stat.label}</span>
+                  <FAIcon icon={stat.icon} style={{ fontSize: isMobile ? 16 : 18, color: 'rgba(255,255,255,0.80)' }} />
+                  <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 22 : 28, color: 'white', lineHeight: 1 }}>{stat.value}</span>
+                  <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: isMobile ? 10 : 11, color: 'rgba(255,255,255,0.75)', textAlign: 'center', lineHeight: 1.3 }}>{stat.label}</span>
                 </div>
               ))}
             </div>
@@ -4647,12 +4889,12 @@ function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
 
       {/* ── Conteúdo normal da Home ── */}
       {!isLoggedIn && (
-        <div style={{ height: 300, overflow: 'hidden', flexShrink: 0, margin: '-16px -24px 0 -24px' }}>
+        <div style={{ height: isMobile ? 180 : 300, overflow: 'hidden', flexShrink: 0, margin: isMobile ? '-16px -16px 0 -16px' : '-16px -24px 0 -24px' }}>
           <img src={imgBannerFloripa} alt="Florianópolis" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }} />
         </div>
       )}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
-        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#333', textAlign: 'center', margin: 0 }}>{t('encontreServico')}</h1>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
+        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 18 : 24, color: '#333', textAlign: 'center', margin: 0 }}>{t('encontreServico')}</h1>
         <SearchWithDropdown />
       </div>
       <div style={{ background: '#dce6f5', border: '1px solid #6393db', borderRadius: 8, padding: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)' }}>
@@ -4660,16 +4902,195 @@ function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
           {t('iptuDesc')}
         </span>
       </div>
-      <div style={{ display: 'flex', gap: 24 }}>
-        <ServiceCard title={t('maisAcessados')} items={popularServices} />
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 24 }}>
         <ServiceCard title={t('emDestaque')}   items={featuredServices} />
+        <ServiceCard title={t('maisAcessados')} items={popularServices} />
       </div>
-      <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '24px 24px 48px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)' }}>
-        <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#353535', lineHeight: 1.2, margin: 0 }}>{t('porAssunto')}</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 15 }}>
+      <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: isMobile ? '16px 16px 32px' : '24px 24px 48px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)' }}>
+        <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 18 : 24, color: '#353535', lineHeight: 1.2, margin: 0 }}>{t('porAssunto')}</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(180px, 1fr))', gap: isMobile ? 10 : 15 }}>
           {categories.map((cat, i) => <CategoryCard key={i} icon={cat.icon} label={cat.label} onClick={() => onNavigateCat({ label: cat.label, icon: cat.icon })} />)}
         </div>
       </div>
+    </div>
+  );
+}
+
+// ── Mobile: Header ───────────────────────────────────────────────────────────
+function MobileHeader({ onOpenDrawer, onLogin, isLoggedIn, onNavigate }: {
+  onOpenDrawer: () => void; onLogin: () => void; isLoggedIn: boolean; onNavigate: (p: Page) => void;
+}) {
+  const t = useT();
+  return (
+    <div style={{ background: 'white', borderBottom: '1px solid #dce6f5', height: 56, display: 'flex', alignItems: 'center', padding: '0 16px', flexShrink: 0, position: 'relative', zIndex: 10 }}>
+      <button onClick={onOpenDrawer} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px 8px 8px 0', color: '#0058db', display: 'flex', alignItems: 'center' }}>
+        <FAIcon icon="fa-regular fa-bars" style={{ fontSize: 22, color: '#0058db' }} />
+      </button>
+      <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 8, pointerEvents: 'none' }}>
+        <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 22, color: '#0059db', letterSpacing: '-0.5px' }}>FloripaOn</span>
+      </div>
+      <div style={{ flex: 1 }} />
+      {isLoggedIn ? (
+        <div onClick={() => onNavigate('meusdados')} style={{ width: 36, height: 36, borderRadius: '50%', background: '#dce6f5', border: '2px solid #0058db', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
+          <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 13, color: '#0058db' }}>CL</span>
+        </div>
+      ) : (
+        <button onClick={onLogin} style={{ background: '#0058db', border: 'none', borderRadius: 6, color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, padding: '7px 14px', cursor: 'pointer' }}>
+          {t('entrar')}
+        </button>
+      )}
+    </div>
+  );
+}
+
+// ── Mobile: Drawer ────────────────────────────────────────────────────────────
+function MobileDrawer({ open, onClose, activePage, onNavigate, isLoggedIn, onLogin, onLogout, darkMode, onToggleDark, highContrast, onToggleContrast, lang, onSetLang }: {
+  open: boolean; onClose: () => void; activePage: Page; onNavigate: (p: Page) => void;
+  isLoggedIn: boolean; onLogin: () => void; onLogout: () => void;
+  darkMode: boolean; onToggleDark: () => void; highContrast: boolean; onToggleContrast: () => void;
+  lang: Lang; onSetLang: (l: Lang) => void;
+}) {
+  const t = useT();
+  const [showContact, setShowContact] = useState(false);
+
+  const navigate = (p: Page) => { onNavigate(p); onClose(); };
+  const effectivePage: Page =
+    activePage === 'processo' ? 'consulta' :
+    (activePage === 'cat-servicos' || activePage === 'servico-detalhe' || activePage === 'servico-form') ? 'solicitacao' :
+    activePage;
+
+  const navItem = (icon: string, label: string, page: Page | null, color?: string, customOnClick?: () => void) => {
+    const isActive = page === effectivePage;
+    return (
+      <div
+        onClick={customOnClick || (page ? () => navigate(page) : undefined)}
+        style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '13px 20px', background: isActive ? '#edf2ff' : 'transparent', color: color || (isActive ? '#0058db' : '#333'), cursor: 'pointer', fontFamily: 'Open Sans, sans-serif', fontSize: 15, fontWeight: isActive ? 600 : 400, borderLeft: isActive ? '3px solid #0058db' : '3px solid transparent', transition: 'background 0.12s' }}
+        onMouseEnter={e => { if (!isActive && !color) (e.currentTarget as HTMLDivElement).style.background = '#f5f5f5'; }}
+        onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLDivElement).style.background = isActive ? '#edf2ff' : 'transparent'; }}
+      >
+        <FAIcon icon={icon} style={{ fontSize: 18, color: 'inherit', flexShrink: 0 }} />
+        {label}
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {open && <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 900 }} />}
+      <div style={{ position: 'fixed', top: 0, left: 0, height: '100%', width: 288, background: 'white', zIndex: 901, transform: open ? 'translateX(0)' : 'translateX(-100%)', transition: 'transform 0.26s cubic-bezier(0.25,0.8,0.25,1)', display: 'flex', flexDirection: 'column', boxShadow: open ? '4px 0 32px rgba(0,0,0,0.18)' : 'none' }}>
+
+        {/* Drawer header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #dce6f5', flexShrink: 0 }}>
+          <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 22, color: '#0059db', letterSpacing: '-0.3px' }}>FloripaOn</span>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#7d7d7d', padding: 6, display: 'flex', alignItems: 'center' }}>
+            <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 18 }} />
+          </button>
+        </div>
+
+        {/* User info if logged in */}
+        {isLoggedIn && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', background: '#f0f5ff', borderBottom: '1px solid #dce6f5', flexShrink: 0 }}>
+            <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#dce6f5', border: '2px solid #0058db', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#0058db' }}>CL</span>
+            </div>
+            <div>
+              <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#1a1a1a' }}>Cris Lima</div>
+              <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: '#7d7d7d' }}>043.792.234-00</div>
+            </div>
+          </div>
+        )}
+
+        {/* Nav items */}
+        <div style={{ flex: 1, overflowY: 'auto' }}>
+          {navItem('fa-regular fa-house', t('inicio'), 'home')}
+          {navItem('fa-regular fa-magnifying-glass', t('consultaProcessos'), 'consulta')}
+          {navItem('fa-regular fa-list-check', t('conferenciaDocumentos'), 'documentos')}
+          {navItem('fa-regular fa-file-circle-plus', t('solicitacaoServicos'), 'solicitacao')}
+
+          {isLoggedIn && <>
+            <div style={{ height: 1, background: '#ebebeb', margin: '6px 0' }} />
+            {navItem('fa-regular fa-folder-user', t('meusProcessos'), 'meusprocessos')}
+            {navItem('fa-regular fa-bell', t('minhasPendencias'), 'minhaspendencias')}
+            {navItem('fa-regular fa-circle-check', t('processosLiberados'), 'processosliberados')}
+          </>}
+
+          <div style={{ height: 1, background: '#ebebeb', margin: '6px 0' }} />
+
+          {isLoggedIn ? (
+            <>
+              {navItem('fa-regular fa-user', t('meusDados'), 'meusdados')}
+              {navItem('fa-regular fa-arrow-right-from-bracket', t('sair'), null, '#c0182d', () => { onLogout(); onClose(); })}
+            </>
+          ) : (
+            navItem('fa-regular fa-arrow-right-to-bracket', t('entrar'), null, '#0058db', () => { onLogin(); onClose(); })
+          )}
+
+          <div style={{ height: 1, background: '#ebebeb', margin: '6px 0' }} />
+          {navItem('fa-regular fa-phone', t('contato'), null, undefined, () => setShowContact(true))}
+        </div>
+
+        {/* Accessibility controls */}
+        <div style={{ padding: '12px 20px', borderTop: '1px solid #dce6f5', display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          <button title={t('altoContraste')} onClick={onToggleContrast} style={{ flex: 1, height: 40, border: `1.5px solid ${highContrast ? '#0058db' : '#dce6f5'}`, borderRadius: 8, background: highContrast ? '#edf2ff' : 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: highContrast ? '#0058db' : '#565656', gap: 5 }}>
+            <FAIcon icon="fa-regular fa-circle-half-stroke" style={{ fontSize: 15, color: 'inherit' }} />
+          </button>
+          <button title={t('modoEscuro')} onClick={onToggleDark} style={{ flex: 1, height: 40, border: `1.5px solid ${darkMode ? '#0058db' : '#dce6f5'}`, borderRadius: 8, background: darkMode ? '#edf2ff' : 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: darkMode ? '#0058db' : '#565656', gap: 5 }}>
+            <FAIcon icon={darkMode ? 'fa-regular fa-moon' : 'fa-regular fa-sun-bright'} style={{ fontSize: 15, color: 'inherit' }} />
+          </button>
+          <button title={t('idioma')} onClick={() => onSetLang(lang === 'pt' ? 'en' : 'pt')} style={{ flex: 1, height: 40, border: '1.5px solid #dce6f5', borderRadius: 8, background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16 }}>
+            {lang === 'pt' ? '🇧🇷' : '🇺🇸'}
+          </button>
+        </div>
+
+        {/* Solar BPM branding */}
+        <div style={{ padding: '10px 20px', background: '#f8f9fb', borderTop: '1px solid #dce6f5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <img src="/solarBPM_principal_horizontal_fundoclaro.png" alt="SolarBPM" style={{ height: 26, objectFit: 'contain' }} />
+        </div>
+      </div>
+
+      {showContact && <ContactModal onClose={() => setShowContact(false)} />}
+    </>
+  );
+}
+
+// ── Mobile: Bottom navigation ─────────────────────────────────────────────────
+function MobileBottomNav({ activePage, onNavigate, isLoggedIn, onLogin }: {
+  activePage: Page; onNavigate: (p: Page) => void; isLoggedIn: boolean; onLogin: () => void;
+}) {
+  const t = useT();
+  const effectivePage: Page =
+    activePage === 'processo' ? 'consulta' :
+    (activePage === 'cat-servicos' || activePage === 'servico-detalhe' || activePage === 'servico-form') ? 'solicitacao' :
+    (activePage === 'pendencia-resolver') ? 'minhaspendencias' :
+    activePage;
+
+  const tabs = [
+    { icon: 'fa-regular fa-house',            label: t('inicio'),            page: 'home' as Page,            requiresLogin: false },
+    { icon: 'fa-regular fa-magnifying-glass', label: t('consultar'),         page: 'consulta' as Page,        requiresLogin: false },
+    { icon: 'fa-regular fa-file-circle-plus', label: 'Solicitar',            page: 'solicitacao' as Page,     requiresLogin: false },
+    { icon: 'fa-regular fa-bell',             label: 'Pendências',           page: 'minhaspendencias' as Page,requiresLogin: true  },
+    { icon: 'fa-regular fa-user',             label: t('meusDados'),         page: 'meusdados' as Page,       requiresLogin: true  },
+  ];
+
+  return (
+    <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 800, background: 'white', borderTop: '1px solid #dce6f5', display: 'flex', paddingBottom: 'env(safe-area-inset-bottom)', boxShadow: '0px -2px 12px rgba(0,0,0,0.09)', flexShrink: 0 }}>
+      {tabs.map((tab, i) => {
+        const isActive = tab.page === effectivePage;
+        const isLocked = tab.requiresLogin && !isLoggedIn;
+        return (
+          <button
+            key={i}
+            onClick={() => { if (isLocked) { onLogin(); return; } onNavigate(tab.page); }}
+            style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3, padding: '8px 2px 6px', background: 'none', border: 'none', cursor: 'pointer', color: isActive ? '#0058db' : '#7d7d7d', position: 'relative', minWidth: 0 }}
+          >
+            {isActive && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 32, height: 3, background: '#0058db', borderRadius: '0 0 4px 4px' }} />}
+            <FAIcon icon={tab.icon} style={{ fontSize: 20, color: isActive ? '#0058db' : isLocked ? '#b0b0b0' : '#7d7d7d' }} />
+            <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 10, fontWeight: isActive ? 700 : 400, color: isActive ? '#0058db' : isLocked ? '#b0b0b0' : '#7d7d7d', lineHeight: 1, whiteSpace: 'nowrap' }}>
+              {tab.label}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -4686,9 +5107,18 @@ export default function App() {
   const [selectedCat,     setSelectedCat]     = useState<{ label: string; icon: string } | null>(null);
   const [selectedService, setSelectedService] = useState<typeof MOCK_SERVICOS_AV[0] | null>(null);
   const [selectedPendencia, setSelectedPendencia] = useState<Pendencia | null>(null);
+  const [selectedLiberado, setSelectedLiberado] = useState<ProcessoLiberado | null>(null);
+  const [isMobile,        setIsMobile]        = useState(() => window.innerWidth < 768);
+  const [drawerOpen,      setDrawerOpen]      = useState(false);
 
   function handleLogin()  { setIsLoggedIn(true);  setShowLogin(false); }
-  function handleLogout() { setIsLoggedIn(false); setPage('home'); }
+  function handleLogout() { setIsLoggedIn(false); setPage('home'); setDrawerOpen(false); }
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-dark', darkMode ? 'true' : 'false');
@@ -4698,85 +5128,126 @@ export default function App() {
     document.documentElement.setAttribute('data-contrast', highContrast ? 'true' : 'false');
   }, [highContrast]);
 
+  // Pages shared between mobile and desktop
+  const pageContent = (
+    <>
+      {page === 'home'       && <HomePage onNavigateCat={cat => { setSelectedCat(cat); setPage('cat-servicos'); }} isLoggedIn={isLoggedIn} onNavigate={setPage} />}
+      {page === 'consulta'   && <ConsultaProcessos onNavigateProcesso={() => setPage('processo')} />}
+      {page === 'processo'   && <ProcessoDetalhe onVoltar={() => { setSelectedLiberado(null); setPage(selectedLiberado ? 'processosliberados' : 'consulta'); }} liberadoItem={selectedLiberado} initialTab={selectedLiberado ? 'documentos' : undefined} />}
+      {page === 'documentos' && <ConsultaDocumentos />}
+      {page === 'meusdados'  && <MeusDados />}
+      {page === 'meusprocessos' && <MeusProcessos onNavigateProcesso={() => setPage('processo')} />}
+      {page === 'minhaspendencias' && (
+        <MinhasPendencias
+          onNavigateProcesso={() => setPage('processo')}
+          onResolverPendencia={p => { setSelectedPendencia(p); setPage('pendencia-resolver'); }}
+        />
+      )}
+      {page === 'processosliberados' && <ProcessosLiberados onVerAnexos={item => { setSelectedLiberado(item); setPage('processo'); }} />}
+      {page === 'pendencia-resolver' && (
+        <ResolverPendencia
+          pendencia={selectedPendencia}
+          onVoltar={() => setPage('minhaspendencias')}
+          onConcluir={() => setPage('minhaspendencias')}
+        />
+      )}
+      {page === 'solicitacao' && (
+        <SolicitacaoServicos
+          onNavigateCat={cat => { setSelectedCat(cat); setPage('cat-servicos'); }}
+          onNavigateDetalhe={svc => { setSelectedService(svc); setPage('servico-detalhe'); }}
+        />
+      )}
+      {page === 'cat-servicos' && selectedCat && (
+        <CatServicos
+          catLabel={selectedCat.label}
+          catIcon={selectedCat.icon}
+          onNavigateDetalhe={svc => { setSelectedService(svc); setPage('servico-detalhe'); }}
+          onNavigateForm={svc => { setSelectedService(svc); setPage('servico-form'); }}
+        />
+      )}
+      {page === 'servico-detalhe' && selectedService && (
+        <ServicoDetalhe
+          service={selectedService}
+          onNavigateForm={svc => { setSelectedService(svc); setPage('servico-form'); }}
+        />
+      )}
+      {page === 'servico-form' && selectedService && (
+        <ServicoForm service={selectedService} />
+      )}
+    </>
+  );
+
   return (
     <LangContext.Provider value={lang}>
-      <div style={{ background: '#f4f6f9', height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <IsMobileContext.Provider value={isMobile}>
         {showLogin && <LoginModal onClose={() => setShowLogin(false)} onLogin={handleLogin} />}
-        <Header
-          onToggle={() => setExpanded(e => !e)}
-          onLogin={() => setShowLogin(true)}
-          isLoggedIn={isLoggedIn}
-          onLogout={handleLogout}
-          onNavigate={setPage}
-          darkMode={darkMode}
-          onToggleDark={() => setDarkMode(d => !d)}
-          highContrast={highContrast}
-          onToggleContrast={() => setHighContrast(c => !c)}
-          lang={lang}
-          onSetLang={setLang}
-        />
 
-        <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-          <SideMenu
-            activePage={page}
-            onNavigate={setPage}
-            expanded={expanded}
-            onLogin={() => setShowLogin(true)}
-            isLoggedIn={isLoggedIn}
-            onLogout={handleLogout}
-          />
-
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
-            <Breadcrumb page={page} onNavigate={setPage} selectedCat={selectedCat} selectedService={selectedService} />
-
-            <div style={{ flex: 1, overflowY: 'auto' }}>
-              {page === 'home'       && <HomePage onNavigateCat={cat => { setSelectedCat(cat); setPage('cat-servicos'); }} isLoggedIn={isLoggedIn} onNavigate={setPage} />}
-              {page === 'consulta'   && <ConsultaProcessos onNavigateProcesso={() => setPage('processo')} />}
-              {page === 'processo'   && <ProcessoDetalhe />}
-              {page === 'documentos' && <ConsultaDocumentos />}
-              {page === 'meusdados'  && <MeusDados />}
-              {page === 'meusprocessos' && <MeusProcessos onNavigateProcesso={() => setPage('processo')} />}
-              {page === 'minhaspendencias' && (
-                <MinhasPendencias
-                  onNavigateProcesso={() => setPage('processo')}
-                  onResolverPendencia={p => { setSelectedPendencia(p); setPage('pendencia-resolver'); }}
-                />
-              )}
-              {page === 'processosliberados' && <ProcessosLiberados onNavigateProcesso={() => setPage('processo')} />}
-              {page === 'pendencia-resolver' && (
-                <ResolverPendencia
-                  pendencia={selectedPendencia}
-                  onVoltar={() => setPage('minhaspendencias')}
-                  onConcluir={() => setPage('minhaspendencias')}
-                />
-              )}
-              {page === 'solicitacao' && (
-                <SolicitacaoServicos
-                  onNavigateCat={cat => { setSelectedCat(cat); setPage('cat-servicos'); }}
-                  onNavigateDetalhe={svc => { setSelectedService(svc); setPage('servico-detalhe'); }}
-                />
-              )}
-              {page === 'cat-servicos' && selectedCat && (
-                <CatServicos
-                  catLabel={selectedCat.label}
-                  catIcon={selectedCat.icon}
-                  onNavigateDetalhe={svc => { setSelectedService(svc); setPage('servico-detalhe'); }}
-                  onNavigateForm={svc => { setSelectedService(svc); setPage('servico-form'); }}
-                />
-              )}
-              {page === 'servico-detalhe' && selectedService && (
-                <ServicoDetalhe
-                  service={selectedService}
-                  onNavigateForm={svc => { setSelectedService(svc); setPage('servico-form'); }}
-                />
-              )}
-              {page === 'servico-form' && selectedService && (
-                <ServicoForm service={selectedService} />
-              )}
+        {isMobile ? (
+          /* ── Layout mobile ── */
+          <div style={{ background: '#f4f6f9', height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <MobileHeader
+              onOpenDrawer={() => setDrawerOpen(true)}
+              onLogin={() => setShowLogin(true)}
+              isLoggedIn={isLoggedIn}
+              onNavigate={setPage}
+            />
+            <MobileDrawer
+              open={drawerOpen}
+              onClose={() => setDrawerOpen(false)}
+              activePage={page}
+              onNavigate={p => { setPage(p); setDrawerOpen(false); }}
+              isLoggedIn={isLoggedIn}
+              onLogin={() => { setShowLogin(true); setDrawerOpen(false); }}
+              onLogout={handleLogout}
+              darkMode={darkMode} onToggleDark={() => setDarkMode(d => !d)}
+              highContrast={highContrast} onToggleContrast={() => setHighContrast(c => !c)}
+              lang={lang} onSetLang={setLang}
+            />
+            <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 'calc(64px + env(safe-area-inset-bottom))' }}>
+              {pageContent}
+            </div>
+            <MobileBottomNav
+              activePage={page}
+              onNavigate={setPage}
+              isLoggedIn={isLoggedIn}
+              onLogin={() => setShowLogin(true)}
+            />
+          </div>
+        ) : (
+          /* ── Layout desktop ── */
+          <div style={{ background: '#f4f6f9', height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <Header
+              onToggle={() => setExpanded(e => !e)}
+              onLogin={() => setShowLogin(true)}
+              isLoggedIn={isLoggedIn}
+              onLogout={handleLogout}
+              onNavigate={setPage}
+              darkMode={darkMode}
+              onToggleDark={() => setDarkMode(d => !d)}
+              highContrast={highContrast}
+              onToggleContrast={() => setHighContrast(c => !c)}
+              lang={lang}
+              onSetLang={setLang}
+            />
+            <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+              <SideMenu
+                activePage={page}
+                onNavigate={setPage}
+                expanded={expanded}
+                onLogin={() => setShowLogin(true)}
+                isLoggedIn={isLoggedIn}
+                onLogout={handleLogout}
+              />
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
+                <Breadcrumb page={page} onNavigate={setPage} selectedCat={selectedCat} selectedService={selectedService} />
+                <div style={{ flex: 1, overflowY: 'auto' }}>
+                  {pageContent}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        )}
+      </IsMobileContext.Provider>
     </LangContext.Provider>
   );
 }
