@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, createContext, useContext, Fragment } from 'react';
+import { createPortal } from 'react-dom';
 import { Button, Input } from '@1doc/1ds-react';
 
 // ── Traduções ─────────────────────────────────────────────────────────────────
@@ -1271,13 +1272,11 @@ function SideMenu({ activePage, onNavigate, expanded, onLogin, isLoggedIn, onLog
         transition: 'padding 0.2s ease',
       }}>
         {expanded ? (
-          <img src="/solarBPM_principal_horizontal_fundoclaro.png" alt="SolarBPM"
+          <img src="/Logo completa.png" alt="SolarBPM"
             style={{ height: 28, objectFit: 'contain', maxWidth: '100%' }} />
         ) : (
-          <div style={{ width: 24, height: 24, overflow: 'hidden', flexShrink: 0 }}>
-            <img src="/solarBPM_principal_horizontal_fundoclaro.png" alt="SolarBPM"
-              style={{ height: 24, maxWidth: 'none', objectFit: 'cover', objectPosition: 'left center' }} />
-          </div>
+          <img src="/Logo compacta.png" alt="SolarBPM"
+            style={{ height: 28, objectFit: 'contain' }} />
         )}
       </div>
 
@@ -1373,17 +1372,17 @@ function Breadcrumb({ page, onNavigate, selectedCat, selectedService }: {
   );
 }
 
-function ServiceCard({ title, items }: { title: string; items: string[] }) {
+function ServiceCard({ title, items, icon }: { title: string; items: string[]; icon: string }) {
   return (
     <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: 24, flex: '1 0 0', boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#353535', lineHeight: 1.2, margin: 0 }}>{title}</h2>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <FAIcon icon={icon} style={{ fontSize: 20, color: '#0058db', flexShrink: 0 }} />
+        <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 24, color: '#353535', lineHeight: 1.2, margin: 0 }}>{title}</h2>
+      </div>
       <div>
         {items.map((item, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: i < items.length - 1 ? '1px solid #d5d5d5' : 'none', cursor: 'pointer' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <FAIcon icon="fa-regular fa-file-lines" style={{ fontSize: 13, color: '#0058db', flexShrink: 0 }} />
-              <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#333', lineHeight: '24px' }}>{item}</span>
-            </div>
+            <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#333', lineHeight: '24px' }}>{item}</span>
             <i className="fa-regular fa-angle-right" style={{ color: '#7d7d7d', fontSize: 16 }} />
           </div>
         ))}
@@ -1475,14 +1474,29 @@ function SearchableSelect({ label, value, onChange, options, placeholder, width 
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [dropPos, setDropPos] = useState({ top: 0, left: 0, width: 0 });
 
   useEffect(() => {
     function onOut(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (
+        ref.current && !ref.current.contains(e.target as Node) &&
+        !(dropdownRef.current && dropdownRef.current.contains(e.target as Node))
+      ) setOpen(false);
     }
     document.addEventListener('mousedown', onOut);
     return () => document.removeEventListener('mousedown', onOut);
   }, []);
+
+  function handleOpen() {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setDropPos({ top: rect.bottom + 4, left: rect.left, width: Math.max(rect.width, 200) });
+    }
+    setOpen(o => !o);
+    setSearch('');
+  }
 
   const filtered = options.filter(o => o.toLowerCase().includes(search.toLowerCase()));
   const selected = value || (placeholder ?? options[0]);
@@ -1491,14 +1505,14 @@ function SearchableSelect({ label, value, onChange, options, placeholder, width 
   return (
     <div ref={ref} style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 2, flex: 'none', width: width ?? undefined, borderRight: '1px solid #b3c7e6', padding: '8px 14px' }}>
       <label style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 10, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{label}</label>
-      <div onClick={() => { setOpen(o => !o); setSearch(''); }} style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer', minWidth: 0 }}>
+      <div ref={triggerRef} onClick={handleOpen} style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer', minWidth: 0 }}>
         <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 15, color: isPlaceholder ? '#a3a3a3' : '#222', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>
           {selected}
         </span>
         <FAIcon icon="fa-regular fa-chevron-down" style={{ fontSize: 11, color: '#8a9ab5', flexShrink: 0 }} />
       </div>
-      {open && (
-        <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, zIndex: 200, background: 'white', border: '1.5px solid #0058db', borderRadius: 8, boxShadow: '0px 8px 24px rgba(0,0,0,0.12)', minWidth: 200, overflow: 'hidden' }}>
+      {open && createPortal(
+        <div ref={dropdownRef} style={{ position: 'fixed', top: dropPos.top, left: dropPos.left, minWidth: dropPos.width, zIndex: 9999, background: 'white', border: '1.5px solid #0058db', borderRadius: 8, boxShadow: '0px 8px 24px rgba(0,0,0,0.12)', overflow: 'hidden' }}>
           <div style={{ padding: '8px 10px', borderBottom: '1px solid #f0f0f0' }}>
             <input autoFocus value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar..." style={{ width: '100%', border: '1px solid #dce6f5', borderRadius: 6, padding: '5px 8px', fontFamily: 'Open Sans, sans-serif', fontSize: 13, outline: 'none', background: '#f8f9fb', color: '#333' }} />
           </div>
@@ -1516,7 +1530,8 @@ function SearchableSelect({ label, value, onChange, options, placeholder, width 
               <div style={{ padding: '12px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#a3a3a3', textAlign: 'center' }}>Nenhum resultado</div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
@@ -1599,7 +1614,7 @@ function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => v
             </div>
           </div>
         ) : (
-          <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'stretch', alignSelf: 'flex-start', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
             <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
             <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
             <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
@@ -1715,7 +1730,7 @@ function ConsultaDocumentos() {
                   </div>
                 </div>
               ) : (
-                <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+                <div style={{ display: 'inline-flex', alignItems: 'stretch', alignSelf: 'flex-start', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
                   <SearchableSelect label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
                   <SearchableSelect label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
                   <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
@@ -1738,7 +1753,7 @@ function ConsultaDocumentos() {
                   </div>
                 </MobileFormField>
               ) : (
-                <div style={{ display: 'inline-flex', alignItems: 'stretch', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+                <div style={{ display: 'inline-flex', alignItems: 'stretch', alignSelf: 'flex-start', border: '1.5px solid #0058db', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '8px 14px', width: 200 }}>
                     <label style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 10, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{t('codigoDoc')}</label>
                     <input value={codigo} onChange={e => setCodigo(e.target.value)} placeholder="Ex: 00U61ULQ" style={{ border: 'none', outline: 'none', background: 'transparent', fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 15, color: '#222', padding: 0, width: '100%' }} />
@@ -1759,6 +1774,100 @@ function ConsultaDocumentos() {
       </div>
 
     </div>
+  );
+}
+
+// ── Dados mock de arquivamentos ───────────────────────────────────────────────
+const MOCK_ARQUIVAMENTOS = [
+  {
+    vol: 1,
+    tarefa: 'SAUDE - Secretaria da Saúde',
+    arquivadoEm: '08/09/2025',
+    motivo: {
+      tipo: 'Conclusão de fluxo',
+      responsavel: 'Ana Cristina Souza',
+      unidade: 'SAUDE – Secretaria da Saúde',
+      descricao: 'Processo concluído com êxito após análise completa da documentação pela unidade responsável. Todas as etapas do fluxo foram cumpridas dentro do prazo estabelecido pela legislação municipal.\n\nO processo foi encaminhado para arquivamento definitivo conforme determinação da unidade SAUDE – Secretaria da Saúde, em conformidade com a Instrução Normativa nº 014/2025.',
+    },
+    reabertoEm: '02/10/2025',
+    motivoReab: 'Complementação documental solicitada pelo requerente',
+  },
+  {
+    vol: 2,
+    tarefa: 'DIGITAL - Secretaria de Inovação',
+    arquivadoEm: '12/10/2025',
+    motivo: {
+      tipo: 'Arquivamento automático',
+      responsavel: 'Sistema Solar BPM',
+      unidade: 'DIGITAL – Secretaria de Inovação',
+      descricao: 'Arquivamento automático ao finalizar o fluxo de análise de sustentabilidade. O processo atingiu o estado final sem pendências em aberto.\n\nGerado automaticamente pelo sistema Solar BPM após confirmação de todas as assinaturas digitais e validação dos critérios ambientais exigidos pela legislação vigente.',
+    },
+    reabertoEm: '—',
+    motivoReab: '—',
+  },
+];
+
+// ── Modal: Motivo de Arquivamento ─────────────────────────────────────────────
+function MotivoArquivamentoModal({ motivo, arquivadoEm, onClose }: {
+  motivo: typeof MOCK_ARQUIVAMENTOS[0]['motivo'];
+  arquivadoEm: string;
+  onClose: () => void;
+}) {
+  return createPortal(
+    <div
+      style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div style={{ background: 'white', borderRadius: 14, width: '100%', maxWidth: 540, boxShadow: '0px 16px 48px rgba(0,0,0,0.20)', display: 'flex', flexDirection: 'column', overflow: 'hidden', fontFamily: 'Open Sans, sans-serif' }}>
+
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid #ebebeb' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: '#edf2ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <FAIcon icon="fa-regular fa-box-archive" style={{ fontSize: 18, color: '#0058db' }} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 16, color: '#1a1a1a', lineHeight: 1.2 }}>Motivo do Arquivamento</div>
+              <div style={{ fontSize: 12, color: '#7d7d7d', marginTop: 2 }}>Arquivado em {arquivadoEm}</div>
+            </div>
+          </div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#7d7d7d', padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 18 }} />
+          </button>
+        </div>
+
+        {/* Metadados */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, borderBottom: '1px solid #ebebeb' }}>
+          {[
+            { label: 'Tipo de arquivamento', value: motivo.tipo },
+            { label: 'Responsável', value: motivo.responsavel },
+            { label: 'Unidade', value: motivo.unidade, full: true },
+          ].map((item, i) => (
+            <div key={i} style={{ padding: '12px 24px', borderRight: i % 2 === 0 && !item.full ? '1px solid #ebebeb' : 'none', ...(item.full ? { gridColumn: '1 / -1' } : {}) }}>
+              <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#8a9ab5', marginBottom: 3 }}>{item.label}</div>
+              <div style={{ fontSize: 14, color: '#222', fontWeight: 500 }}>{item.value}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Motivo */}
+        <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#8a9ab5' }}>Descrição do motivo</div>
+          <div style={{ background: '#f4f6f9', border: '1px solid #dde3ee', borderRadius: 8, padding: '14px 16px', fontSize: 14, color: '#333', lineHeight: '22px', whiteSpace: 'pre-wrap' }}>
+            {motivo.descricao}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '0 24px 20px' }}>
+          <button onClick={onClose} style={{ height: 38, padding: '0 24px', border: 'none', borderRadius: 8, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+            Fechar
+          </button>
+        </div>
+
+      </div>
+    </div>,
+    document.body
   );
 }
 
@@ -1819,6 +1928,7 @@ function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: { onVoltar?: ()
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<ProcessoTab>(initialTab ?? 'dados');
   const [showDespacho, setShowDespacho] = useState(false);
+  const [motivoArq, setMotivoArq] = useState<{ motivo: typeof MOCK_ARQUIVAMENTOS[0]['motivo']; arquivadoEm: string } | null>(null);
 
   const tabs: { key: ProcessoTab; label: string }[] = [
     { key: 'dados',         label: t('dadosProcesso') },
@@ -2146,50 +2256,64 @@ function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: { onVoltar?: ()
 
       {/* ── Tab: Arquivamentos ── */}
       {activeTab === 'arquivamentos' && (() => {
-        const th: React.CSSProperties = { fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 16, color: '#7d7d7d', lineHeight: '24px', letterSpacing: '0.08px', padding: '8px 0', borderBottom: '1px solid #d5d5d5', textAlign: 'left', fontStyle: 'normal' };
-        const td: React.CSSProperties = { fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 16, color: '#333', lineHeight: '24px', letterSpacing: '0.08px', padding: '8px 0', borderBottom: '1px solid #d5d5d5' };
+        const th: React.CSSProperties = { fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, color: '#7d7d7d', lineHeight: '20px', letterSpacing: '0.06px', padding: '10px 12px', borderBottom: '1px solid #ebebeb', textAlign: 'left', fontStyle: 'normal', background: '#f8f9fb' };
+        const td: React.CSSProperties = { fontFamily: 'Open Sans, sans-serif', fontWeight: 400, fontSize: 14, color: '#333', lineHeight: '22px', padding: '12px 12px', borderBottom: '1px solid #ebebeb' };
         return (
-          <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: 24 }}>
-            <div style={{ ...sectionTitle, marginBottom: 8 }}>{t('arquivamentos')}</div>
-            <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
-              <colgroup>
-                <col style={{ width: '5%' }} />
-                <col style={{ width: '25%' }} />
-                <col style={{ width: '15%' }} />
-                <col style={{ width: '15%' }} />
-                <col style={{ width: '15%' }} />
-                <col style={{ width: '25%' }} />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th style={th}>{t('pdVol')}</th>
-                  <th style={th}>{t('pdTipoTarefa')}</th>
-                  <th style={th}>{t('pdArquivadoEm')}</th>
-                  <th style={{ ...th, textAlign: 'center' }}>{t('pdMotivoArq')}</th>
-                  <th style={th}>{t('pdReabertoEm')}</th>
-                  <th style={th}>{t('pdMotivoReab')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={td}>1</td>
-                  <td style={td}>SAUDE - Secretaria da saude</td>
-                  <td style={td}>02/09/2025</td>
-                  <td style={{ ...td, textAlign: 'center' }}>
-                    <div style={{ width: 24, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <FAIcon icon="fa-solid fa-eye" style={{ fontSize: 14, color: '#0058db', cursor: 'pointer' }} />
-                    </div>
-                  </td>
-                  <td style={td}>02/09/2025</td>
-                  <td style={td}>02/09/2025</td>
-                </tr>
-              </tbody>
-            </table>
+          <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, overflow: 'hidden' }}>
+            {/* Cabeçalho do card */}
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid #ebebeb', display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 34, height: 34, borderRadius: 8, background: '#edf2ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <FAIcon icon="fa-regular fa-box-archive" style={{ fontSize: 15, color: '#0058db' }} />
+              </div>
+              <div>
+                <div style={{ ...sectionTitle, margin: 0 }}>{t('arquivamentos')}</div>
+                <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d', marginTop: 1 }}>{MOCK_ARQUIVAMENTOS.length} registro{MOCK_ARQUIVAMENTOS.length !== 1 ? 's' : ''} encontrado{MOCK_ARQUIVAMENTOS.length !== 1 ? 's' : ''}</div>
+              </div>
+            </div>
+
+            {/* Tabela */}
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 600 }}>
+                <thead>
+                  <tr>
+                    <th style={{ ...th, width: 50 }}>{t('pdVol')}</th>
+                    <th style={th}>{t('pdTipoTarefa')}</th>
+                    <th style={{ ...th, width: 130 }}>{t('pdArquivadoEm')}</th>
+                    <th style={{ ...th, width: 80, textAlign: 'center' }}>{t('pdMotivoArq')}</th>
+                    <th style={{ ...th, width: 130 }}>{t('pdReabertoEm')}</th>
+                    <th style={th}>{t('pdMotivoReab')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {MOCK_ARQUIVAMENTOS.map((arq, i) => (
+                    <tr key={i} style={{ background: i % 2 === 1 ? '#fafbfc' : 'white' }}>
+                      <td style={td}>{arq.vol}</td>
+                      <td style={td}>{arq.tarefa}</td>
+                      <td style={td}>{arq.arquivadoEm}</td>
+                      <td style={{ ...td, textAlign: 'center' }}>
+                        <button
+                          onClick={() => setMotivoArq({ motivo: arq.motivo, arquivadoEm: arq.arquivadoEm })}
+                          title="Ver motivo do arquivamento"
+                          style={{ background: '#edf2ff', border: 'none', borderRadius: 6, width: 32, height: 32, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                          onMouseEnter={e => (e.currentTarget.style.background = '#dce6f5')}
+                          onMouseLeave={e => (e.currentTarget.style.background = '#edf2ff')}
+                        >
+                          <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 14, color: '#0058db' }} />
+                        </button>
+                      </td>
+                      <td style={{ ...td, color: arq.reabertoEm === '—' ? '#a3a3a3' : '#333' }}>{arq.reabertoEm}</td>
+                      <td style={{ ...td, color: arq.motivoReab === '—' ? '#a3a3a3' : '#333', fontSize: 13 }}>{arq.motivoReab}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         );
       })()}
 
       {showDespacho && <DespachoModal onClose={() => setShowDespacho(false)} />}
+      {motivoArq && <MotivoArquivamentoModal motivo={motivoArq.motivo} arquivadoEm={motivoArq.arquivadoEm} onClose={() => setMotivoArq(null)} />}
     </div>
   );
 }
@@ -4903,8 +5027,8 @@ function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
         </span>
       </div>
       <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 24 }}>
-        <ServiceCard title={t('emDestaque')}   items={featuredServices} />
-        <ServiceCard title={t('maisAcessados')} items={popularServices} />
+        <ServiceCard title={t('emDestaque')}    items={featuredServices} icon="fa-regular fa-star" />
+        <ServiceCard title={t('maisAcessados')} items={popularServices}  icon="fa-regular fa-fire" />
       </div>
       <div style={{ background: 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: isMobile ? '16px 16px 32px' : '24px 24px 48px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)' }}>
         <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 18 : 24, color: '#353535', lineHeight: 1.2, margin: 0 }}>{t('porAssunto')}</h2>
@@ -5044,7 +5168,7 @@ function MobileDrawer({ open, onClose, activePage, onNavigate, isLoggedIn, onLog
 
         {/* Solar BPM branding */}
         <div style={{ padding: '10px 20px', background: '#f8f9fb', borderTop: '1px solid #dce6f5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <img src="/solarBPM_principal_horizontal_fundoclaro.png" alt="SolarBPM" style={{ height: 26, objectFit: 'contain' }} />
+          <img src="/Logo completa.png" alt="SolarBPM" style={{ height: 26, objectFit: 'contain' }} />
         </div>
       </div>
 
