@@ -1930,13 +1930,15 @@ function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: { onVoltar?: ()
   const [showDespacho, setShowDespacho] = useState(false);
   const [motivoArq, setMotivoArq] = useState<{ motivo: typeof MOCK_ARQUIVAMENTOS[0]['motivo']; arquivadoEm: string } | null>(null);
 
-  const tabs: { key: ProcessoTab; label: string }[] = [
-    { key: 'dados',         label: t('dadosProcesso') },
-    { key: 'documentos',    label: t('documentos') },
-    { key: 'tramitacoes',   label: t('tramitacoes') },
-    { key: 'movimentacoes', label: t('movimentacoes') },
-    { key: 'arquivamentos', label: t('arquivamentos') },
-  ];
+  const tabs: { key: ProcessoTab; label: string }[] = liberadoItem
+    ? [{ key: 'documentos', label: t('documentos') }]
+    : [
+        { key: 'dados',         label: t('dadosProcesso') },
+        { key: 'documentos',    label: t('documentos') },
+        { key: 'tramitacoes',   label: t('tramitacoes') },
+        { key: 'movimentacoes', label: t('movimentacoes') },
+        { key: 'arquivamentos', label: t('arquivamentos') },
+      ];
 
   const cardStyle: React.CSSProperties = {
     background: 'white',
@@ -2990,7 +2992,7 @@ function MeusProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void 
 
       {/* Lista de processos — grid 2 colunas */}
       {filtrados.length > 0 ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(480px, 1fr))', gap: 12 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {filtrados.map(p => (
             <ProcessoCard key={p.numero} processo={p} onClick={onNavigateProcesso} />
           ))}
@@ -3375,7 +3377,7 @@ function MinhasPendencias({ onNavigateProcesso, onResolverPendencia }: { onNavig
               key={p.id}
               pendencia={p}
               onResolver={() => onResolverPendencia(p)}
-              onVer={onNavigateProcesso}
+              onVer={() => onResolverPendencia(p)}
             />
           ))}
         </div>
@@ -3417,6 +3419,76 @@ const MOCK_LIBERADOS: ProcessoLiberado[] = [
   { id: 'l5', numero: 'PMF 2025/007109',      interessado: 'Fernando Naim Schmitz',  cpf: '006.334.989-20', liberadoEm: '12/07/2025', terminaEm: '12/08/2025', ativo: false, anexos: 4, orgao: 'SMDU - Desenvolvimento Urbano' },
   { id: 'l6', numero: 'PMF 2025/006055',      interessado: 'Cris Lima',               cpf: '043.792.234-00', liberadoEm: '03/06/2025', terminaEm: '03/07/2025', ativo: false, anexos: 1, orgao: 'SAUDE - Secretaria da Saúde' },
 ];
+
+// Nomes mock de arquivos por slot
+const MOCK_NOMES_ANEXOS = [
+  'Certidão de regularidade fiscal.pdf',
+  'Alvará de funcionamento 2025.pdf',
+  'Memorial descritivo do processo.pdf',
+  'Declaração de ciência dos termos.pdf',
+  'Planta baixa do imóvel.pdf',
+];
+
+function AnexosExpiradoModal({ item, onClose }: { item: ProcessoLiberado; onClose: () => void }) {
+  const arquivos = MOCK_NOMES_ANEXOS.slice(0, item.anexos);
+  return createPortal(
+    <div
+      style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div style={{ background: 'white', borderRadius: 14, width: '100%', maxWidth: 500, boxShadow: '0px 16px 48px rgba(0,0,0,0.20)', display: 'flex', flexDirection: 'column', overflow: 'hidden', fontFamily: 'Open Sans, sans-serif' }}>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid #ebebeb' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: '#f4f6f9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <FAIcon icon="fa-regular fa-folder-xmark" style={{ fontSize: 18, color: '#7d7d7d' }} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 16, color: '#1a1a1a', lineHeight: 1.2 }}>Anexos do processo</div>
+              <div style={{ fontSize: 12, color: '#7d7d7d', marginTop: 2 }}>{item.numero}</div>
+            </div>
+          </div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#7d7d7d', padding: 4, display: 'flex', alignItems: 'center' }}>
+            <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 18 }} />
+          </button>
+        </div>
+
+        {/* Banner de acesso expirado */}
+        <div style={{ margin: '16px 24px 0', background: '#fff0f2', border: '1px solid #f5b8c0', borderRadius: 8, padding: '12px 14px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+          <FAIcon icon="fa-regular fa-circle-exclamation" style={{ fontSize: 15, color: '#c0182d', flexShrink: 0, marginTop: 1 }} />
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 13, color: '#c0182d', marginBottom: 2 }}>Acesso expirado</div>
+            <div style={{ fontSize: 12, color: '#7d1020', lineHeight: '18px' }}>
+              O prazo de acesso a este processo encerrou em <strong>{item.terminaEm}</strong>. Os documentos abaixo não estão mais disponíveis para visualização ou download.
+            </div>
+          </div>
+        </div>
+
+        {/* Lista de arquivos (somente nomes) */}
+        <div style={{ padding: '16px 24px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#8a9ab5', marginBottom: 4 }}>
+            {arquivos.length} documento{arquivos.length !== 1 ? 's' : ''} neste processo
+          </div>
+          {arquivos.map((nome, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: '#f8f9fb', border: '1px solid #ebebeb', borderRadius: 8 }}>
+              <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 16, color: '#a3a3a3', flexShrink: 0 }} />
+              <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', flex: 1 }}>{nome}</span>
+              <span style={{ fontSize: 10, fontWeight: 600, color: '#a3a3a3', background: '#ebebeb', borderRadius: 4, padding: '2px 8px' }}>Indisponível</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '0 24px 20px' }}>
+          <button onClick={onClose} style={{ height: 38, padding: '0 24px', border: 'none', borderRadius: 8, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
 
 function ProcessoLiberadoCard({ item, onVerAnexos }: { item: ProcessoLiberado; onVerAnexos: () => void }) {
   const t = useT();
@@ -3510,8 +3582,9 @@ function ProcessoLiberadoCard({ item, onVerAnexos }: { item: ProcessoLiberado; o
 
 function ProcessosLiberados({ onVerAnexos }: { onVerAnexos: (item: ProcessoLiberado) => void }) {
   const t = useT();
-  const [query, setQuery]   = useState('');
-  const [filtro, setFiltro] = useState<'todos' | 'ativos' | 'expirados'>('ativos');
+  const [query, setQuery]         = useState('');
+  const [filtro, setFiltro]       = useState<'todos' | 'ativos' | 'expirados'>('ativos');
+  const [expiradoModal, setExpiradoModal] = useState<ProcessoLiberado | null>(null);
 
   const total     = MOCK_LIBERADOS.length;
   const ativos    = MOCK_LIBERADOS.filter(i => i.ativo).length;
@@ -3638,7 +3711,11 @@ function ProcessosLiberados({ onVerAnexos }: { onVerAnexos: (item: ProcessoLiber
       {filtrados.length > 0 ? (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: 14 }}>
           {filtrados.map(i => (
-            <ProcessoLiberadoCard key={i.id} item={i} onVerAnexos={() => onVerAnexos(i)} />
+            <ProcessoLiberadoCard
+              key={i.id}
+              item={i}
+              onVerAnexos={i.ativo ? () => onVerAnexos(i) : () => setExpiradoModal(i)}
+            />
           ))}
         </div>
       ) : (
@@ -3654,6 +3731,8 @@ function ProcessosLiberados({ onVerAnexos }: { onVerAnexos: (item: ProcessoLiber
           </div>
         </div>
       )}
+
+      {expiradoModal && <AnexosExpiradoModal item={expiradoModal} onClose={() => setExpiradoModal(null)} />}
     </div>
   );
 }
@@ -3677,10 +3756,22 @@ const MOCK_DOCUMENTOS_ASSINATURA: DocParaAssinar[] = [
 
 function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pendencia | null; onVoltar: () => void; onConcluir: () => void }) {
   const t = useT();
-  // 'assinar' ou 'recusar' por documento (mutuamente exclusivos)
+  const readOnly = pendencia?.status === 'Finalizada';
+  const tipo = pendencia?.tipo ?? 'Assinatura de documentos';
+
+  // Estado — Assinatura de documentos
   const [paraAssinar,  setParaAssinar]  = useState<Set<string>>(new Set());
   const [paraRecusar,  setParaRecusar]  = useState<Set<string>>(new Set());
   const [parecer,      setParecer]      = useState('');
+
+  // Estado — Comunique-se
+  const [mensagem, setMensagem] = useState('');
+  const [arquivoAnexado, setArquivoAnexado] = useState('');
+
+  // Estado — Verificar informações / Complementar dados / Análise
+  const [observacao, setObservacao] = useState('');
+  const [docComplementar, setDocComplementar] = useState('');
+  const [itensVerificados, setItensVerificados] = useState<Set<string>>(new Set());
 
   const docs = MOCK_DOCUMENTOS_ASSINATURA;
   const totalAssinar  = paraAssinar.size;
@@ -3751,15 +3842,23 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
       }}>
         <div style={{
           width: 56, height: 56, borderRadius: 12,
-          background: iconInfo.bg,
+          background: readOnly ? '#e6f9f0' : iconInfo.bg,
           display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
         }}>
-          <FAIcon icon={iconInfo.icon} style={{ fontSize: 22, color: iconInfo.color }} />
+          <FAIcon icon={readOnly ? 'fa-regular fa-circle-check' : iconInfo.icon} style={{ fontSize: 22, color: readOnly ? '#0f6b3e' : iconInfo.color }} />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 20, color: '#1a1a1a', margin: 0 }}>
-            {pendencia?.titulo || t('rpAssinaturaTitle')}
-          </h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 20, color: '#1a1a1a', margin: 0 }}>
+              {pendencia?.titulo || t('rpAssinaturaTitle')}
+            </h1>
+            {readOnly && (
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#e6f9f0', color: '#0f6b3e', borderRadius: 100, padding: '3px 12px', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 12, whiteSpace: 'nowrap' }}>
+                <FAIcon icon="fa-solid fa-check" style={{ fontSize: 10 }} />
+                Resolvida
+              </span>
+            )}
+          </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 6, fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#565656' }}>
             <span><strong style={{ color: '#7d7d7d' }}>{t('rpTipo')}:</strong> {pendencia?.tipo || '-'}</span>
             <span>·</span>
@@ -3767,31 +3866,31 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
             {pendencia?.prazo && (
               <>
                 <span>·</span>
-                <PrazoBadge prazo={pendencia.prazo} diasRestantes={pendencia.diasRestantes} finalizada={pendencia.status === 'Finalizada'} />
+                <PrazoBadge prazo={pendencia.prazo} diasRestantes={pendencia.diasRestantes} finalizada={readOnly} />
               </>
             )}
           </div>
         </div>
       </div>
 
-      {/* Card de assinatura */}
+      {/* ── TEMPLATE: Assinatura de documentos ── */}
+      {tipo === 'Assinatura de documentos' && (
       <div style={{
         background: 'white', border: '1px solid #dde3ee', borderRadius: 10,
         padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)',
         display: 'flex', flexDirection: 'column', gap: 16,
       }}>
-        {/* Descrição e ações de seleção */}
         <div>
           <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', margin: 0 }}>
             {t('rpAssinaturaTitle')}
           </h2>
           <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', margin: '4px 0 0 0', lineHeight: 1.5 }}>
-            {t('rpAssinaturaDesc')}
+            {readOnly ? 'Abaixo o resultado da sua assinatura. Esta pendência já foi concluída.' : t('rpAssinaturaDesc')}
           </p>
         </div>
 
-        {/* Barra de resumo + ações em massa */}
-        <div style={{
+        {/* Barra de resumo + ações em massa (somente edição) */}
+        {!readOnly && <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           gap: 12, flexWrap: 'wrap',
           background: '#f4f6f9',
@@ -3874,7 +3973,7 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
               </button>
             )}
           </div>
-        </div>
+        </div>}
 
         {/* Lista de documentos — tri-state: neutro / assinar / recusar */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -4027,64 +4126,270 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
 
         {/* Parecer */}
         <div style={{ marginTop: 8 }}>
-          <label style={{
-            display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11,
-            color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6,
-          }}>
+          <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>
             {t('rpParecer')}
           </label>
           <textarea
-            value={parecer}
+            disabled={readOnly}
+            value={readOnly ? 'Todos os documentos foram revisados. Concordo com os termos do contrato e apropriei as assinaturas conforme orientado pela unidade responsável.' : parecer}
             onChange={e => setParecer(e.target.value)}
             placeholder={t('rpParecerPlaceholder')}
             rows={4}
-            style={{
-              width: '100%', boxSizing: 'border-box',
-              background: 'white', border: '1px solid #d5d5d5', borderRadius: 8,
-              padding: '10px 14px',
-              fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333',
-              outline: 'none', resize: 'vertical', minHeight: 88,
-              transition: 'border-color 0.15s',
-            }}
-            onFocus={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#0058db'}
+            style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? '#f8f9fb' : 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '10px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: readOnly ? '#565656' : '#333', outline: 'none', resize: 'vertical', minHeight: 88 }}
+            onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#0058db'; }}
             onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#d5d5d5'}
           />
         </div>
       </div>
+      )} {/* fim template Assinatura */}
 
-      {/* Barra de ações */}
-      <div style={{
-        display: 'flex', justifyContent: 'flex-end', gap: 10, flexWrap: 'wrap',
-      }}>
-        <button
-          onClick={onVoltar}
-          style={{
-            height: 44, padding: '0 20px', borderRadius: 8, background: 'white',
-            border: '1.5px solid #d5d5d5', color: '#565656',
-            fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14,
-            cursor: 'pointer',
-          }}
-          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#f4f6f9'}
-          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
-        >
-          {t('rpCancelar')}
-        </button>
-        <button
-          onClick={onConcluir}
-          style={{
-            height: 44, padding: '0 24px', borderRadius: 8,
-            background: '#0058db', border: '1.5px solid #0058db', color: 'white',
-            fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14,
-            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
-            boxShadow: '0px 2px 6px rgba(0,88,219,0.24)',
-          }}
-          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'}
-          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = '#0058db'}
-        >
-          <FAIcon icon="fa-regular fa-circle-check" style={{ fontSize: 15 }} />
-          {t('rpConcluir')}
-        </button>
-      </div>
+      {/* ── TEMPLATE: Comunique-se ── */}
+      {tipo === 'Comunique-se' && (
+        <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div>
+            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', margin: 0 }}>Responder comunicado</h2>
+            <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', margin: '4px 0 0 0', lineHeight: 1.5 }}>
+              {readOnly ? 'Resposta enviada. Esta pendência já foi concluída.' : 'A unidade responsável solicita que você responda ao comunicado abaixo.'}
+            </p>
+          </div>
+          {/* Mensagem da unidade */}
+          <div style={{ background: '#f4f6f9', border: '1px solid #dde3ee', borderRadius: 8, padding: '14px 16px' }}>
+            <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: '#8a9ab5', marginBottom: 6 }}>Comunicado da unidade</div>
+            <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', lineHeight: '22px' }}>
+              Prezado(a), solicitamos que informe sobre a documentação de residência referente ao processo {pendencia?.processo}. Verifique se os documentos apresentados correspondem ao endereço atual e, se necessário, encaminhe nova documentação atualizada.
+            </div>
+          </div>
+          {/* Resposta */}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>Sua resposta</label>
+            <textarea
+              disabled={readOnly}
+              value={readOnly ? 'Segue em anexo o histórico escolar solicitado, emitido pela Secretaria de Educação em 02/04/2026. O documento contém todas as informações referentes ao período de 2015 a 2023. Confirmo que o endereço constante nos registros corresponde ao meu domicílio atual.' : mensagem}
+              onChange={e => setMensagem(e.target.value)}
+              placeholder="Digite sua resposta aqui..."
+              rows={5}
+              style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? '#f8f9fb' : 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '10px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: readOnly ? '#565656' : '#333', outline: 'none', resize: 'vertical', minHeight: 100 }}
+              onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#0058db'; }}
+              onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#d5d5d5'}
+            />
+          </div>
+          {/* Anexo */}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>Anexar documento (opcional)</label>
+            {readOnly ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#f8f9fb', border: '1px solid #ebebeb', borderRadius: 8 }}>
+                <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 16, color: '#c0182d' }} />
+                <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333' }}>historico_escolar_2026.pdf</span>
+                <span style={{ marginLeft: 'auto', fontSize: 11, color: '#7d7d7d' }}>245 KB</span>
+              </div>
+            ) : (
+              <div>
+                <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, height: 38, padding: '0 16px', border: '1.5px dashed #b3c7e6', borderRadius: 8, background: '#f8f9fb', cursor: 'pointer', fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#0058db', fontWeight: 600 }}>
+                  <FAIcon icon="fa-regular fa-paperclip" style={{ fontSize: 13 }} />
+                  {arquivoAnexado || 'Selecionar arquivo'}
+                  <input type="file" style={{ display: 'none' }} onChange={e => setArquivoAnexado(e.target.files?.[0]?.name || '')} />
+                </label>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── TEMPLATE: Verificar informações ── */}
+      {tipo === 'Verificar informações' && (() => {
+        const campos = [
+          { id: 'nome',      label: 'Nome completo',           valor: 'FERNANDO NAIM SCHMITZ' },
+          { id: 'cpf',       label: 'CPF',                     valor: '006.334.989-20' },
+          { id: 'endereco',  label: 'Endereço',                valor: 'Rua das Flores, 123 – Bairro Centro, Florianópolis – SC' },
+          { id: 'telefone',  label: 'Telefone de contato',     valor: '(48) 99123-4567' },
+          { id: 'email',     label: 'E-mail',                  valor: 'fernando.schmitz@email.com' },
+        ];
+        const toggleItem = (id: string) => {
+          setItensVerificados(prev => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next; });
+        };
+        return (
+          <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div>
+              <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', margin: 0 }}>Verificar informações cadastrais</h2>
+              <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', margin: '4px 0 0 0', lineHeight: 1.5 }}>
+                {readOnly ? 'Informações verificadas. Esta pendência já foi concluída.' : 'Confirme se as informações abaixo estão corretas. Marque cada item verificado.'}
+              </p>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {campos.map(c => {
+                const checked = readOnly || itensVerificados.has(c.id);
+                return (
+                  <div key={c.id} onClick={() => !readOnly && toggleItem(c.id)} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 16px', background: checked ? '#f5fbf7' : 'white', border: `1.5px solid ${checked ? '#a5d6a7' : '#dde3ee'}`, borderRadius: 8, cursor: readOnly ? 'default' : 'pointer', transition: 'all 0.12s' }}>
+                    <div style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${checked ? '#0f6b3e' : '#a3a3a3'}`, background: checked ? '#0f6b3e' : 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      {checked && <FAIcon icon="fa-solid fa-check" style={{ fontSize: 11, color: 'white' }} />}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, fontWeight: 700, color: '#8a9ab5', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>{c.label}</div>
+                      <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#222', fontWeight: 500 }}>{c.valor}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div>
+              <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>Observações (opcional)</label>
+              <textarea
+                disabled={readOnly}
+                value={readOnly ? 'Todos os dados foram verificados e estão corretos. Nenhuma divergência encontrada.' : observacao}
+                onChange={e => setObservacao(e.target.value)}
+                placeholder="Informe se há alguma divergência ou correção necessária..."
+                rows={3}
+                style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? '#f8f9fb' : 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '10px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: readOnly ? '#565656' : '#333', outline: 'none', resize: 'vertical' }}
+                onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#0058db'; }}
+                onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#d5d5d5'}
+              />
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── TEMPLATE: Análise de documentos ── */}
+      {tipo === 'Análise de documentos' && (
+        <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div>
+            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', margin: 0 }}>Análise de documentos</h2>
+            <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', margin: '4px 0 0 0', lineHeight: 1.5 }}>
+              {readOnly ? 'Análise concluída. Veja o resultado abaixo.' : 'Revise os documentos abaixo e emita seu parecer técnico sobre cada um.'}
+            </p>
+          </div>
+          {[
+            { nome: 'Parecer técnico de vistoria', paginas: 8, tipo: 'PDF', status: readOnly ? 'Aprovado' : null },
+            { nome: 'Laudo de conformidade ambiental', paginas: 14, tipo: 'PDF', status: readOnly ? 'Aprovado' : null },
+            { nome: 'Planta de situação do terreno', paginas: 3, tipo: 'PDF', status: readOnly ? 'Em ressalva' : null },
+          ].map((doc, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#f8f9fb', border: '1px solid #ebebeb', borderRadius: 8 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 8, background: '#fff0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 18, color: '#c0182d' }} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#1a1a1a' }}>{doc.nome}</div>
+                <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>{doc.tipo} · {doc.paginas} páginas</div>
+              </div>
+              {doc.status ? (
+                <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 100, background: doc.status === 'Aprovado' ? '#e6f9f0' : '#fff4e5', color: doc.status === 'Aprovado' ? '#0f6b3e' : '#b35c00' }}>{doc.status}</span>
+              ) : (
+                <button style={{ height: 32, padding: '0 12px', border: '1.5px solid #0058db', borderRadius: 6, background: 'white', color: '#0058db', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, cursor: 'pointer' }}>
+                  <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 12, marginRight: 6 }} />
+                  Visualizar
+                </button>
+              )}
+            </div>
+          ))}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>Parecer técnico</label>
+            <textarea
+              disabled={readOnly}
+              value={readOnly ? 'Documentos analisados. O parecer técnico está em conformidade com os requisitos normativos. A planta de situação foi aprovada com ressalva: necessária correção da escala gráfica na próxima revisão.' : observacao}
+              onChange={e => setObservacao(e.target.value)}
+              placeholder="Descreva sua análise técnica..."
+              rows={4}
+              style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? '#f8f9fb' : 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '10px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: readOnly ? '#565656' : '#333', outline: 'none', resize: 'vertical' }}
+              onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#0058db'; }}
+              onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#d5d5d5'}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ── TEMPLATE: Complementar dados ── */}
+      {tipo === 'Complementar dados' && (
+        <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div>
+            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', margin: 0 }}>Complementar dados do processo</h2>
+            <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', margin: '4px 0 0 0', lineHeight: 1.5 }}>
+              {readOnly ? 'Dados complementados. Esta pendência já foi concluída.' : 'Anexe a documentação solicitada e descreva as informações adicionais necessárias.'}
+            </p>
+          </div>
+          {/* O que foi solicitado */}
+          <div style={{ background: '#fff4e5', border: '1px solid #ffcf82', borderRadius: 8, padding: '12px 16px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+            <FAIcon icon="fa-regular fa-triangle-exclamation" style={{ fontSize: 14, color: '#b35c00', flexShrink: 0, marginTop: 2 }} />
+            <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#7a4100', lineHeight: '20px' }}>
+              <strong>Documentação solicitada:</strong> Comprovante de endereço atualizado (emitido nos últimos 90 dias) e comprovante de renda dos últimos 3 meses.
+            </div>
+          </div>
+          {/* Upload */}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>Documentos anexados</label>
+            {readOnly ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {['comprovante_endereco.pdf', 'comprovante_renda_mar2026.pdf'].map((f, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#f8f9fb', border: '1px solid #ebebeb', borderRadius: 8 }}>
+                    <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 16, color: '#c0182d' }} />
+                    <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333', flex: 1 }}>{f}</span>
+                    <span style={{ fontSize: 10, fontWeight: 600, color: '#0f6b3e', background: '#e6f9f0', borderRadius: 4, padding: '2px 8px' }}>Enviado</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <label style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '24px 16px', border: '2px dashed #b3c7e6', borderRadius: 10, background: '#f8f9fb', cursor: 'pointer' }}>
+                <FAIcon icon="fa-regular fa-cloud-arrow-up" style={{ fontSize: 28, color: '#0058db' }} />
+                <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#0058db', fontWeight: 600 }}>
+                  {docComplementar || 'Clique para selecionar ou arraste os arquivos aqui'}
+                </div>
+                <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: '#7d7d7d' }}>PDF, DOCX, JPG até 10 MB</div>
+                <input type="file" style={{ display: 'none' }} onChange={e => setDocComplementar(e.target.files?.[0]?.name || '')} />
+              </label>
+            )}
+          </div>
+          {/* Observações */}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>Informações adicionais</label>
+            <textarea
+              disabled={readOnly}
+              value={readOnly ? 'Documentos enviados conforme solicitação. O comprovante de endereço é referente ao mês de março/2026 e o comprovante de renda cobre o trimestre de janeiro a março de 2026.' : observacao}
+              onChange={e => setObservacao(e.target.value)}
+              placeholder="Descreva informações adicionais que julgar pertinentes..."
+              rows={3}
+              style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? '#f8f9fb' : 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '10px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: readOnly ? '#565656' : '#333', outline: 'none', resize: 'vertical' }}
+              onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#0058db'; }}
+              onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#d5d5d5'}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ── Barra de ações (apenas em modo edição) ── */}
+      {!readOnly && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, flexWrap: 'wrap' }}>
+          <button
+            onClick={onVoltar}
+            style={{ height: 44, padding: '0 20px', borderRadius: 8, background: 'white', border: '1.5px solid #d5d5d5', color: '#565656', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, cursor: 'pointer' }}
+            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#f4f6f9'}
+            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
+          >
+            {t('rpCancelar')}
+          </button>
+          <button
+            onClick={onConcluir}
+            style={{ height: 44, padding: '0 24px', borderRadius: 8, background: '#0058db', border: '1.5px solid #0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0px 2px 6px rgba(0,88,219,0.24)' }}
+            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'}
+            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = '#0058db'}
+          >
+            <FAIcon icon="fa-regular fa-circle-check" style={{ fontSize: 15 }} />
+            {t('rpConcluir')}
+          </button>
+        </div>
+      )}
+
+      {/* ── Botão de retorno em modo leitura ── */}
+      {readOnly && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            onClick={onVoltar}
+            style={{ height: 44, padding: '0 24px', borderRadius: 8, background: 'white', border: '1.5px solid #d5d5d5', color: '#565656', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
+            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#f4f6f9'}
+            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
+          >
+            <FAIcon icon="fa-regular fa-arrow-left" style={{ fontSize: 13 }} />
+            Voltar às pendências
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -5256,11 +5561,11 @@ export default function App() {
   const pageContent = (
     <>
       {page === 'home'       && <HomePage onNavigateCat={cat => { setSelectedCat(cat); setPage('cat-servicos'); }} isLoggedIn={isLoggedIn} onNavigate={setPage} />}
-      {page === 'consulta'   && <ConsultaProcessos onNavigateProcesso={() => setPage('processo')} />}
+      {page === 'consulta'   && <ConsultaProcessos onNavigateProcesso={() => { setSelectedLiberado(null); setPage('processo'); }} />}
       {page === 'processo'   && <ProcessoDetalhe onVoltar={() => { setSelectedLiberado(null); setPage(selectedLiberado ? 'processosliberados' : 'consulta'); }} liberadoItem={selectedLiberado} initialTab={selectedLiberado ? 'documentos' : undefined} />}
       {page === 'documentos' && <ConsultaDocumentos />}
       {page === 'meusdados'  && <MeusDados />}
-      {page === 'meusprocessos' && <MeusProcessos onNavigateProcesso={() => setPage('processo')} />}
+      {page === 'meusprocessos' && <MeusProcessos onNavigateProcesso={() => { setSelectedLiberado(null); setPage('processo'); }} />}
       {page === 'minhaspendencias' && (
         <MinhasPendencias
           onNavigateProcesso={() => setPage('processo')}
