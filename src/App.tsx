@@ -2347,6 +2347,7 @@ const MOCK_SERVICOS_AV = [
   { servico: 'Solicitação de poda de árvores',         categoria: 'Meio ambiente',                       setor: 'FLORIPAMANHÃ/Parques e Jardins',                    destino: ['Cidadão', 'Visitante'] },
   { servico: 'Taxa de coleta de lixo',                 categoria: 'Impostos e taxas',                    setor: 'COMCAP/Coleta Urbana',                              destino: ['Cidadão', 'Empresa'] },
   { servico: 'Vacinação municipal',                    categoria: 'Saúde',                               setor: 'SMS/Vigilância Epidemiológica',                     destino: ['Cidadão', 'Visitante'] },
+  { servico: 'Alvará de funcionamento (Simplificado)', categoria: 'Alvarás, autorizações e licenças',     setor: 'SMPHDU/SDU/DLAE/Gerência de Alvarás',               destino: ['Empresa'], agrupado: true, htmlContent: `<div style="font-family:Open Sans,sans-serif;font-size:14px;color:#333;line-height:22px"><h2 style="font-size:17px;font-weight:700;color:#1a1a1a;margin:0 0 12px 0">Descrição do serviço</h2><p style="margin:0 0 16px 0">O Alvará de Funcionamento Simplificado permite a regularização de atividades comerciais de baixo risco de forma ágil e digital, sem necessidade de vistoria prévia. Ideal para MEIs e microempresas que desejam iniciar suas atividades rapidamente.</p><h2 style="font-size:17px;font-weight:700;color:#1a1a1a;margin:0 0 12px 0">Quem pode solicitar</h2><p style="margin:0 0 16px 0">Microempreendedores individuais (MEI), microempresas (ME) e empresas de pequeno porte (EPP) com atividade de baixo risco enquadrada na Lista Nacional de Atividades.</p><h2 style="font-size:17px;font-weight:700;color:#1a1a1a;margin:0 0 12px 0">Documentos necessários</h2><ul style="margin:0 0 16px 0;padding-left:20px"><li>CNPJ ativo</li><li>Contrato social ou certificado MEI</li><li>Comprovante de endereço do estabelecimento</li><li>Declaração de enquadramento em atividade de baixo risco</li></ul><h2 style="font-size:17px;font-weight:700;color:#1a1a1a;margin:0 0 12px 0">Prazo e custo</h2><p style="margin:0 0 8px 0"><strong>Prazo:</strong> Emissão imediata após aprovação automática do sistema.</p><p style="margin:0"><strong>Custo:</strong> Gratuito para MEI. Taxas aplicáveis para ME e EPP conforme tabela vigente.</p></div>` },
 ];
 
 // ── Tela: Solicitação de Serviços ─────────────────────────────────────────────
@@ -4752,52 +4753,44 @@ function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNavigateForm }: {
           <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#7a8a9e' }}>{t('solNenhumDesc')}</div>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 12 }}>
           {filtered.map((svc, i) => (
             <div key={i}
-              style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 20, display: 'flex', flexDirection: 'column', gap: 14, boxShadow: '0px 2px 8px rgba(24,39,75,0.07)', transition: 'box-shadow 0.15s, border-color 0.15s' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 4px 16px rgba(24,39,75,0.13)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#b3c7e6'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 2px 8px rgba(24,39,75,0.07)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#dde3ee'; }}
+              style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10, boxShadow: '0px 2px 6px rgba(24,39,75,0.06)', transition: 'box-shadow 0.15s, border-color 0.15s' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 4px 14px rgba(24,39,75,0.12)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#b3c7e6'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 2px 6px rgba(24,39,75,0.06)'; (e.currentTarget as HTMLDivElement).style.borderColor = '#dde3ee'; }}
             >
               {/* Linha 1: ícone + título */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ width: 48, height: 48, background: '#f0f4fb', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <FAIcon icon="fa-regular fa-file-lines" style={{ fontSize: 22, color: '#0058db' }} />
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                <div style={{ width: 36, height: 36, background: '#f0f4fb', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <FAIcon icon="fa-regular fa-file-lines" style={{ fontSize: 16, color: '#0058db' }} />
                 </div>
-                <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, color: '#222' }}>{svc.servico}</div>
+                <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#222', lineHeight: '20px', paddingTop: 8 }}>{svc.servico}</div>
               </div>
 
-              {/* Linha 2: chips de meta */}
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: '#565656', background: '#f4f6f9', borderRadius: 100, padding: '3px 10px', fontWeight: 600 }}>
+              {/* Chips de meta */}
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 10, color: '#0058db', background: '#edf2ff', borderRadius: 100, padding: '2px 9px', fontWeight: 600 }}>
                   {svc.setor.split('/')[0]}
                 </span>
                 {svc.destino.map((d, di) => (
-                  <span key={di} style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: '#565656', background: '#f4f6f9', borderRadius: 100, padding: '3px 10px', fontWeight: 600 }}>
+                  <span key={di} style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 10, color: '#565656', background: '#f4f6f9', borderRadius: 100, padding: '2px 9px', fontWeight: 600 }}>
                     {d}
                   </span>
                 ))}
               </div>
 
-              {/* Linha 3: descrição */}
-              <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', lineHeight: '20px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                Serviço municipal disponível para solicitação digital via FloripaOn. Acompanhe o andamento em tempo real.
-              </div>
-
-              {/* Divider */}
-              <div style={{ height: 1, background: '#f0f0f0' }} />
-
-              {/* Linha 4: botões alinhados à direita */}
-              <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+              {/* Botões */}
+              <div style={{ display: 'flex', gap: 8, marginTop: 2 }}>
                 <button onClick={() => onNavigateDetalhe(svc)}
-                  style={{ height: 36, padding: '0 16px', border: '1.5px solid #0058db', borderRadius: 6, background: 'white', color: '#0058db', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'background 0.12s' }}
+                  style={{ flex: 1, height: 32, border: '1.5px solid #0058db', borderRadius: 6, background: 'white', color: '#0058db', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, cursor: 'pointer', transition: 'background 0.12s' }}
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'white'; }}
                 >
                   {t('solMaisInfo')}
                 </button>
                 <button onClick={() => onNavigateForm(svc)}
-                  style={{ height: 36, padding: '0 16px', border: 'none', borderRadius: 6, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'background 0.12s' }}
+                  style={{ flex: 1, height: 32, border: 'none', borderRadius: 6, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, cursor: 'pointer', transition: 'background 0.12s' }}
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0058db'; }}
                 >
@@ -4819,7 +4812,7 @@ function ServicoDetalhe({ service, onNavigateForm }: {
 }) {
   const t = useT();
   const isMobile = useIsMobile();
-  // Informações genéricas que variam por categoria
+
   const descricoesPorCategoria: Record<string, string> = {
     'Impostos e taxas':                    'Serviço relacionado à emissão, consulta e pagamento de impostos e taxas municipais. Facilita o cumprimento das obrigações fiscais de forma digital, sem necessidade de comparecimento presencial.',
     'Alvarás, autorizações e licenças':    'Emissão e renovação de alvarás, autorizações e licenças municipais de forma eletrônica. Agilize a regularização da sua atividade ou obra com segurança e praticidade.',
@@ -4850,6 +4843,11 @@ function ServicoDetalhe({ service, onNavigateForm }: {
     'Documentos específicos conforme o tipo de serviço',
   ];
 
+  const linksRelacionados = [
+    { label: 'Legislação municipal – Lei nº 12.345/2022', url: '#' },
+    { label: 'Regulamento de alvarás e licenças', url: '#' },
+  ];
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: isMobile ? '16px 16px 80px 16px' : '24px 24px 48px 24px' }}>
 
@@ -4860,102 +4858,111 @@ function ServicoDetalhe({ service, onNavigateForm }: {
           {service.destino.map(d => (
             <span key={d} style={{ background: '#f0f0f0', color: '#555', borderRadius: 100, padding: '3px 12px', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12 }}>{d}</span>
           ))}
+          {'agrupado' in service && service.agrupado && (
+            <span style={{ background: '#fff8e6', color: '#b45a00', borderRadius: 100, padding: '3px 12px', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12 }}>Simplificado</span>
+          )}
         </div>
         <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 20 : 28, color: '#1a1a1a', margin: '0 0 8px 0' }}>{service.servico}</h1>
         <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#565656', margin: '0 0 20px 0', lineHeight: '22px' }}>
           {service.setor}
         </p>
-        {!isMobile && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-            <button
-              onClick={() => onNavigateForm(service)}
-              style={{ height: 44, padding: '0 32px', border: 'none', borderRadius: 8, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, transition: 'background 0.12s' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0058db'; }}
-            >
-              <FAIcon icon="fa-regular fa-paper-plane" style={{ fontSize: 15 }} />
-              Solicitar serviço
-            </button>
-            <button
-              onClick={() => window.print()}
-              style={{ height: 44, padding: '0 20px', border: '1.5px solid #d5d5d5', borderRadius: 8, background: 'white', color: '#565656', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.12s' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#0058db'; (e.currentTarget as HTMLButtonElement).style.color = '#0058db'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5'; (e.currentTarget as HTMLButtonElement).style.color = '#565656'; }}
-            >
-              <FAIcon icon="fa-regular fa-file-arrow-down" style={{ fontSize: 14 }} />
-              {t('exportarDescritivo')}
-            </button>
-          </div>
-        )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+          <button
+            onClick={() => onNavigateForm(service)}
+            style={{ height: 44, padding: '0 32px', border: 'none', borderRadius: 8, background: '#0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 15, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, transition: 'background 0.12s' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#0058db'; }}
+          >
+            <FAIcon icon="fa-regular fa-paper-plane" style={{ fontSize: 15 }} />
+            Solicitar serviço
+          </button>
+          <button
+            onClick={() => window.print()}
+            style={{ height: 44, padding: '0 20px', border: '1.5px solid #d5d5d5', borderRadius: 8, background: 'white', color: '#565656', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.12s' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#0058db'; (e.currentTarget as HTMLButtonElement).style.color = '#0058db'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5'; (e.currentTarget as HTMLButtonElement).style.color = '#565656'; }}
+          >
+            <FAIcon icon="fa-regular fa-file-arrow-down" style={{ fontSize: 14 }} />
+            {t('exportarDescritivo')}
+          </button>
+        </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 20, alignItems: 'flex-start' }}>
+      {/* Modo agrupado: renderiza HTML */}
+      {'agrupado' in service && service.agrupado ? (
+        <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 28 }}>
+          <div dangerouslySetInnerHTML={{ __html: (service as typeof MOCK_SERVICOS_AV[0] & { htmlContent: string }).htmlContent }} />
+        </div>
+      ) : (
+        <>
+          {/* Box principal */}
+          <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24, display: 'flex', flexDirection: 'column', gap: 24 }}>
 
-        {/* Coluna esquerda */}
-        <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 16, width: isMobile ? '100%' : undefined }}>
+            {/* O que é */}
+            <div>
+              <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 17, color: '#353535', margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <FAIcon icon="fa-regular fa-circle-info" style={{ fontSize: 15, color: '#0058db' }} />
+                O que é este serviço?
+              </h2>
+              <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', margin: 0, lineHeight: '23px' }}>{desc}</p>
+            </div>
 
-          {/* O que é */}
-          <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24 }}>
-            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 17, color: '#353535', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <FAIcon icon="fa-regular fa-circle-info" style={{ fontSize: 16, color: '#0058db' }} />
-              O que é este serviço?
-            </h2>
-            <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', margin: 0, lineHeight: '23px' }}>{desc}</p>
-          </div>
+            <div style={{ height: 1, background: '#f0f0f0' }} />
 
-          {/* Como solicitar */}
-          <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24 }}>
-            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 17, color: '#353535', margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <FAIcon icon="fa-regular fa-list-check" style={{ fontSize: 16, color: '#0058db' }} />
-              Como solicitar?
-            </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {steps.map((step, i) => (
-                <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#0058db', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
-                    <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 12, color: 'white' }}>{i + 1}</span>
+            {/* Informações */}
+            <div>
+              <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 17, color: '#353535', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <FAIcon icon="fa-regular fa-clock" style={{ fontSize: 15, color: '#0058db' }} />
+                Informações
+              </h2>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 12 }}>
+                {[
+                  { label: 'Prazo de atendimento', value: 'Até 30 dias úteis', icon: 'fa-regular fa-calendar' },
+                  { label: 'Custo',                value: 'Gratuito',          icon: 'fa-regular fa-circle-check' },
+                  { label: 'Órgão responsável',    value: service.setor.split('/')[0], icon: 'fa-regular fa-building' },
+                  { label: 'Setor',                value: service.setor.split('/').pop() ?? '', icon: 'fa-regular fa-sitemap' },
+                ].map((info, i) => (
+                  <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', background: '#f8f9fb', borderRadius: 8, padding: '10px 14px' }}>
+                    <FAIcon icon={info.icon} style={{ fontSize: 14, color: '#7d7d7d', marginTop: 2, flexShrink: 0 }} />
+                    <div>
+                      <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#7d7d7d', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 2 }}>{info.label}</div>
+                      <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333', fontWeight: 600 }}>{info.value}</div>
+                    </div>
                   </div>
-                  <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', margin: 0, lineHeight: '22px', paddingTop: 3 }}>{step}</p>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            <div style={{ height: 1, background: '#f0f0f0' }} />
+
+            {/* Como solicitar */}
+            <div>
+              <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 17, color: '#353535', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <FAIcon icon="fa-regular fa-list-check" style={{ fontSize: 15, color: '#0058db' }} />
+                Como solicitar?
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {steps.map((step, i) => (
+                  <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                    <div style={{ width: 26, height: 26, borderRadius: '50%', background: '#0058db', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                      <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 11, color: 'white' }}>{i + 1}</span>
+                    </div>
+                    <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', margin: 0, lineHeight: '22px', paddingTop: 2 }}>{step}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Coluna direita */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
-
-          {/* Informações gerais */}
+          {/* Box Documentos necessários */}
           <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24 }}>
-            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <FAIcon icon="fa-regular fa-clock" style={{ fontSize: 15, color: '#0058db' }} />
-              Informações
-            </h2>
-            {[
-              { label: 'Prazo de atendimento', value: 'Até 30 dias úteis', icon: 'fa-regular fa-calendar' },
-              { label: 'Custo',                value: 'Gratuito',          icon: 'fa-regular fa-circle-check' },
-              { label: 'Órgão responsável',    value: service.setor.split('/')[0], icon: 'fa-regular fa-building' },
-              { label: 'Setor',                value: service.setor.split('/').pop() ?? '', icon: 'fa-regular fa-sitemap' },
-            ].map((info, i, arr) => (
-              <div key={i} style={{ display: 'flex', gap: 10, padding: '10px 0', borderBottom: i < arr.length - 1 ? '1px solid #f0f0f0' : 'none', alignItems: 'flex-start' }}>
-                <FAIcon icon={info.icon} style={{ fontSize: 14, color: '#7d7d7d', marginTop: 2, flexShrink: 0 }} />
-                <div>
-                  <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#7d7d7d', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 2 }}>{info.label}</div>
-                  <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333' }}>{info.value}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Documentos necessários */}
-          <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24 }}>
-            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#353535', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 17, color: '#353535', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
               <FAIcon icon="fa-regular fa-paperclip" style={{ fontSize: 15, color: '#0058db' }} />
               Documentos necessários
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {docs.map((doc, i) => (
-                <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', padding: '8px 12px', background: '#f8f9fb', borderRadius: 8 }}>
                   <FAIcon icon="fa-regular fa-file-check" style={{ fontSize: 14, color: '#0058db', flexShrink: 0, marginTop: 2 }} />
                   <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333', lineHeight: '20px' }}>{doc}</span>
                 </div>
@@ -4963,18 +4970,44 @@ function ServicoDetalhe({ service, onNavigateForm }: {
             </div>
           </div>
 
-          {/* CTA secundário */}
-          <button
-            onClick={() => onNavigateForm(service)}
-            style={{ width: '100%', height: 44, border: '1.5px solid #0058db', borderRadius: 8, background: 'white', color: '#0058db', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.12s' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'white'; }}
-          >
-            <FAIcon icon="fa-regular fa-paper-plane" style={{ fontSize: 14 }} />
-            Solicitar serviço
-          </button>
-        </div>
-      </div>
+          {/* Box Links relacionados */}
+          <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24 }}>
+            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 17, color: '#353535', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <FAIcon icon="fa-regular fa-link" style={{ fontSize: 15, color: '#0058db' }} />
+              Links relacionados
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {linksRelacionados.map((link, i) => (
+                <a key={i} href={link.url} style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: '#0058db', fontFamily: 'Open Sans, sans-serif', fontSize: 14, fontWeight: 600 }}>
+                  <FAIcon icon="fa-regular fa-arrow-up-right-from-square" style={{ fontSize: 12, flexShrink: 0 }} />
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Box Fluxo */}
+          <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24 }}>
+            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 17, color: '#353535', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <FAIcon icon="fa-regular fa-diagram-project" style={{ fontSize: 15, color: '#0058db' }} />
+              Fluxo do serviço
+            </h2>
+            <div style={{ background: '#f8f9fb', borderRadius: 8, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 0, overflowX: 'auto' }}>
+              {['Protocolo', 'Análise', 'Aprovação', 'Emissão', 'Entrega'].map((etapa, i, arr) => (
+                <Fragment key={i}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#0058db', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 13, color: 'white' }}>{i + 1}</span>
+                    </div>
+                    <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, fontWeight: 600, color: '#333', whiteSpace: 'nowrap' }}>{etapa}</span>
+                  </div>
+                  {i < arr.length - 1 && <div style={{ flex: 1, height: 2, background: '#b3c7e6', minWidth: 20, marginBottom: 20 }} />}
+                </Fragment>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -5322,12 +5355,12 @@ function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
           <img src={imgBannerFloripa} alt="Florianópolis" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }} />
         </div>
       )}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
-        <h1 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: isMobile ? 18 : 24, color: '#333', textAlign: 'center', margin: 0 }}>{t('encontreServico')}</h1>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
         <SearchWithDropdown />
       </div>
-      <div style={{ background: '#dce6f5', border: '1px solid #6393db', borderRadius: 8, padding: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)' }}>
-        <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#333', lineHeight: '24px', textAlign: 'center' }}>
+      <div style={{ background: '#dce6f5', border: '1px solid #6393db', borderRadius: 8, padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 10, boxShadow: '0px 2px 6px rgba(24,39,75,0.08)' }}>
+        <FAIcon icon="fa-regular fa-circle-info" style={{ fontSize: 14, color: '#0058db', flexShrink: 0 }} />
+        <span style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 13, color: '#333', lineHeight: '20px' }}>
           {t('iptuDesc')}
         </span>
       </div>
