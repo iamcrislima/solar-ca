@@ -26,7 +26,10 @@
       "Bash(node -e ' *)",
       "Bash(Test-Path \"C:\\\\Users\\\\cristianderson.lima\\\\solar-bpm\\\\.git\\\\index.lock\")",
       "Bash(cmd /c \"rmdir /s /q \\\\\"C:\\\\Users\\\\cristianderson.lima\\\\solar-bpm\\\\.git\\\\\"\")",
-      "Bash(cmd /c \"del /f \\\\\"C:\\\\Users\\\\cristianderson.lima\\\\solar-bpm\\\\.gitignore\\\\\"\")"
+      "Bash(cmd /c \"del /f \\\\\"C:\\\\Users\\\\cristianderson.lima\\\\solar-bpm\\\\.gitignore\\\\\"\")",
+      "Bash(git push *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
