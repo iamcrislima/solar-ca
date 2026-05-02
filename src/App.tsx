@@ -3738,6 +3738,234 @@ function ProcessosLiberados({ onVerAnexos }: { onVerAnexos: (item: ProcessoLiber
   );
 }
 
+// ── FormField dinâmico ───────────────────────────────────────────────────────
+interface FormField {
+  id: string;
+  label: string;
+  type: 'text' | 'textarea' | 'select' | 'date' | 'checkbox' | 'file';
+  placeholder?: string;
+  options?: string[];
+  required?: boolean;
+  readonlyValue?: string;
+}
+
+const FORM_FIELDS_COMUNIQUE: FormField[] = [
+  { id: 'assunto',      label: 'Assunto',          type: 'text',     placeholder: 'Informe o assunto da resposta', required: true, readonlyValue: 'Complementação de documentação de residência' },
+  { id: 'resposta',     label: 'Sua resposta',      type: 'textarea', placeholder: 'Digite sua resposta ao comunicado...', required: true, readonlyValue: 'Segue em anexo o comprovante de residência atualizado, emitido em março/2026. Confirmo que o endereço corresponde ao domicílio atual.' },
+  { id: 'urgencia',     label: 'Urgência',          type: 'select',   options: ['Normal', 'Urgente', 'Muito urgente'], readonlyValue: 'Normal' },
+  { id: 'dataResposta', label: 'Data da resposta',  type: 'date',     readonlyValue: '2026-04-10' },
+  { id: 'ciencia',      label: 'Declaro que estou ciente das informações prestadas', type: 'checkbox', required: true },
+  { id: 'anexo',        label: 'Documento anexo (opcional)', type: 'file', readonlyValue: 'comprovante_residencia_mar2026.pdf' },
+];
+
+const FORM_FIELDS_ANALISE: FormField[] = [
+  { id: 'parecer',      label: 'Parecer técnico',   type: 'select',   options: ['Aprovado', 'Aprovado com ressalva', 'Reprovado', 'Pendente de complementação'], required: true, readonlyValue: 'Aprovado com ressalva' },
+  { id: 'fundamentacao',label: 'Fundamentação técnica', type: 'textarea', placeholder: 'Descreva a fundamentação do seu parecer...', required: true, readonlyValue: 'Documentos analisados conforme normativas vigentes. A planta de situação foi aprovada com ressalva: necessária correção da escala gráfica.' },
+  { id: 'prazoCorrecao',label: 'Prazo para correção (se houver)', type: 'date', readonlyValue: '2026-05-15' },
+  { id: 'norma',        label: 'Norma de referência', type: 'text',   placeholder: 'Ex: ABNT NBR 15575, Lei 12.462/2011', readonlyValue: 'ABNT NBR 15575' },
+  { id: 'requer',       label: 'Requer complementação documental', type: 'checkbox', readonlyValue: 'true' },
+  { id: 'laudo',        label: 'Laudo técnico assinado', type: 'file', required: true, readonlyValue: 'laudo_tecnico_analise.pdf' },
+];
+
+function DynamicFormRenderer({ fields, readOnly }: { fields: FormField[]; readOnly: boolean }) {
+  const [values, setValues] = useState<Record<string, string>>(() =>
+    Object.fromEntries(fields.map(f => [f.id, readOnly ? (f.readonlyValue ?? '') : '']))
+  );
+  const [checked, setChecked] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(fields.filter(f => f.type === 'checkbox').map(f => [f.id, readOnly && f.readonlyValue === 'true']))
+  );
+  const [fileNames, setFileNames] = useState<Record<string, string>>(() =>
+    Object.fromEntries(fields.filter(f => f.type === 'file').map(f => [f.id, readOnly ? (f.readonlyValue ?? '') : '']))
+  );
+
+  const labelStyle: React.CSSProperties = { display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 };
+  const inputStyle: React.CSSProperties = { width: '100%', boxSizing: 'border-box', height: 44, border: '1.5px solid #d5d5d5', borderRadius: 8, padding: '0 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', outline: 'none', background: readOnly ? '#f8f9fb' : 'white' };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {fields.map(field => (
+        <div key={field.id}>
+          {field.type !== 'checkbox' && (
+            <label style={labelStyle}>
+              {field.label}
+              {field.required && !readOnly && <span style={{ color: '#c0182d', marginLeft: 3 }}>*</span>}
+            </label>
+          )}
+
+          {field.type === 'text' && (
+            <input
+              disabled={readOnly}
+              value={values[field.id]}
+              onChange={e => setValues(v => ({ ...v, [field.id]: e.target.value }))}
+              placeholder={field.placeholder}
+              style={inputStyle}
+              onFocus={e => { if (!readOnly) (e.currentTarget as HTMLInputElement).style.borderColor = '#0058db'; }}
+              onBlur={e => (e.currentTarget as HTMLInputElement).style.borderColor = '#d5d5d5'}
+            />
+          )}
+
+          {field.type === 'textarea' && (
+            <textarea
+              disabled={readOnly}
+              value={values[field.id]}
+              onChange={e => setValues(v => ({ ...v, [field.id]: e.target.value }))}
+              placeholder={field.placeholder}
+              rows={4}
+              style={{ ...inputStyle, height: undefined, minHeight: 88, padding: '10px 14px', resize: 'vertical', color: readOnly ? '#565656' : '#333' }}
+              onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#0058db'; }}
+              onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#d5d5d5'}
+            />
+          )}
+
+          {field.type === 'select' && (
+            <select
+              disabled={readOnly}
+              value={values[field.id]}
+              onChange={e => setValues(v => ({ ...v, [field.id]: e.target.value }))}
+              style={{ ...inputStyle, cursor: readOnly ? 'default' : 'pointer' }}
+            >
+              {!values[field.id] && <option value="">Selecione...</option>}
+              {field.options?.map(o => <option key={o} value={o}>{o}</option>)}
+            </select>
+          )}
+
+          {field.type === 'date' && (
+            <input
+              type="date"
+              disabled={readOnly}
+              value={values[field.id]}
+              onChange={e => setValues(v => ({ ...v, [field.id]: e.target.value }))}
+              style={inputStyle}
+              onFocus={e => { if (!readOnly) (e.currentTarget as HTMLInputElement).style.borderColor = '#0058db'; }}
+              onBlur={e => (e.currentTarget as HTMLInputElement).style.borderColor = '#d5d5d5'}
+            />
+          )}
+
+          {field.type === 'checkbox' && (
+            <div
+              onClick={() => !readOnly && setChecked(c => ({ ...c, [field.id]: !c[field.id] }))}
+              style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', background: checked[field.id] ? '#f5fbf7' : '#f8f9fb', border: `1.5px solid ${checked[field.id] ? '#a5d6a7' : '#dde3ee'}`, borderRadius: 8, cursor: readOnly ? 'default' : 'pointer', transition: 'all 0.12s' }}
+            >
+              <div style={{ width: 20, height: 20, borderRadius: 5, border: `2px solid ${checked[field.id] ? '#0f6b3e' : '#a3a3a3'}`, background: checked[field.id] ? '#0f6b3e' : 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                {checked[field.id] && <FAIcon icon="fa-solid fa-check" style={{ fontSize: 10, color: 'white' }} />}
+              </div>
+              <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333', lineHeight: '18px' }}>{field.label}</span>
+            </div>
+          )}
+
+          {field.type === 'file' && (
+            readOnly ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#f8f9fb', border: '1px solid #ebebeb', borderRadius: 8 }}>
+                <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 16, color: '#c0182d' }} />
+                <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333', flex: 1 }}>{fileNames[field.id] || '—'}</span>
+                <span style={{ fontSize: 10, fontWeight: 600, color: '#0f6b3e', background: '#e6f9f0', borderRadius: 4, padding: '2px 8px' }}>Enviado</span>
+              </div>
+            ) : (
+              <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, height: 40, padding: '0 16px', border: '1.5px dashed #b3c7e6', borderRadius: 8, background: '#f8f9fb', cursor: 'pointer', fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#0058db', fontWeight: 600 }}>
+                <FAIcon icon="fa-regular fa-paperclip" style={{ fontSize: 13 }} />
+                {fileNames[field.id] || 'Selecionar arquivo'}
+                <input type="file" style={{ display: 'none' }} onChange={e => setFileNames(fn => ({ ...fn, [field.id]: e.target.files?.[0]?.name || '' }))} />
+              </label>
+            )
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Modal: Confirmar Assinaturas ──────────────────────────────────────────────
+function ConfirmarAssinaturaModal({ onClose, onConfirmar }: { onClose: () => void; onConfirmar: () => void }) {
+  const [tipo,   setTipo]   = useState('ICP Brasil');
+  const [padrao, setPadrao] = useState('PAdES');
+
+  return createPortal(
+    <div
+      style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.48)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}
+      onClick={onClose}
+    >
+      <div
+        style={{ background: 'white', borderRadius: 14, padding: 28, maxWidth: 440, width: '100%', boxShadow: '0px 20px 60px rgba(0,0,0,0.22)' }}
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Cabeçalho */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 22 }}>
+          <div style={{ width: 48, height: 48, borderRadius: 12, background: '#edf2ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <FAIcon icon="fa-regular fa-signature" style={{ fontSize: 22, color: '#0058db' }} />
+          </div>
+          <div>
+            <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 18, color: '#1a1a1a' }}>Confirmar assinaturas</div>
+            <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#7d7d7d', marginTop: 2 }}>Defina o tipo e padrão de assinatura digital</div>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {/* Tipo */}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>
+              Tipo de assinatura
+            </label>
+            <select
+              value={tipo}
+              onChange={e => setTipo(e.target.value)}
+              style={{ width: '100%', height: 44, border: '1.5px solid #d5d5d5', borderRadius: 8, padding: '0 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', outline: 'none', background: 'white', cursor: 'pointer' }}
+            >
+              <option>ICP Brasil</option>
+              <option>Sistema</option>
+            </select>
+          </div>
+
+          {/* Padrão */}
+          <div>
+            <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>
+              Padrão de assinatura
+            </label>
+            <select
+              value={padrao}
+              onChange={e => setPadrao(e.target.value)}
+              style={{ width: '100%', height: 44, border: '1.5px solid #d5d5d5', borderRadius: 8, padding: '0 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: '#333', outline: 'none', background: 'white', cursor: 'pointer' }}
+            >
+              <option>PAdES</option>
+              <option>CAdES</option>
+              <option>XAdES</option>
+            </select>
+          </div>
+
+          {/* Info */}
+          <div style={{ background: '#f4f6f9', borderRadius: 8, padding: '10px 14px', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+            <FAIcon icon="fa-regular fa-circle-info" style={{ fontSize: 13, color: '#7d7d7d', flexShrink: 0, marginTop: 2 }} />
+            <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#565656', lineHeight: '18px' }}>
+              A assinatura <strong>{tipo}</strong> no padrão <strong>{padrao}</strong> será aplicada a todos os documentos marcados para assinar.
+            </span>
+          </div>
+        </div>
+
+        {/* Ações */}
+        <div style={{ display: 'flex', gap: 10, marginTop: 24, justifyContent: 'flex-end' }}>
+          <button
+            onClick={onClose}
+            style={{ height: 44, padding: '0 20px', borderRadius: 8, background: 'white', border: '1.5px solid #d5d5d5', color: '#565656', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 14, cursor: 'pointer' }}
+            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#f4f6f9'}
+            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={() => { onConfirmar(); onClose(); }}
+            style={{ height: 44, padding: '0 24px', borderRadius: 8, background: '#0058db', border: 'none', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
+            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'}
+            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = '#0058db'}
+          >
+            <FAIcon icon="fa-regular fa-signature" style={{ fontSize: 14 }} />
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
 // ── Tela: Resolver Pendência ─────────────────────────────────────────────────
 interface DocParaAssinar {
   id: string;
@@ -3761,11 +3989,14 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
   const tipo = pendencia?.tipo ?? 'Assinatura de documentos';
 
   // Estado — Assinatura de documentos
-  const [paraAssinar,  setParaAssinar]  = useState<Set<string>>(new Set());
-  const [paraRecusar,  setParaRecusar]  = useState<Set<string>>(new Set());
-  const [parecer,      setParecer]      = useState('');
+  const [paraAssinar,         setParaAssinar]         = useState<Set<string>>(new Set());
+  const [paraRecusar,         setParaRecusar]         = useState<Set<string>>(new Set());
+  const [parecer,             setParecer]             = useState('');
+  const [showConfirmarModal,  setShowConfirmarModal]  = useState(false);
+  const [tipoAssMap,          setTipoAssMap]          = useState<Record<string, string>>({});
+  const [padraoAssMap,        setPadraoAssMap]        = useState<Record<string, string>>({});
 
-  // Estado — Comunique-se
+  // Estado — Comunique-se (agora via DynamicFormRenderer — sem estado local adicional)
   const [mensagem, setMensagem] = useState('');
   const [arquivoAnexado, setArquivoAnexado] = useState('');
 
@@ -3876,257 +4107,152 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
 
       {/* ── TEMPLATE: Assinatura de documentos ── */}
       {tipo === 'Assinatura de documentos' && (
-      <div style={{
-        background: 'white', border: '1px solid #dde3ee', borderRadius: 10,
-        padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)',
-        display: 'flex', flexDirection: 'column', gap: 16,
-      }}>
-        <div>
-          <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', margin: 0 }}>
-            {t('rpAssinaturaTitle')}
-          </h2>
-          <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', margin: '4px 0 0 0', lineHeight: 1.5 }}>
-            {readOnly ? 'Abaixo o resultado da sua assinatura. Esta pendência já foi concluída.' : t('rpAssinaturaDesc')}
-          </p>
+      <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+          <div>
+            <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', margin: 0 }}>{t('rpAssinaturaTitle')}</h2>
+            <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', margin: '4px 0 0 0', lineHeight: 1.5 }}>
+              {readOnly ? 'Assinatura concluída. Veja o resultado abaixo.' : t('rpAssinaturaDesc')}
+            </p>
+          </div>
+          {!readOnly && (
+            <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+              <button onClick={assinarTodos}
+                style={{ height: 34, padding: '0 14px', border: '1.5px solid #0058db', borderRadius: 6, background: todosAssinar ? '#0058db' : 'white', color: todosAssinar ? 'white' : '#0058db', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <FAIcon icon="fa-regular fa-signature" style={{ fontSize: 11 }} />
+                {t('rpAssinarTodos')}
+              </button>
+              <button onClick={recusarTodos}
+                style={{ height: 34, padding: '0 14px', border: '1.5px solid #c0182d', borderRadius: 6, background: 'white', color: '#c0182d', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <FAIcon icon="fa-regular fa-xmark-circle" style={{ fontSize: 11 }} />
+                {t('rpRecusarTodos')}
+              </button>
+              {(totalAssinar > 0 || totalRecusar > 0) && (
+                <button onClick={limparSelecao}
+                  style={{ height: 34, padding: '0 12px', border: '1.5px solid #d5d5d5', borderRadius: 6, background: 'white', color: '#565656', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, cursor: 'pointer' }}>
+                  <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 11 }} />
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Barra de resumo + ações em massa (somente edição) */}
-        {!readOnly && <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          gap: 12, flexWrap: 'wrap',
-          background: '#f4f6f9',
-          border: '1px solid #ebebeb',
-          borderRadius: 8, padding: '10px 14px',
-        }}>
-          {/* Contadores */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontFamily: 'Open Sans, sans-serif', fontSize: 13 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{
-                minWidth: 24, height: 24, borderRadius: '50%', padding: '0 6px',
-                background: totalAssinar > 0 ? '#0058db' : '#d5d5d5',
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                fontWeight: 700, fontSize: 12, color: 'white',
-              }}>{totalAssinar}</span>
-              <span style={{ color: '#333' }}>{t('rpDocumentosParaAssinar')}</span>
-            </div>
-            <span style={{ color: '#d5d5d5' }}>·</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{
-                minWidth: 24, height: 24, borderRadius: '50%', padding: '0 6px',
-                background: totalRecusar > 0 ? '#c0182d' : '#d5d5d5',
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                fontWeight: 700, fontSize: 12, color: 'white',
-              }}>{totalRecusar}</span>
-              <span style={{ color: '#333' }}>{t('rpDocumentosParaRecusar')}</span>
-            </div>
-          </div>
-
-          {/* Botões de ação em massa */}
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <button
-              onClick={assinarTodos}
-              style={{
-                background: todosAssinar ? '#0058db' : 'white',
-                border: '1.5px solid #0058db',
-                color: todosAssinar ? 'white' : '#0058db',
-                borderRadius: 6, height: 34, padding: '0 14px',
-                fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12,
-                cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 7,
-                transition: 'background 0.12s',
-              }}
-              onMouseEnter={e => { if (!todosAssinar) (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'; }}
-              onMouseLeave={e => { if (!todosAssinar) (e.currentTarget as HTMLButtonElement).style.background = 'white'; }}
-            >
-              <FAIcon icon="fa-regular fa-signature" style={{ fontSize: 12 }} />
-              {t('rpAssinarTodos')}
-            </button>
-            <button
-              onClick={recusarTodos}
-              style={{
-                background: totalRecusar === docs.length && docs.length > 0 ? '#c0182d' : 'white',
-                border: '1.5px solid #c0182d',
-                color: totalRecusar === docs.length && docs.length > 0 ? 'white' : '#c0182d',
-                borderRadius: 6, height: 34, padding: '0 14px',
-                fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12,
-                cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 7,
-                transition: 'background 0.12s',
-              }}
-              onMouseEnter={e => { if (totalRecusar < docs.length) (e.currentTarget as HTMLButtonElement).style.background = '#fff0f2'; }}
-              onMouseLeave={e => { if (totalRecusar < docs.length) (e.currentTarget as HTMLButtonElement).style.background = 'white'; }}
-            >
-              <FAIcon icon="fa-regular fa-xmark-circle" style={{ fontSize: 12 }} />
-              {t('rpRecusarTodos')}
-            </button>
-            {(totalAssinar > 0 || totalRecusar > 0) && (
-              <button
-                onClick={limparSelecao}
-                style={{
-                  background: 'white', border: '1.5px solid #d5d5d5', color: '#565656',
-                  borderRadius: 6, height: 34, padding: '0 14px',
-                  fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12,
-                  cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 7,
-                }}
-                onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#f4f6f9'}
-                onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
-              >
-                <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 12 }} />
-                {t('rpLimparSelecao')}
-              </button>
-            )}
-          </div>
-        </div>}
-
-        {/* Lista de documentos — tri-state: neutro / assinar / recusar */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {docs.map(doc => {
-            const assinando = paraAssinar.has(doc.id);
-            const recusando = paraRecusar.has(doc.id);
-            const borderColor = assinando ? '#0058db' : recusando ? '#c0182d' : '#dde3ee';
-            const bgColor     = assinando ? '#f5f9ff'  : recusando ? '#fff5f5'  : 'white';
-            const shadow      = assinando ? '0px 2px 8px rgba(0,88,219,0.12)' : recusando ? '0px 2px 8px rgba(192,24,45,0.10)' : 'none';
-
-            return (
-              <div
-                key={doc.id}
-                style={{
-                  background: bgColor,
-                  border: `2px solid ${borderColor}`,
-                  borderRadius: 10, padding: '14px 16px',
-                  display: 'flex', alignItems: 'center', gap: 14,
-                  transition: 'background 0.15s, border-color 0.15s, box-shadow 0.15s',
-                  boxShadow: shadow,
-                }}
-              >
-                {/* Indicador de estado (clicável para toggle assinar) */}
-                <div
-                  onClick={() => marcarAssinar(doc.id)}
-                  title={t('rpAssinar')}
-                  style={{
-                    width: 24, height: 24, borderRadius: 6, flexShrink: 0, cursor: 'pointer',
-                    border: `2px solid ${assinando ? '#0058db' : '#a3a3a3'}`,
-                    background: assinando ? '#0058db' : 'white',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'background 0.15s, border-color 0.15s',
-                  }}
-                >
-                  {assinando && <FAIcon icon="fa-solid fa-check" style={{ fontSize: 12, color: 'white' }} />}
-                  {recusando && <FAIcon icon="fa-solid fa-xmark" style={{ fontSize: 12, color: '#a3a3a3' }} />}
-                </div>
-
-                {/* Ícone do arquivo */}
-                <div style={{
-                  width: 44, height: 44, borderRadius: 8,
-                  background: '#fff0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                }}>
-                  <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 18, color: '#c0182d' }} />
-                </div>
-
-                {/* Conteúdo */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#1a1a1a', marginBottom: 2 }}>
-                    {doc.nome}
-                  </div>
-                  <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7a8a9e', marginBottom: 4 }}>
-                    {doc.descricao}
-                  </div>
-                  <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: '#a3a3a3', display: 'flex', gap: 10 }}>
-                    <span>{doc.tipo}</span>
-                    <span>·</span>
-                    <span>{doc.paginas} {doc.paginas === 1 ? 'página' : 'páginas'}</span>
-                    <span>·</span>
-                    <span>{doc.tamanho}</span>
-                  </div>
-                </div>
-
-                {/* Badge de estado + ações */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-                  {assinando && (
-                    <span style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 6,
-                      background: '#0058db', color: 'white',
-                      borderRadius: 100, padding: '4px 10px',
-                      fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11,
-                      whiteSpace: 'nowrap',
-                    }}>
-                      <FAIcon icon="fa-regular fa-signature" style={{ fontSize: 11 }} />
-                      {t('rpAssinar')}
-                    </span>
-                  )}
-                  {recusando && (
-                    <span style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 6,
-                      background: '#c0182d', color: 'white',
-                      borderRadius: 100, padding: '4px 10px',
-                      fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11,
-                      whiteSpace: 'nowrap',
-                    }}>
-                      <FAIcon icon="fa-regular fa-xmark-circle" style={{ fontSize: 11 }} />
-                      {t('rpRecusar')}
-                    </span>
-                  )}
-
-                  {/* Botão Recusar individual */}
-                  <button
-                    onClick={e => { e.stopPropagation(); marcarRecusar(doc.id); }}
-                    title={t('rpRecusar')}
-                    style={{
-                      background: recusando ? '#fff0f2' : 'white',
-                      border: `1px solid ${recusando ? '#c0182d' : '#d5d5d5'}`,
-                      borderRadius: 6,
-                      width: 34, height: 34, cursor: 'pointer',
-                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      color: recusando ? '#c0182d' : '#565656',
-                      transition: 'all 0.12s',
-                    }}
-                    onMouseEnter={e => {
-                      if (!recusando) {
-                        (e.currentTarget as HTMLButtonElement).style.background = '#fff0f2';
-                        (e.currentTarget as HTMLButtonElement).style.borderColor = '#c0182d';
-                        (e.currentTarget as HTMLButtonElement).style.color = '#c0182d';
-                      }
-                    }}
-                    onMouseLeave={e => {
-                      if (!recusando) {
-                        (e.currentTarget as HTMLButtonElement).style.background = 'white';
-                        (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5';
-                        (e.currentTarget as HTMLButtonElement).style.color = '#565656';
-                      }
-                    }}
-                  >
-                    <FAIcon icon="fa-regular fa-xmark-circle" style={{ fontSize: 14 }} />
-                  </button>
-
-                  {/* Botão Visualizar */}
-                  <button
-                    onClick={e => { e.stopPropagation(); /* preview */ }}
-                    title={t('rpVisualizar')}
-                    style={{
-                      background: 'white', border: '1px solid #d5d5d5', borderRadius: 6,
-                      width: 34, height: 34, cursor: 'pointer',
-                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      color: '#565656', transition: 'all 0.12s',
-                    }}
-                    onMouseEnter={e => {
-                      (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff';
-                      (e.currentTarget as HTMLButtonElement).style.borderColor = '#0058db';
-                      (e.currentTarget as HTMLButtonElement).style.color = '#0058db';
-                    }}
-                    onMouseLeave={e => {
-                      (e.currentTarget as HTMLButtonElement).style.background = 'white';
-                      (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5';
-                      (e.currentTarget as HTMLButtonElement).style.color = '#565656';
-                    }}
-                  >
-                    <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 13 }} />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+        {/* Tabela de documentos */}
+        <div style={{ overflowX: 'auto', border: '1px solid #ebebeb', borderRadius: 10 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'Open Sans, sans-serif' }}>
+            <thead>
+              <tr style={{ background: '#f4f6f9' }}>
+                {[
+                  { w: 50,  label: 'Assinar' },
+                  { w: 50,  label: 'Recusar' },
+                  { w: 160, label: 'Tipo assinatura' },
+                  { w: 130, label: 'Padrão' },
+                  { w: undefined, label: 'Nome do documento' },
+                  { w: 150, label: 'Usuário inserção' },
+                  { w: 110, label: 'Data inserção' },
+                  { w: 48,  label: '' },
+                ].map((col, ci) => (
+                  <th key={ci} style={{ padding: '10px 14px', textAlign: ci <= 1 ? 'center' : 'left', fontWeight: 700, fontSize: 11, color: '#7d7d7d', textTransform: 'uppercase', letterSpacing: '0.06em', borderBottom: '1px solid #ebebeb', whiteSpace: 'nowrap', width: col.w }}>
+                    {col.label}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {docs.map((doc, i) => {
+                const assinando = readOnly ? true  : paraAssinar.has(doc.id);
+                const recusando = readOnly ? false : paraRecusar.has(doc.id);
+                const rowBg = assinando ? '#f5f9ff' : recusando ? '#fff5f5' : i % 2 === 1 ? '#fafbfc' : 'white';
+                const tipoV   = tipoAssMap[doc.id]   ?? 'ICP Brasil';
+                const padraoV = padraoAssMap[doc.id] ?? 'PAdES';
+                return (
+                  <tr key={doc.id} style={{ background: rowBg, transition: 'background 0.12s' }}>
+                    {/* ☐ Assinar */}
+                    <td style={{ padding: '12px 14px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                      <div
+                        onClick={() => !readOnly && marcarAssinar(doc.id)}
+                        style={{ width: 20, height: 20, borderRadius: 5, border: `2px solid ${assinando ? '#0058db' : '#c0c0c0'}`, background: assinando ? '#0058db' : 'white', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: readOnly ? 'default' : 'pointer', transition: 'all 0.12s' }}
+                      >
+                        {assinando && <FAIcon icon="fa-solid fa-check" style={{ fontSize: 10, color: 'white' }} />}
+                      </div>
+                    </td>
+                    {/* ☐ Recusar */}
+                    <td style={{ padding: '12px 14px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                      <div
+                        onClick={() => !readOnly && marcarRecusar(doc.id)}
+                        style={{ width: 20, height: 20, borderRadius: 5, border: `2px solid ${recusando ? '#c0182d' : '#c0c0c0'}`, background: recusando ? '#c0182d' : 'white', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: readOnly ? 'default' : 'pointer', transition: 'all 0.12s' }}
+                      >
+                        {recusando && <FAIcon icon="fa-solid fa-xmark" style={{ fontSize: 10, color: 'white' }} />}
+                      </div>
+                    </td>
+                    {/* Tipo assinatura */}
+                    <td style={{ padding: '8px 14px', borderBottom: '1px solid #f0f0f0' }}>
+                      {readOnly ? (
+                        <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333' }}>{tipoV}</span>
+                      ) : (
+                        <select
+                          value={tipoV}
+                          onChange={e => setTipoAssMap(m => ({ ...m, [doc.id]: e.target.value }))}
+                          style={{ height: 32, border: '1px solid #d5d5d5', borderRadius: 6, padding: '0 8px', fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#333', outline: 'none', background: 'white', width: '100%' }}
+                        >
+                          <option>ICP Brasil</option>
+                          <option>Sistema</option>
+                        </select>
+                      )}
+                    </td>
+                    {/* Padrão */}
+                    <td style={{ padding: '8px 14px', borderBottom: '1px solid #f0f0f0' }}>
+                      {readOnly ? (
+                        <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333' }}>{padraoV}</span>
+                      ) : (
+                        <select
+                          value={padraoV}
+                          onChange={e => setPadraoAssMap(m => ({ ...m, [doc.id]: e.target.value }))}
+                          style={{ height: 32, border: '1px solid #d5d5d5', borderRadius: 6, padding: '0 8px', fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#333', outline: 'none', background: 'white', width: '100%' }}
+                        >
+                          <option>PAdES</option>
+                          <option>CAdES</option>
+                          <option>XAdES</option>
+                        </select>
+                      )}
+                    </td>
+                    {/* Nome documento */}
+                    <td style={{ padding: '12px 14px', borderBottom: '1px solid #f0f0f0' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 14, color: '#c0182d', flexShrink: 0 }} />
+                        <div>
+                          <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 13, color: '#0058db', cursor: 'pointer', textDecoration: 'underline' }}>{doc.nome}</div>
+                          <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: '#7d7d7d' }}>{doc.tipo} · {doc.paginas}p · {doc.tamanho}</div>
+                        </div>
+                      </div>
+                    </td>
+                    {/* Usuário inserção */}
+                    <td style={{ padding: '12px 14px', borderBottom: '1px solid #f0f0f0', fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', whiteSpace: 'nowrap' }}>
+                      Sistema Solar BPM
+                    </td>
+                    {/* Data inserção */}
+                    <td style={{ padding: '12px 14px', borderBottom: '1px solid #f0f0f0', fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', whiteSpace: 'nowrap' }}>
+                      {`0${i + 1}/04/2026`}
+                    </td>
+                    {/* Visualizar */}
+                    <td style={{ padding: '8px 14px', borderBottom: '1px solid #f0f0f0', textAlign: 'center' }}>
+                      <button
+                        style={{ width: 32, height: 32, border: '1px solid #d5d5d5', borderRadius: 6, background: 'white', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: '#565656' }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#edf2ff'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#0058db'; (e.currentTarget as HTMLButtonElement).style.color = '#0058db'; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'white'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#d5d5d5'; (e.currentTarget as HTMLButtonElement).style.color = '#565656'; }}
+                      >
+                        <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 13 }} />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
 
         {/* Parecer */}
-        <div style={{ marginTop: 8 }}>
+        <div>
           <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>
             {t('rpParecer')}
           </label>
@@ -4135,8 +4261,8 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
             value={readOnly ? 'Todos os documentos foram revisados. Concordo com os termos do contrato e apropriei as assinaturas conforme orientado pela unidade responsável.' : parecer}
             onChange={e => setParecer(e.target.value)}
             placeholder={t('rpParecerPlaceholder')}
-            rows={4}
-            style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? '#f8f9fb' : 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '10px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: readOnly ? '#565656' : '#333', outline: 'none', resize: 'vertical', minHeight: 88 }}
+            rows={3}
+            style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? '#f8f9fb' : 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '10px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: readOnly ? '#565656' : '#333', outline: 'none', resize: 'vertical', minHeight: 80 }}
             onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#0058db'; }}
             onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#d5d5d5'}
           />
@@ -4144,13 +4270,20 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
       </div>
       )} {/* fim template Assinatura */}
 
+      {showConfirmarModal && (
+        <ConfirmarAssinaturaModal
+          onClose={() => setShowConfirmarModal(false)}
+          onConfirmar={onConcluir}
+        />
+      )}
+
       {/* ── TEMPLATE: Comunique-se ── */}
       {tipo === 'Comunique-se' && (
         <div style={{ background: 'white', border: '1px solid #dde3ee', borderRadius: 10, padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>
             <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', margin: 0 }}>Responder comunicado</h2>
             <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', margin: '4px 0 0 0', lineHeight: 1.5 }}>
-              {readOnly ? 'Resposta enviada. Esta pendência já foi concluída.' : 'A unidade responsável solicita que você responda ao comunicado abaixo.'}
+              {readOnly ? 'Resposta enviada. Esta pendência já foi concluída.' : 'Preencha os campos abaixo para responder ao comunicado da unidade.'}
             </p>
           </div>
           {/* Mensagem da unidade */}
@@ -4160,39 +4293,7 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
               Prezado(a), solicitamos que informe sobre a documentação de residência referente ao processo {pendencia?.processo}. Verifique se os documentos apresentados correspondem ao endereço atual e, se necessário, encaminhe nova documentação atualizada.
             </div>
           </div>
-          {/* Resposta */}
-          <div>
-            <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>Sua resposta</label>
-            <textarea
-              disabled={readOnly}
-              value={readOnly ? 'Segue em anexo o histórico escolar solicitado, emitido pela Secretaria de Educação em 02/04/2026. O documento contém todas as informações referentes ao período de 2015 a 2023. Confirmo que o endereço constante nos registros corresponde ao meu domicílio atual.' : mensagem}
-              onChange={e => setMensagem(e.target.value)}
-              placeholder="Digite sua resposta aqui..."
-              rows={5}
-              style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? '#f8f9fb' : 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '10px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: readOnly ? '#565656' : '#333', outline: 'none', resize: 'vertical', minHeight: 100 }}
-              onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#0058db'; }}
-              onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#d5d5d5'}
-            />
-          </div>
-          {/* Anexo */}
-          <div>
-            <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>Anexar documento (opcional)</label>
-            {readOnly ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#f8f9fb', border: '1px solid #ebebeb', borderRadius: 8 }}>
-                <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 16, color: '#c0182d' }} />
-                <span style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#333' }}>historico_escolar_2026.pdf</span>
-                <span style={{ marginLeft: 'auto', fontSize: 11, color: '#7d7d7d' }}>245 KB</span>
-              </div>
-            ) : (
-              <div>
-                <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, height: 38, padding: '0 16px', border: '1.5px dashed #b3c7e6', borderRadius: 8, background: '#f8f9fb', cursor: 'pointer', fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#0058db', fontWeight: 600 }}>
-                  <FAIcon icon="fa-regular fa-paperclip" style={{ fontSize: 13 }} />
-                  {arquivoAnexado || 'Selecionar arquivo'}
-                  <input type="file" style={{ display: 'none' }} onChange={e => setArquivoAnexado(e.target.files?.[0]?.name || '')} />
-                </label>
-              </div>
-            )}
-          </div>
+          <DynamicFormRenderer fields={FORM_FIELDS_COMUNIQUE} readOnly={readOnly} />
         </div>
       )}
 
@@ -4255,45 +4356,35 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
           <div>
             <h2 style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 16, color: '#1a1a1a', margin: 0 }}>Análise de documentos</h2>
             <p style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 13, color: '#565656', margin: '4px 0 0 0', lineHeight: 1.5 }}>
-              {readOnly ? 'Análise concluída. Veja o resultado abaixo.' : 'Revise os documentos abaixo e emita seu parecer técnico sobre cada um.'}
+              {readOnly ? 'Análise concluída. Veja o resultado abaixo.' : 'Preencha os campos de análise técnica e emita seu parecer.'}
             </p>
           </div>
-          {[
-            { nome: 'Parecer técnico de vistoria', paginas: 8, tipo: 'PDF', status: readOnly ? 'Aprovado' : null },
-            { nome: 'Laudo de conformidade ambiental', paginas: 14, tipo: 'PDF', status: readOnly ? 'Aprovado' : null },
-            { nome: 'Planta de situação do terreno', paginas: 3, tipo: 'PDF', status: readOnly ? 'Em ressalva' : null },
-          ].map((doc, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#f8f9fb', border: '1px solid #ebebeb', borderRadius: 8 }}>
-              <div style={{ width: 42, height: 42, borderRadius: 8, background: '#fff0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 18, color: '#c0182d' }} />
+          {/* Documentos para revisão */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[
+              { nome: 'Parecer técnico de vistoria',      paginas: 8,  status: readOnly ? 'Aprovado'     : null },
+              { nome: 'Laudo de conformidade ambiental',  paginas: 14, status: readOnly ? 'Aprovado'     : null },
+              { nome: 'Planta de situação do terreno',    paginas: 3,  status: readOnly ? 'Em ressalva'  : null },
+            ].map((doc, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: '#f8f9fb', border: '1px solid #ebebeb', borderRadius: 8 }}>
+                <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 16, color: '#c0182d', flexShrink: 0 }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 13, color: '#1a1a1a' }}>{doc.nome}</div>
+                  <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 11, color: '#7d7d7d' }}>PDF · {doc.paginas} páginas</div>
+                </div>
+                {doc.status ? (
+                  <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 100, background: doc.status === 'Aprovado' ? '#e6f9f0' : '#fff4e5', color: doc.status === 'Aprovado' ? '#0f6b3e' : '#b35c00', whiteSpace: 'nowrap' }}>{doc.status}</span>
+                ) : (
+                  <button style={{ height: 30, padding: '0 10px', border: '1.5px solid #0058db', borderRadius: 6, background: 'white', color: '#0058db', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 11 }} />
+                    Visualizar
+                  </button>
+                )}
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, color: '#1a1a1a' }}>{doc.nome}</div>
-                <div style={{ fontFamily: 'Open Sans, sans-serif', fontSize: 12, color: '#7d7d7d' }}>{doc.tipo} · {doc.paginas} páginas</div>
-              </div>
-              {doc.status ? (
-                <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 100, background: doc.status === 'Aprovado' ? '#e6f9f0' : '#fff4e5', color: doc.status === 'Aprovado' ? '#0f6b3e' : '#b35c00' }}>{doc.status}</span>
-              ) : (
-                <button style={{ height: 32, padding: '0 12px', border: '1.5px solid #0058db', borderRadius: 6, background: 'white', color: '#0058db', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 12, cursor: 'pointer' }}>
-                  <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 12, marginRight: 6 }} />
-                  Visualizar
-                </button>
-              )}
-            </div>
-          ))}
-          <div>
-            <label style={{ display: 'block', fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: 11, color: '#8a9ab5', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6 }}>Parecer técnico</label>
-            <textarea
-              disabled={readOnly}
-              value={readOnly ? 'Documentos analisados. O parecer técnico está em conformidade com os requisitos normativos. A planta de situação foi aprovada com ressalva: necessária correção da escala gráfica na próxima revisão.' : observacao}
-              onChange={e => setObservacao(e.target.value)}
-              placeholder="Descreva sua análise técnica..."
-              rows={4}
-              style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? '#f8f9fb' : 'white', border: '1px solid #d5d5d5', borderRadius: 8, padding: '10px 14px', fontFamily: 'Open Sans, sans-serif', fontSize: 14, color: readOnly ? '#565656' : '#333', outline: 'none', resize: 'vertical' }}
-              onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#0058db'; }}
-              onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#d5d5d5'}
-            />
+            ))}
           </div>
+          <div style={{ height: 1, background: '#f0f0f0' }} />
+          <DynamicFormRenderer fields={FORM_FIELDS_ANALISE} readOnly={readOnly} />
         </div>
       )}
 
@@ -4366,13 +4457,13 @@ function ResolverPendencia({ pendencia, onVoltar, onConcluir }: { pendencia: Pen
             {t('rpCancelar')}
           </button>
           <button
-            onClick={onConcluir}
+            onClick={tipo === 'Assinatura de documentos' ? () => setShowConfirmarModal(true) : onConcluir}
             style={{ height: 44, padding: '0 24px', borderRadius: 8, background: '#0058db', border: '1.5px solid #0058db', color: 'white', fontFamily: 'Open Sans, sans-serif', fontWeight: 700, fontSize: 14, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0px 2px 6px rgba(0,88,219,0.24)' }}
             onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#0046b5'}
             onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = '#0058db'}
           >
-            <FAIcon icon="fa-regular fa-circle-check" style={{ fontSize: 15 }} />
-            {t('rpConcluir')}
+            <FAIcon icon={tipo === 'Assinatura de documentos' ? 'fa-regular fa-signature' : 'fa-regular fa-circle-check'} style={{ fontSize: 15 }} />
+            {tipo === 'Assinatura de documentos' ? 'Concluir assinaturas' : t('rpConcluir')}
           </button>
         </div>
       )}
