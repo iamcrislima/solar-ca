@@ -10,39 +10,25 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
   const t = useT();
   const isMobile = useIsMobile();
 
-  const descricoesPorCategoria: Record<string, string> = {
-    'Impostos e taxas':                    'serviço relacionado  emisso, consulta e pagamento de impostos e taxas municipais. Facilita o cumprimento das obrigaes fiscais de forma digital, sem necessidade de comparecimento presencial.',
-    'Alvars, autorizaes e licenças':    'Emisso e renovao de alvars, autorizaes e licenças municipais de forma eletrnica. Agilize a regularizao da sua atividade ou obra com segurana e praticidade.',
-    'Certides, declaraes e documentos': 'Solicite certides, declaraes e documentos oficiais emitidos pela Prefeitura Municipal. O processo  totalmente digital e os documentos possuem validade jurdica.',
-    'Assistncia social':                  'Acesso a serviços de assistncia social e proteo social oferecidos pelo municpio. Atendimento humanizado voltado ao bem-estar e  incluso social dos cidados.',
-    'Obras e urbanismo':                   'serviços relacionados a projetos, aprovaes e fiscalizao de obras no municpio. Regularize sua construo respeitando as normas urbansticas vigentes.',
-    'Meio ambiente':                       'serviços ambientais para preservao e proteo do meio ambiente municipal. Contribua com a sustentabilidade e o equilbrio ecolgico de Florianpolis.',
-    'Sade':                               'Acesso a serviços de sade pblica municipal, incluindo agendamentos, vacinao e vigilncia sanitria. Cuide da sua sade com os servios do municpio.',
-    'Solicitaes':                        'Registre solicitaes de serviços municipais de forma prtica e acompanhe o andamento em tempo real atravs da plataforma digital.',
-    'Comrcio e serviços':                 'Regularize e gerencie sua atividade comercial ou de prestao de serviços no município de Florianópolis de forma digital e segura.',
+  const catDescMap: Record<string, string> = {
+    'Impostos e taxas':                       t('sdDescImpostos'),
+    'Alvarás, autorizações e licenças':       t('sdDescAlvaras'),
+    'Certidões, declarações e documentos':    t('sdDescCertidoes'),
+    'Assistência social':                     t('sdDescAssistencia'),
+    'Obras e urbanismo':                      t('sdDescObras'),
+    'Meio ambiente':                          t('sdDescMeio'),
+    'Saúde':                                  t('sdDescSaude'),
+    'Solicitações':                           t('sdDescSolicitacoes'),
+    'Comércio e serviços':                    t('sdDescComercio'),
   };
+  const desc = catDescMap[service.categoria] ?? t('sdDescDefault');
 
-  const desc = descricoesPorCategoria[service.categoria]
-    ?? 'Solicite este serviço municipal de forma digital, com acompanhamento em tempo real do andamento do seu pedido atravs da plataforma FloripaOn.';
-
-  const steps = [
-    'Preencha o formulrio de solicitação com seus dados pessoais',
-    'Informe os detalhes especficos do serviço solicitado',
-    'Anexe os documentos necessrios conforme a lista indicada',
-    'Envie a solicitação e aguarde anlise pelo rgo responsvel',
-    'Acompanhe o status em "Meus processos" na plataforma',
-  ];
-
-  const docs = [
-    'Documento de identificao com foto (RG, CNH ou passaporte)',
-    'CPF (pode estar no documento de identificao)',
-    'Comprovante de residncia emitido nos ltimos 3 meses',
-    'Documentos especficos conforme o tipo de serviço',
-  ];
+  const steps = [t('sdStep1'), t('sdStep2'), t('sdStep3'), t('sdStep4'), t('sdStep5')];
+  const docs   = [t('sdDoc1'),  t('sdDoc2'),  t('sdDoc3'),  t('sdDoc4')];
 
   const linksRelacionados = [
-    { label: 'Legislao municipal  Lei n 12.345/2022', url: '#' },
-    { label: 'Regulamento de alvars e licenças', url: '#' },
+    { label: t('solLinksTitle'), url: '#' },
+    { label: t('labelOrgaoResp'), url: '#' },
   ];
 
   return (
@@ -71,7 +57,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-pure)'; }}
           >
             <FAIcon icon="fa-regular fa-paper-plane" style={{ fontSize: 15 }} />
-            Solicitar servio
+            {t('solSolicitarServico')}
           </button>
           <button
             onClick={() => window.print()}
@@ -99,7 +85,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
             <div>
               <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <FAIcon icon="fa-regular fa-circle-info" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
-                O que  este serviço?
+                {t('solOQueE')}
               </h2>
               <p style={{ fontSize: 14, color: 'var(--neutral-dark-pure)', margin: 0, lineHeight: '23px' }}>{desc}</p>
             </div>
@@ -110,14 +96,14 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
             <div>
               <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <FAIcon icon="fa-regular fa-clock" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
-                Informaes
+                {t('sdInformacoesTitle')}
               </h2>
               <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 12 }}>
                 {[
-                  { label: 'Prazo de atendimento', value: 'At 30 dias teis', icon: 'fa-regular fa-calendar' },
-                  { label: 'Custo',                value: 'Gratuito',          icon: 'fa-regular fa-circle-check' },
-                  { label: 'rgo responsvel',    value: service.setor.split('/')[0], icon: 'fa-regular fa-building' },
-                  { label: 'Setor',                value: service.setor.split('/').pop() ?? '', icon: 'fa-regular fa-sitemap' },
+                  { label: t('sdPrazoAtendimento'), value: t('sdPrazoValor'),                    icon: 'fa-regular fa-calendar' },
+                  { label: t('sdCusto'),            value: t('sdCustoValor'),                    icon: 'fa-regular fa-circle-check' },
+                  { label: t('labelOrgaoResp'),     value: service.setor.split('/')[0],          icon: 'fa-regular fa-building' },
+                  { label: t('labelSetorResp'),      value: service.setor.split('/').pop() ?? '', icon: 'fa-regular fa-sitemap' },
                 ].map((info) => (
                   <div key={info.label} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', background: 'var(--bg-subtle)', borderRadius: 8, padding: '10px 14px' }}>
                     <FAIcon icon={info.icon} style={{ fontSize: 14, color: 'var(--neutral-dark-medium)', marginTop: 2, flexShrink: 0 }} />
@@ -136,7 +122,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
             <div>
               <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <FAIcon icon="fa-regular fa-list-check" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
-                Como solicitar?
+                {t('sdComoSolicitar')}
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {steps.map((step, i) => (
@@ -155,7 +141,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
           <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 24 }}>
             <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
               <FAIcon icon="fa-regular fa-paperclip" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
-              Documentos necessrios
+              {t('solDocsTitle')}
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {docs.map((doc) => (
@@ -171,7 +157,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
           <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 24 }}>
             <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
               <FAIcon icon="fa-regular fa-link" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
-              Links relacionados
+              {t('solLinksTitle')}
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {linksRelacionados.map((link) => (
@@ -187,10 +173,10 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
           <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 24 }}>
             <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
               <FAIcon icon="fa-regular fa-diagram-project" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
-              Fluxo do serviço
+              {t('sdFluxoTitle')}
             </h2>
             <div style={{ background: 'var(--bg-subtle)', borderRadius: 8, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 0, overflowX: 'auto' }}>
-              {['Protocolo', 'Anlise', 'Aprovao', 'Emisso', 'Entrega'].map((etapa, i, arr) => (
+              {[t('sdEtapa1'), t('sdEtapa2'), t('sdEtapa3'), t('sdEtapa4'), t('sdEtapa5')].map((etapa, i, arr) => (
                 <Fragment key={etapa}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, flexShrink: 0 }}>
                     <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--primary-pure)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

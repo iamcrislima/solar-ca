@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Button } from '@1doc/1ds-react';
-import { useT } from '../i18n';
+import { useT, useLang } from '../i18n';
 import type { Lang } from '../i18n';
 import type { Page } from '../types';
 import { ALL_SERVICES, MOCK_USER, SIDEBAR_COLLAPSED } from '../mocks';
@@ -8,14 +8,15 @@ import FAIcon from './FAIcon';
 
 function HeaderSearch() {
   const t = useT();
+  const lang = useLang();
   const [query,       setQuery]       = useState('');
   const [open,        setOpen]        = useState(false);
   const [highlighted, setHighlighted] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const results = useMemo(() => query.trim().length === 0
-    ? [] : ALL_SERVICES.filter(s => s.toLowerCase().includes(query.toLowerCase())).slice(0, 6),
-  [query]);
+    ? [] : ALL_SERVICES[lang].filter(s => s.toLowerCase().includes(query.toLowerCase())).slice(0, 6),
+  [query, lang]);
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
