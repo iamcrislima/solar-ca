@@ -123,8 +123,8 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
         </span>
       </div>
       <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 24 }}>
-        <ServiceCard title={t('emDestaque')}    items={featuredServices} icon="fa-regular fa-star" />
-        <ServiceCard title={t('maisAcessados')} items={popularServices}  icon="fa-regular fa-fire" />
+        <ServiceCard title={t('emDestaque')}    items={featuredServices[lang]} icon="fa-regular fa-star" />
+        <ServiceCard title={t('maisAcessados')} items={popularServices[lang]}  icon="fa-regular fa-fire" />
       </div>
       <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, padding: isMobile ? '16px 16px 32px' : '24px 24px 48px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)' }}>
         <h2 style={{ fontWeight: 700, fontSize: isMobile ? 18 : 24, color: 'var(--colors-neutral-01)', lineHeight: 1.2, margin: 0 }}>{t('porAssunto')}</h2>
