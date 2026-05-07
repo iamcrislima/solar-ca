@@ -621,6 +621,7 @@ export function useT() {
   const lang = useContext(LangContext);
   return (key: keyof typeof TRANS['pt']) => TRANS[lang][key];
 }
+export function useLang() { return useContext(LangContext); }
 
 //  Mobile detection 
 export const IsMobileContext = createContext(false);

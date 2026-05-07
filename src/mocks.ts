@@ -65,41 +65,37 @@ export const ALL_SERVICES = [
 
 //  Categorias de serviço 
 export const categories = [
-  { icon: 'fa-duotone fa-file-signature',    label: 'Alvarás, autorizações e licenças' },
-  { icon: 'fa-duotone fa-hand-holding-heart',label: 'Assistência social' },
-  { icon: 'fa-duotone fa-circle-xmark',      label: 'Baixas e cancelamentos' },
-  { icon: 'fa-duotone fa-file-lines',        label: 'Certidões, declarações e documentos' },
-  { icon: 'fa-duotone fa-store',             label: 'Comércio e serviços' },
-  { icon: 'fa-duotone fa-money-bill',        label: 'Devoluções, compensações e prescrições' },
-  { icon: 'fa-duotone fa-bullhorn',          label: 'Editais' },
-  { icon: 'fa-duotone fa-landmark',          label: 'Impostos e taxas' },
-  { icon: 'fa-duotone fa-shield-halved',     label: 'Isenções e imunidade' },
-  { icon: 'fa-duotone fa-tree',              label: 'Meio ambiente' },
-  { icon: 'fa-duotone fa-paint-roller',      label: 'Obras e urbanismo' },
-  { icon: 'fa-duotone fa-folder-plus',       label: 'Processos externos' },
-  { icon: 'fa-duotone fa-user-gear',         label: 'Processo funcional' },
-  { icon: 'fa-duotone fa-comments',          label: 'Reclamações e denúncias' },
-  { icon: 'fa-duotone fa-hospital',          label: 'Saúde' },
-  { icon: 'fa-duotone fa-list-ol',           label: 'Solicitações' },
-  { icon: 'fa-duotone fa-arrows-rotate',     label: 'Substituições, alterações e exclusões' },
-  { icon: 'fa-duotone fa-cars',              label: 'Transporte e trânsito' },
+  { icon: 'fa-duotone fa-file-signature',    label: 'Alvarás, autorizações e licenças',      labelEn: 'Permits, authorizations and licenses',       labelEs: 'Permisos, autorizaciones y licencias' },
+  { icon: 'fa-duotone fa-hand-holding-heart',label: 'Assistência social',                    labelEn: 'Social assistance',                          labelEs: 'Asistencia social' },
+  { icon: 'fa-duotone fa-circle-xmark',      label: 'Baixas e cancelamentos',                labelEn: 'Cancellations',                              labelEs: 'Bajas y cancelaciones' },
+  { icon: 'fa-duotone fa-file-lines',        label: 'Certidões, declarações e documentos',  labelEn: 'Certificates, declarations and documents',   labelEs: 'Certificados, declaraciones y documentos' },
+  { icon: 'fa-duotone fa-store',             label: 'Comércio e serviços',                  labelEn: 'Commerce and services',                      labelEs: 'Comercio y servicios' },
+  { icon: 'fa-duotone fa-money-bill',        label: 'Devoluções, compensações e prescrições',labelEn: 'Refunds, compensations and claims',           labelEs: 'Devoluciones, compensaciones y prescripciones' },
+  { icon: 'fa-duotone fa-bullhorn',          label: 'Editais',                              labelEn: 'Public notices',                             labelEs: 'Edictos' },
+  { icon: 'fa-duotone fa-landmark',          label: 'Impostos e taxas',                     labelEn: 'Taxes and fees',                             labelEs: 'Impuestos y tasas' },
+  { icon: 'fa-duotone fa-shield-halved',     label: 'Isenções e imunidade',                 labelEn: 'Exemptions and immunity',                    labelEs: 'Exenciones e inmunidad' },
+  { icon: 'fa-duotone fa-tree',              label: 'Meio ambiente',                        labelEn: 'Environment',                                labelEs: 'Medio ambiente' },
+  { icon: 'fa-duotone fa-paint-roller',      label: 'Obras e urbanismo',                    labelEn: 'Construction and urban planning',             labelEs: 'Obras y urbanismo' },
+  { icon: 'fa-duotone fa-folder-plus',       label: 'Processos externos',                   labelEn: 'External processes',                         labelEs: 'Procesos externos' },
+  { icon: 'fa-duotone fa-user-gear',         label: 'Processo funcional',                   labelEn: 'Functional process',                         labelEs: 'Proceso funcional' },
+  { icon: 'fa-duotone fa-comments',          label: 'Reclamações e denúncias',              labelEn: 'Complaints and reports',                     labelEs: 'Reclamaciones y denuncias' },
+  { icon: 'fa-duotone fa-hospital',          label: 'Saúde',                                labelEn: 'Health',                                     labelEs: 'Salud' },
+  { icon: 'fa-duotone fa-list-ol',           label: 'Solicitações',                         labelEn: 'Requests',                                   labelEs: 'Solicitudes' },
+  { icon: 'fa-duotone fa-arrows-rotate',     label: 'Substituições, alterações e exclusões',labelEn: 'Replacements, changes and deletions',         labelEs: 'Sustituciones, alteraciones y exclusiones' },
+  { icon: 'fa-duotone fa-cars',              label: 'Transporte e trânsito',                labelEn: 'Transport and transit',                      labelEs: 'Transporte y tránsito' },
 ];
 
-export const popularServices = [
-  '2ª Via de IPTU',
-  'Consulta de processo',
-  'Alvará de funcionamento',
-  'Nota fiscal de serviço eletrônica',
-  'Agendamento de atendimento presencial',
-];
+export const popularServices = {
+  pt: ['2ª Via de IPTU', 'Consulta de processo', 'Alvará de funcionamento', 'Nota fiscal de serviço eletrônica', 'Agendamento de atendimento presencial'],
+  en: ['2nd copy of IPTU', 'Process inquiry', 'Business permit', 'Electronic service invoice', 'In-person appointment scheduling'],
+  es: ['2ª Copia del IPTU', 'Consulta de proceso', 'Permiso de funcionamiento', 'Factura electrónica de servicio', 'Agenda de atención presencial'],
+};
 
-export const featuredServices = [
-  'Aprovação de projetos',
-  'Carteira do idoso',
-  'Fala, cidadão',
-  'Licença ambiental',
-  'Matrícula escolar municipal',
-];
+export const featuredServices = {
+  pt: ['Aprovação de projetos', 'Carteira do idoso', 'Fala, cidadão', 'Licença ambiental', 'Matrícula escolar municipal'],
+  en: ['Project approval', 'Senior citizen card', 'Speak up, citizen', 'Environmental permit', 'Municipal school enrollment'],
+  es: ['Aprobación de proyectos', 'Tarjeta del adulto mayor', 'Hable, ciudadano', 'Licencia ambiental', 'Matrícula escolar municipal'],
+};
 
 //  Consultas recentes 
 export const consultasRecentes: ConsultaRecente[] = [

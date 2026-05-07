@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useT } from '../i18n';
+import { useT, useLang } from '../i18n';
 import { Servico } from '../types';
 import FAIcon from '../components/FAIcon';
-import { MOCK_SERVICOS_AV } from '../mocks';
+import { MOCK_SERVICOS_AV, categories } from '../mocks';
 //  Tela: Categoria de serviços 
 export default function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNavigateForm }: {
   catLabel: string;
@@ -11,6 +11,8 @@ export default function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNa
   onNavigateForm:    (service: Servico) => void;
 }) {
   const t = useT();
+  const lang = useLang();
+  const catObj = categories.find(c => c.label === catLabel);
   const [search, setSearch] = useState('');
 
   const catServices = MOCK_SERVICOS_AV.filter(s => s.categoria === catLabel);
@@ -27,7 +29,7 @@ export default function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNa
           <i className={catIcon} style={{ fontSize: 30, color: 'var(--primary-pure)' }} />
         </div>
         <div>
-          <h1 style={{ fontWeight: 700, fontSize: 24, color: 'var(--neutral-ink-strong)', margin: 0 }}>{catLabel}</h1>
+          <h1 style={{ fontWeight: 700, fontSize: 24, color: 'var(--neutral-ink-strong)', margin: 0 }}>{lang === 'en' ? (catObj?.labelEn ?? catLabel) : lang === 'es' ? (catObj?.labelEs ?? catLabel) : catLabel}</h1>
           <p style={{ fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-medium)', margin: '4px 0 0 0' }}>
             {filtered.length} {filtered.length !== 1 ? t('solServicosDisp') : t('solServicoDisp')} {filtered.length !== 1 ? t('solDispPlural') : t('solDispSingular')}
           </p>

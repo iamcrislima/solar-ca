@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@1doc/1ds-react';
-import { useT } from '../i18n';
+import { useT, useLang } from '../i18n';
 import type { Servico } from '../types';
 import { MOCK_SERVICOS_AV, ALL_SERVICES, categories } from '../mocks';
 import FAIcon from '../components/FAIcon';
@@ -10,6 +10,7 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
   onNavigateDetalhe: (service: Servico) => void;
 }) {
   const t = useT();
+  const lang = useLang();
   const [tab,    setTab]    = useState<'servicos' | 'avancada'>('servicos');
   const [query,  setQuery]  = useState('');
 
@@ -145,13 +146,13 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
                 </p>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: 12 }}>
                   {categories.map((cat) => (
-                    <div key={cat.label} onClick={() => onNavigateCat({ label: cat.label, icon: cat.icon })}
+                    <div key={lang === 'en' ? cat.labelEn : lang === 'es' ? cat.labelEs : cat.label} onClick={() => onNavigateCat({ label: cat.label, icon: cat.icon })}
                       style={{ background: 'white', border: '1.5px solid var(--neutral-light-down)', borderRadius: 8, padding: '20px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, cursor: 'pointer', transition: 'all 0.15s', boxShadow: '0px 2px 6px rgba(24,39,75,0.08)' }}
                       onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--primary-pure)'; (e.currentTarget as HTMLDivElement).style.background = 'var(--primary-bg-subtle)'; }}
                       onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--neutral-light-down)'; (e.currentTarget as HTMLDivElement).style.background = 'white'; }}
                     >
                       <FAIcon icon={cat.icon} style={{ fontSize: 40, color: 'var(--primary-medium)' }} />
-                      <span style={{ fontWeight: 600, fontSize: 13, color: 'var(--colors-neutral-01)', textAlign: 'center', lineHeight: 1.3 }}>{cat.label}</span>
+                      <span style={{ fontWeight: 600, fontSize: 13, color: 'var(--colors-neutral-01)', textAlign: 'center', lineHeight: 1.3 }}>{lang === 'en' ? cat.labelEn : lang === 'es' ? cat.labelEs : cat.label}</span>
                     </div>
                   ))}
                 </div>
