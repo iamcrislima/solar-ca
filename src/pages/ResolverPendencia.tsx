@@ -4,7 +4,8 @@ import { useT } from '../i18n';
 import type { Pendencia, DocParaAssinar } from '../types';
 import FAIcon from '../components/FAIcon';
 import DynamicFormRenderer from '../components/DynamicFormRenderer';
-import { FORM_FIELDS_COMUNIQUE, FORM_FIELDS_ANALISE } from '../mocks';
+import { FORM_FIELDS_COMUNIQUE, FORM_FIELDS_ANALISE, PENDENCIA_ICON } from '../mocks';
+import { PrazoBadge } from './MinhasPendencias';
 
 //  Modal: Confirmar Assinaturas 
 function ConfirmarAssinaturaModal({ onClose, onConfirmar }: { onClose: () => void; onConfirmar: () => void }) {
