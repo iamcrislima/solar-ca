@@ -49,7 +49,7 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
   const avSlice    = avResultados?.slice((avPage - 1) * avPerPage, avPage * avPerPage) ?? [];
 
   const results = query.trim()
-    ? ALL_SERVICES.filter(s => s.toLowerCase().includes(query.toLowerCase()))
+    ? ALL_SERVICES[lang].filter(s => s.toLowerCase().includes(query.toLowerCase()))
     : [];
 
   const tabBtn = (active: boolean): React.CSSProperties => ({
@@ -74,8 +74,8 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
 
       {/* Barra de tabs separada */}
       <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, padding: '8px 24px', display: 'flex', gap: 0 }}>
-        <button style={tabBtn(tab === 'servicos')}  onClick={() => setTab('servicos')}>Serviços</button>
-        <button style={tabBtn(tab === 'avancada')}  onClick={() => setTab('avancada')}>Consulta avançada</button>
+        <button style={tabBtn(tab === 'servicos')}  onClick={() => setTab('servicos')}>{t('tabServicos')}</button>
+        <button style={tabBtn(tab === 'avancada')}  onClick={() => setTab('avancada')}>{t('tabConsultaAvancada')}</button>
       </div>
 
       {/* Card de conteúdo */}
@@ -87,12 +87,12 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
             {/* Busca */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
               <p style={{ fontWeight: 600, fontSize: 15, color: 'var(--colors-neutral-01)', margin: 0 }}>
-                O que você procura?
+                {t('oqueProcura')}
               </p>
               <div style={{ width: '100%', maxWidth: 760, position: 'relative' }}>
                 <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid var(--primary-pure)', borderRadius: 8, overflow: 'hidden', background: 'white', height: 48 }}>
                   <input
-                    value={query} placeholder="Digite o serviço desejado..."
+                    value={query} placeholder={t('digitarServico')}
                     onChange={e => { setQuery(e.target.value); }}
                     style={{ flex: 1, border: 'none', outline: 'none', padding: '0 16px', fontSize: 14, color: 'var(--neutral-dark-pure)', background: 'transparent' }}
                   />
@@ -122,7 +122,7 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
             {query.trim() && results.length > 0 && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0, border: '1px solid var(--card-border)', borderRadius: 8, overflow: 'hidden' }}>
                 <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--bg-subtle)', fontWeight: 700, fontSize: 14, color: 'var(--colors-neutral-01)' }}>
-                  {results.length} resultado{results.length !== 1 ? 's' : ''} encontrado{results.length !== 1 ? 's' : ''}
+                  {results.length} {results.length !== 1 ? t('resultadosEncontrados') : t('resultadoEncontrado')}
                 </div>
                 {results.map((s, i) => (
                   <div key={s}
@@ -142,7 +142,7 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
             {!query.trim() && (
               <>
                 <p style={{ fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-down)', margin: 0, textAlign: 'center' }}>
-                  Navegue pelas categorias e encontre o serviço desejado:
+                  {t('navegueCategorias')}
                 </p>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: 12 }}>
                   {categories.map((cat) => (
@@ -170,8 +170,8 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
 
               {/* Serviço */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                <label style={{ fontWeight: 600, fontSize: 11, color: 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>Serviço</label>
-                <input value={avServico} onChange={e => setAvServico(e.target.value)} placeholder="Nome do serviço..."
+                <label style={{ fontWeight: 600, fontSize: 11, color: 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>{t('labelServico')}</label>
+                <input value={avServico} onChange={e => setAvServico(e.target.value)} placeholder={t('nomeServicoPh')}
                   style={{ height: 44, border: '1px solid var(--neutral-light-down)', borderRadius: 6, padding: '0 12px', fontSize: 14, color: 'var(--neutral-dark-pure)', outline: 'none', width: '100%' }} />
               </div>
 
@@ -180,10 +180,10 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
 
                 {/* Categoria com busca */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 5, position: 'relative' }} ref={avCatRef}>
-                  <label style={{ fontWeight: 600, fontSize: 11, color: 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>Categoria</label>
+                  <label style={{ fontWeight: 600, fontSize: 11, color: 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>{t('labelCategoria')}</label>
                   <div onClick={() => setAvCatOpen(o => !o)}
                     style={{ height: 44, border: '1px solid var(--neutral-light-down)', borderRadius: 6, padding: '0 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', background: 'white' }}>
-                    <span style={{ fontSize: 14, color: avCategoria ? 'var(--neutral-dark-pure)' : 'var(--neutral-dark-up)' }}>{avCategoria || 'Todas as categorias'}</span>
+                    <span style={{ fontSize: 14, color: avCategoria ? 'var(--neutral-dark-pure)' : 'var(--neutral-dark-up)' }}>{avCategoria || t('todasCategorias')}</span>
                     <FAIcon icon="fa-regular fa-chevron-down" style={{ fontSize: 11, color: 'var(--neutral-label)' }} />
                   </div>
                   {avCatOpen && (
@@ -191,7 +191,7 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
                       <div style={{ padding: '8px 10px', borderBottom: '1px solid var(--neutral-light-medium)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, border: '1px solid var(--neutral-light-down)', borderRadius: 6, padding: '0 10px', height: 34 }}>
                           <FAIcon icon="fa-regular fa-magnifying-glass" style={{ fontSize: 12, color: 'var(--neutral-dark-up)', flexShrink: 0 }} />
-                          <input autoFocus value={avCatQuery} onChange={e => setAvCatQuery(e.target.value)} placeholder="Buscar categoria..."
+                          <input autoFocus value={avCatQuery} onChange={e => setAvCatQuery(e.target.value)} placeholder={t('buscarCategoria')}
                             style={{ flex: 1, border: 'none', outline: 'none', fontSize: 13, color: 'var(--neutral-dark-pure)', background: 'transparent' }} />
                         </div>
                       </div>
@@ -200,7 +200,7 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
                           style={{ padding: '9px 12px', cursor: 'pointer', fontSize: 13, color: !avCategoria ? 'var(--primary-pure)' : 'var(--neutral-dark-pure)', fontWeight: !avCategoria ? 600 : 400, borderBottom: '1px solid var(--neutral-light-medium)' }}
                           onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'var(--primary-bg-subtle)'; }}
                           onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'transparent'; }}>
-                          Todas as categorias
+                          {t('todasCategorias')}
                         </div>
                         {catOptions.map(c => (
                           <div key={c} onClick={() => { setAvCategoria(c); setAvCatOpen(false); setAvCatQuery(''); }}
@@ -218,11 +218,11 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
 
                 {/* rgão Responsável */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 5 }}>
-                  <label style={{ fontWeight: 600, fontSize: 11, color: 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>rgão responsável</label>
+                  <label style={{ fontWeight: 600, fontSize: 11, color: 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>{t('labelOrgaoResp')}</label>
                   <div style={{ position: 'relative' }}>
                     <select style={{ width: '100%', height: 44, border: '1px solid var(--neutral-light-down)', borderRadius: 6, padding: '0 32px 0 12px', fontSize: 14, color: 'var(--neutral-dark-pure)', background: 'white', outline: 'none', appearance: 'none', cursor: 'pointer' }}>
-                      <option value="">Todos</option>
-                      <option value="PMF">PMF - Prefeitura Municipal de Florianópolis</option>
+                      <option value="">{t('todos')}</option>
+                      <option value="PMF">{t('pmfNome')}</option>
                     </select>
                     <FAIcon icon="fa-regular fa-chevron-down" style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 11, color: 'var(--neutral-label)', pointerEvents: 'none' }} />
                   </div>
@@ -230,14 +230,14 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
 
                 {/* A quem se destina */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 5 }}>
-                  <label style={{ fontWeight: 600, fontSize: 11, color: 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>A quem se destina</label>
+                  <label style={{ fontWeight: 600, fontSize: 11, color: 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>{t('labelAQuemDestina')}</label>
                   <div style={{ position: 'relative', display: 'flex', alignItems: 'center', height: 44, border: '1px solid var(--neutral-light-down)', borderRadius: 6, background: 'white', overflow: 'hidden' }}>
                     <select
                       value={avDestino}
                       onChange={e => setAvDestino(e.target.value)}
                       style={{ width: '100%', height: '100%', border: 'none', outline: 'none', background: 'transparent', fontSize: 14, color: avDestino ? 'var(--neutral-dark-pure)' : 'var(--neutral-dark-up)', padding: '0 36px 0 12px', appearance: 'none', WebkitAppearance: 'none', cursor: 'pointer' }}
                     >
-                      <option value="">Todos os públicos</option>
+                      <option value="">{t('todosPublicos')}</option>
                       <option value="Cidadão">{t('destinoCidadao')}</option>
                       <option value="Empresa">{t('destinoEmpresa')}</option>
                       <option value="Visitante">{t('destinoVisitante')}</option>
@@ -261,8 +261,8 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
                   <FAIcon icon="fa-regular fa-magnifying-glass-plus" style={{ fontSize: 24, color: 'var(--primary-pure)' }} />
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--neutral-ink)', marginBottom: 4 }}>Pesquise um serviço</div>
-                  <div style={{ fontWeight: 400, fontSize: 13, color: 'var(--neutral-label)' }}>Use os filtros acima para encontrar o serviço desejado</div>
+                  <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--neutral-ink)', marginBottom: 4 }}>{t('avPesquiseTitle')}</div>
+                  <div style={{ fontWeight: 400, fontSize: 13, color: 'var(--neutral-label)' }}>{t('avPesquiseDesc')}</div>
                 </div>
               </div>
             )}
@@ -274,15 +274,15 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
                 {/* Cabeçalho resultado + exportar */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--colors-neutral-01)' }}>
-                    {totalAv} resultado{totalAv !== 1 ? 's' : ''} encontrado{totalAv !== 1 ? 's' : ''}
+                    {totalAv} {totalAv !== 1 ? t('resultadosEncontrados') : t('resultadoEncontrado')}
                   </span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ fontSize: 13, color: 'var(--neutral-dark-medium)' }}>Exportar:</span>
+                    <span style={{ fontSize: 13, color: 'var(--neutral-dark-medium)' }}>{t('exportarLabel')}</span>
                     <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: 'var(--primary-pure)', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>
-                      <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 13 }} /> Documento em PDF
+                      <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 13 }} /> {t('exportarDocPdf')}
                     </button>
                     <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: 'var(--success-btn)', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>
-                      <FAIcon icon="fa-regular fa-file-spreadsheet" style={{ fontSize: 13 }} /> Planilha em XLS
+                      <FAIcon icon="fa-regular fa-file-spreadsheet" style={{ fontSize: 13 }} /> {t('exportarPlanXls')}
                     </button>
                   </div>
                 </div>
@@ -294,8 +294,8 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
                       <FAIcon icon="fa-regular fa-file-slash" style={{ fontSize: 24, color: 'var(--primary-pure)' }} />
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--neutral-ink)', marginBottom: 4 }}>Nenhum serviço encontrado</div>
-                      <div style={{ fontWeight: 400, fontSize: 13, color: 'var(--neutral-label)' }}>Tente ajustar os filtros e pesquisar novamente</div>
+                      <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--neutral-ink)', marginBottom: 4 }}>{t('avNenhumTitle')}</div>
+                      <div style={{ fontWeight: 400, fontSize: 13, color: 'var(--neutral-label)' }}>{t('avNenhumDesc')}</div>
                     </div>
                   </div>
                 )}
@@ -314,7 +314,7 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
                       </colgroup>
                       <thead>
                         <tr style={{ background: 'var(--bg-subtle)' }}>
-                          {['Serviço', 'Categoria', 'rgão responsável', 'Setor responsável', 'A quem se destina', ''].map((h, i) => (
+                          {[t('labelServico'), t('labelCategoria'), t('labelOrgaoResp'), t('labelSetorResp'), t('labelAQuemDestina'), ''].map((h, i) => (
                             <th key={h || `col-${i}`} style={{ fontWeight: 600, fontSize: 13, color: 'var(--neutral-dark-down)', padding: '12px 14px', textAlign: 'left', borderBottom: '1px solid var(--card-border)' }}>
                               {h}{i === 0 && <FAIcon icon="fa-regular fa-arrow-up" style={{ fontSize: 10, marginLeft: 4, color: 'var(--neutral-dark-up)' }} />}
                             </th>
@@ -328,7 +328,7 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
                             onMouseLeave={e => { (e.currentTarget as HTMLTableRowElement).style.background = i % 2 === 0 ? 'white' : 'var(--bg-subtle)'; }}>
                             <td style={{ padding: '11px 14px', fontSize: 13, color: 'var(--primary-pure)', fontWeight: 500 }}>{row.servico}</td>
                             <td style={{ padding: '11px 14px', fontSize: 13, color: 'var(--primary-pure)' }}>{row.categoria}</td>
-                            <td style={{ padding: '11px 14px', fontSize: 13, color: 'var(--primary-pure)' }}>PMF - Prefeitura Municipal de Florianópolis</td>
+                            <td style={{ padding: '11px 14px', fontSize: 13, color: 'var(--primary-pure)' }}>{t('pmfNome')}</td>
                             <td style={{ padding: '11px 14px', fontSize: 13, color: 'var(--primary-pure)' }}>{row.setor}</td>
                             <td style={{ padding: '11px 14px', fontSize: 13, color: 'var(--primary-pure)' }}>{row.destino.join(', ')}</td>
                             <td style={{ padding: '11px 14px', textAlign: 'center' }}>
@@ -344,7 +344,7 @@ export default function SolicitacaoServicos({ onNavigateCat, onNavigateDetalhe }
                     {/* Rodapé: por página + paginação */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '12px 16px', borderTop: '1px solid var(--bg-subtle)', gap: 20, background: 'white' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <span style={{ fontSize: 13, color: 'var(--neutral-dark-medium)' }}>Quantidade por página</span>
+                        <span style={{ fontSize: 13, color: 'var(--neutral-dark-medium)' }}>{t('qtdPorPagina')}</span>
                         <select value={avPerPage} onChange={e => { setAvPerPage(Number(e.target.value)); setAvPage(1); }}
                           style={{ height: 30, border: '1px solid var(--neutral-light-down)', borderRadius: 4, padding: '0 8px', fontSize: 13, color: 'var(--neutral-dark-pure)', cursor: 'pointer', outline: 'none' }}>
                           {[10, 25, 50, 100].map(n => <option key={n} value={n}>{n}</option>)}

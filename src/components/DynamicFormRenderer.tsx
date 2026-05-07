@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import type { FormField } from '../types';
 import FAIcon from './FAIcon';
+import { useT } from '../i18n';
 
 /**
  * Renderiza dinamicamente um formulario baseado em um array de FormField.
  * Usado em ResolverPendencia para os tipos Comunique-se e Analise de documentos.
  */
 export default function DynamicFormRenderer({ fields, readOnly }: { fields: FormField[]; readOnly: boolean }) {
+  const t = useT();
   const [values, setValues] = useState<Record<string, string>>(() =>
     Object.fromEntries(fields.map(f => [f.id, readOnly ? (f.readonlyValue ?? '') : '']))
   );
@@ -72,7 +74,7 @@ export default function DynamicFormRenderer({ fields, readOnly }: { fields: Form
               onChange={e => setValues(v => ({ ...v, [field.id]: e.target.value }))}
               style={{ ...inputStyle, cursor: readOnly ? 'default' : 'pointer' }}
             >
-              {!values[field.id] && <option value="">Selecione...</option>}
+              {!values[field.id] && <option value="">{t('selecione')}</option>}
               {field.options?.map(o => <option key={o} value={o}>{o}</option>)}
             </select>
           )}
@@ -106,12 +108,12 @@ export default function DynamicFormRenderer({ fields, readOnly }: { fields: Form
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: 'var(--bg-subtle)', border: '1px solid var(--neutral-light-medium)', borderRadius: 8 }}>
                 <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 16, color: 'var(--error-color)' }} />
                 <span style={{ fontSize: 13, color: 'var(--neutral-dark-pure)', flex: 1 }}>{fileNames[field.id] || ''}</span>
-                <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--success-color)', background: 'var(--success-bg)', borderRadius: 4, padding: '2px 8px' }}>Enviado</span>
+                <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--success-color)', background: 'var(--success-bg)', borderRadius: 4, padding: '2px 8px' }}>{t('enviado')}</span>
               </div>
             ) : (
               <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, height: 40, padding: '0 16px', border: '1.5px dashed var(--card-border-hover)', borderRadius: 8, background: 'var(--bg-subtle)', cursor: 'pointer', fontSize: 13, color: 'var(--primary-pure)', fontWeight: 600 }}>
                 <FAIcon icon="fa-regular fa-paperclip" style={{ fontSize: 13 }} />
-                {fileNames[field.id] || 'Selecionar arquivo'}
+                {fileNames[field.id] || t('selecionarArquivo')}
                 <input type="file" style={{ display: 'none' }} onChange={e => setFileNames(fn => ({ ...fn, [field.id]: e.target.files?.[0]?.name || '' }))} />
               </label>
             )

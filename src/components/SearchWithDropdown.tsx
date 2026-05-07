@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Input } from '@1doc/1ds-react';
-import { useT } from '../i18n';
+import { useT, useLang } from '../i18n';
 import { ALL_SERVICES } from '../mocks';
 import FAIcon from './FAIcon';
 
 export default function SearchWithDropdown() {
   const t = useT();
+  const lang = useLang();
   const [query, setQuery]             = useState('');
   const [open, setOpen]               = useState(false);
   const [highlighted, setHighlighted] = useState(-1);
@@ -13,8 +14,8 @@ export default function SearchWithDropdown() {
 
   const results = useMemo(() => query.trim().length === 0
     ? []
-    : ALL_SERVICES.filter(s => s.toLowerCase().includes(query.toLowerCase())).slice(0, 8),
-  [query]);
+    : ALL_SERVICES[lang].filter(s => s.toLowerCase().includes(query.toLowerCase())).slice(0, 8),
+  [query, lang]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {

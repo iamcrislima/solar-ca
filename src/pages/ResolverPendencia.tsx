@@ -9,6 +9,7 @@ import { PrazoBadge } from './MinhasPendencias';
 
 //  Modal: Confirmar Assinaturas 
 function ConfirmarAssinaturaModal({ onClose, onConfirmar }: { onClose: () => void; onConfirmar: () => void }) {
+  const t = useT();
   const [tipo,   setTipo]   = useState('ICP Brasil');
   const [padrao, setPadrao] = useState('PAdES');
 
@@ -27,8 +28,8 @@ function ConfirmarAssinaturaModal({ onClose, onConfirmar }: { onClose: () => voi
             <FAIcon icon="fa-regular fa-signature" style={{ fontSize: 22, color: 'var(--primary-pure)' }} />
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 18, color: 'var(--neutral-ink-strong)' }}>Confirmar assinaturas</div>
-            <div style={{ fontSize: 13, color: 'var(--neutral-dark-medium)', marginTop: 2 }}>Defina o tipo e padrão de assinatura digital</div>
+            <div style={{ fontWeight: 700, fontSize: 18, color: 'var(--neutral-ink-strong)' }}>{t('rpConfirmarTitle')}</div>
+            <div style={{ fontSize: 13, color: 'var(--neutral-dark-medium)', marginTop: 2 }}>{t('rpConfirmarDescModal')}</div>
           </div>
         </div>
 
@@ -36,7 +37,7 @@ function ConfirmarAssinaturaModal({ onClose, onConfirmar }: { onClose: () => voi
           {/* Tipo */}
           <div>
             <label style={LABEL_STYLE}>
-              Tipo de assinatura
+              {t('rpTipoAssinatura')}
             </label>
             <select
               value={tipo}
@@ -44,14 +45,14 @@ function ConfirmarAssinaturaModal({ onClose, onConfirmar }: { onClose: () => voi
               style={{ width: '100%', height: 44, border: '1.5px solid var(--neutral-light-down)', borderRadius: 8, padding: '0 14px', fontSize: 14, color: 'var(--neutral-dark-pure)', outline: 'none', background: 'white', cursor: 'pointer' }}
             >
               <option>ICP Brasil</option>
-              <option>Sistema</option>
+              <option>{t('rpSistemaTipo')}</option>
             </select>
           </div>
 
           {/* Padrão */}
           <div>
             <label style={LABEL_STYLE}>
-              Padrão de assinatura
+              {t('rpPadraoAssinatura')}
             </label>
             <select
               value={padrao}
@@ -68,7 +69,7 @@ function ConfirmarAssinaturaModal({ onClose, onConfirmar }: { onClose: () => voi
           <div style={{ background: 'var(--background-color-light)', borderRadius: 8, padding: '10px 14px', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
             <FAIcon icon="fa-regular fa-circle-info" style={{ fontSize: 13, color: 'var(--neutral-dark-medium)', flexShrink: 0, marginTop: 2 }} />
             <span style={{ fontSize: 12, color: 'var(--neutral-dark-down)', lineHeight: '18px' }}>
-              A assinatura <strong>{tipo}</strong> no padrão <strong>{padrao}</strong> será aplicada a todos os documentos marcados para assinar.
+              {t('rpAssinaturaInfoA')} <strong>{tipo}</strong> {t('rpAssinaturaInfoB')} <strong>{padrao}</strong> {t('rpAssinaturaInfoC')}
             </span>
           </div>
         </div>
@@ -81,7 +82,7 @@ function ConfirmarAssinaturaModal({ onClose, onConfirmar }: { onClose: () => voi
             onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--background-color-light)'}
             onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
           >
-            Cancelar
+            {t('rpCancelar')}
           </button>
           <button
             onClick={() => { onConfirmar(); onClose(); }}
@@ -90,7 +91,7 @@ function ConfirmarAssinaturaModal({ onClose, onConfirmar }: { onClose: () => voi
             onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-pure)'}
           >
             <FAIcon icon="fa-regular fa-signature" style={{ fontSize: 14 }} />
-            Confirmar
+            {t('rpConfirmar')}
           </button>
         </div>
       </div>
