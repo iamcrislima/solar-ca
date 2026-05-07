@@ -1,5 +1,5 @@
 import React from 'react';
-import { useT, useIsMobile } from '../i18n';
+import { useT, useIsMobile, useLang } from '../i18n';
 import type { Page } from '../types';
 import FAIcon from '../components/FAIcon';
 import SearchWithDropdown from '../components/SearchWithDropdown';
@@ -19,6 +19,7 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
   onNavigate: (p: Page) => void;
 }) {
   const t = useT();
+  const lang = useLang();
   const isMobile = useIsMobile();
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: isLoggedIn ? 24 : (isMobile ? 24 : 48), padding: isMobile ? '16px 16px 48px 16px' : '16px 24px 48px 24px' }}>
@@ -128,7 +129,7 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
       <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, padding: isMobile ? '16px 16px 32px' : '24px 24px 48px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)' }}>
         <h2 style={{ fontWeight: 700, fontSize: isMobile ? 18 : 24, color: 'var(--colors-neutral-01)', lineHeight: 1.2, margin: 0 }}>{t('porAssunto')}</h2>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(180px, 1fr))', gap: isMobile ? 10 : 15 }}>
-          {categories.map((cat) => <CategoryCard key={cat.label} icon={cat.icon} label={cat.label} onClick={() => onNavigateCat({ label: cat.label, icon: cat.icon })} />)}
+          {categories.map((cat) => <CategoryCard key={lang === 'en' ? cat.labelEn : lang === 'es' ? cat.labelEs : cat.label} icon={cat.icon} label={lang === 'en' ? cat.labelEn : lang === 'es' ? cat.labelEs : cat.label} onClick={() => onNavigateCat({ label: cat.label, icon: cat.icon })} />)}
         </div>
       </div>
     </div>
