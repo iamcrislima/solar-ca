@@ -125,8 +125,8 @@ export function MobileDrawer({ open, onClose, activePage, onNavigate, isLoggedIn
           <button title={t('modoEscuro')} onClick={onToggleDark} style={{ flex: 1, height: 40, border: `1.5px solid ${darkMode ? 'var(--primary-pure)' : 'var(--primary-light)'}`, borderRadius: 8, background: darkMode ? 'var(--primary-bg-hover)' : 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: darkMode ? 'var(--primary-pure)' : 'var(--neutral-dark-down)', gap: 5 }}>
             <FAIcon icon={darkMode ? 'fa-regular fa-moon' : 'fa-regular fa-sun-bright'} style={{ fontSize: 15, color: 'inherit' }} />
           </button>
-          <button title={t('idioma')} onClick={() => onSetLang(lang === 'pt' ? 'en' : 'pt')} style={{ flex: 1, height: 40, border: '1.5px solid var(--primary-light)', borderRadius: 8, background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16 }}>
-            {lang === 'pt' ? '🇧🇷' : '🇺🇸'}
+          <button title={t('idioma')} onClick={() => onSetLang(lang === 'pt' ? 'en' : lang === 'en' ? 'es' : 'pt')} style={{ flex: 1, height: 40, border: '1.5px solid var(--primary-light)', borderRadius: 8, background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16 }}>
+            {lang === 'pt' ? '🇧🇷' : lang === 'en' ? '🇺🇸' : '🇪🇸'}
           </button>
         </div>
 
