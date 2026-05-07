@@ -38,14 +38,14 @@ export default function ServicoForm({ service }: { service: Servico }) {
           <FAIcon icon="fa-regular fa-circle-check" style={{ fontSize: 38, color: 'var(--success-color)' }} />
         </div>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontWeight: 700, fontSize: 24, color: 'var(--neutral-ink)', marginBottom: 8 }}>solicitação enviada!</div>
+          <div style={{ fontWeight: 700, fontSize: 24, color: 'var(--neutral-ink)', marginBottom: 8 }}>{t('sfEnviada')}</div>
           <div style={{ fontSize: 15, color: 'var(--neutral-dark-down)', lineHeight: '22px', maxWidth: 480 }}>
-            Sua solicitação de <strong>{service.servico}</strong> foi recebida com sucesso. Você pode acompanhar o andamento em <strong>Meus processos</strong>.
+            {t('sfEnviadaDesc1')} <strong>{service.servico}</strong> {t('sfEnviadaDesc2')} <strong>{t('meusProcessos')}</strong>.
           </div>
         </div>
         <div style={{ background: 'var(--bg-subtle)', border: '1px solid var(--card-border)', borderRadius: 8, padding: '14px 24px', display: 'flex', gap: 8, alignItems: 'center' }}>
           <FAIcon icon="fa-regular fa-clock" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
-          <span style={{ fontSize: 13, color: 'var(--neutral-dark-down)' }}>Protocolo: <strong>PMF2026/{protocolo}</strong></span>
+          <span style={{ fontSize: 13, color: 'var(--neutral-dark-down)' }}>{t('sfProtocolo')} <strong>PMF2026/{protocolo}</strong></span>
         </div>
       </div>
     );
@@ -57,21 +57,21 @@ export default function ServicoForm({ service }: { service: Servico }) {
       {/* Ttulo */}
       <div>
         <h1 style={{ fontWeight: 700, fontSize: 24, color: 'var(--neutral-ink-strong)', margin: '0 0 4px 0' }}>
-          Solicitar: {service.servico}
+          {t('sfSolicitarPrefixo')} {service.servico}
         </h1>
         <p style={{ fontSize: 14, color: 'var(--neutral-dark-down)', margin: 0 }}>
-          Preencha os campos abaixo para realizar sua solicitação de forma digital
+          {t('sfSubtitulo')}
         </p>
       </div>
 
       {/* Indicador de progresso */}
       <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 8, padding: '16px 24px', display: 'flex', alignItems: 'center', gap: 0 }}>
-        {(['Dados pessoais', 'Detalhes', 'Documentos'] as const).map((label, i) => {
+        {[t('sfStepDados'), t('sfStepDetalhes'), t('sfStepDocumentos')].map((label, i) => {
           const s = i + 1;
           const done   = step > s;
           const active = step === s;
           return (
-            <Fragment key={label}>
+            <Fragment key={i}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 32, height: 32, borderRadius: '50%', background: done ? 'var(--success-color)' : active ? 'var(--primary-pure)' : 'var(--neutral-light-medium)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.2s' }}>
                   {done
@@ -94,32 +94,32 @@ export default function ServicoForm({ service }: { service: Servico }) {
         {step === 1 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             <h2 style={{ fontWeight: 700, fontSize: 18, color: 'var(--colors-neutral-01)', margin: 0, paddingBottom: 12, borderBottom: '1px solid var(--neutral-light-medium)' }}>
-              Dados do solicitante
+              {t('sfDadosSolicitante')}
             </h2>
             <div style={{ display: 'flex', gap: 16 }}>
               <div style={{ flex: 2 }}>
-                <label style={lbl}>Nome completo *</label>
+                <label style={lbl}>{t('mdNomeCompleto')}</label>
                 <input value={nome} onChange={e => setNome(e.target.value)} style={inp} />
               </div>
               <div style={{ flex: 1 }}>
-                <label style={lbl}>CPF *</label>
+                <label style={lbl}>{t('mdCpf')}</label>
                 <input value={cpf} readOnly style={{ ...inp, background: 'var(--background-color-light)', color: 'var(--neutral-label)', cursor: 'default' }} />
               </div>
             </div>
             <div style={{ display: 'flex', gap: 16 }}>
               <div style={{ flex: 1 }}>
-                <label style={lbl}>E-mail *</label>
+                <label style={lbl}>{t('mdEmail')}</label>
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)} style={inp} />
               </div>
               <div style={{ flex: 1 }}>
-                <label style={lbl}>Telefone *</label>
+                <label style={lbl}>{t('mdTelefone')}</label>
                 <input value={telefone} onChange={e => setTelefone(e.target.value)} style={inp} />
               </div>
             </div>
             <div style={{ background: 'var(--info-bg)', border: '1px solid var(--info-border)', borderRadius: 6, padding: '10px 14px', display: 'flex', gap: 8, alignItems: 'center' }}>
               <FAIcon icon="fa-regular fa-circle-info" style={{ fontSize: 14, color: 'var(--primary-pure)', flexShrink: 0 }} />
               <span style={{ fontSize: 12, color: 'var(--info-dark)', lineHeight: '18px' }}>
-                Seus dados foram preenchidos automaticamente a partir do seu perfil. Verifique e corrija se necessrio.
+                {t('sfAutoFill')}
               </span>
             </div>
           </div>
@@ -129,15 +129,15 @@ export default function ServicoForm({ service }: { service: Servico }) {
         {step === 2 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             <h2 style={{ fontWeight: 700, fontSize: 18, color: 'var(--colors-neutral-01)', margin: 0, paddingBottom: 12, borderBottom: '1px solid var(--neutral-light-medium)' }}>
-              Detalhes da solicitação
+              {t('sfDetalhesTitle')}
             </h2>
             <div style={{ display: 'flex', gap: 16 }}>
               <div style={{ flex: 2 }}>
-                <label style={lbl}>serviço solicitado *</label>
+                <label style={lbl}>{t('sfServicoSolicitado')} *</label>
                 <input value={service.servico} readOnly style={{ ...inp, background: 'var(--background-color-light)', color: 'var(--neutral-dark-down)', cursor: 'default' }} />
               </div>
               <div style={{ flex: 1 }}>
-                <label style={lbl}>A quem se destina *</label>
+                <label style={lbl}>{t('sfAQuemDestina')} *</label>
                 <select
                   value={destino}
                   onChange={e => setDestino(e.target.value)}
@@ -150,7 +150,7 @@ export default function ServicoForm({ service }: { service: Servico }) {
               </div>
             </div>
             <div>
-              <label style={lbl}>Nvel de urgncia</label>
+              <label style={lbl}>{t('sfNivelUrgencia')}</label>
               <div style={{ display: 'flex', gap: 0, border: '1px solid var(--neutral-light-down)', borderRadius: 6, overflow: 'hidden' }}>
                 {['Normal', 'Urgente', 'Muito urgente'].map((u, i) => {
                   const active = urgencia === u;
@@ -164,11 +164,11 @@ export default function ServicoForm({ service }: { service: Servico }) {
               </div>
             </div>
             <div>
-              <label style={lbl}>Descrio / observaes</label>
+              <label style={lbl}>{t('sfDescricao')}</label>
               <textarea
                 value={descricao}
                 onChange={e => setDescricao(e.target.value)}
-                placeholder="Descreva com detalhes sua solicitação, incluindo informaes relevantes para anlise..."
+                placeholder={t('sfDescricaoPh')}
                 style={{ ...inp, height: 130, padding: '10px 12px', resize: 'vertical', lineHeight: '21px' } as React.CSSProperties}
               />
             </div>
@@ -179,15 +179,15 @@ export default function ServicoForm({ service }: { service: Servico }) {
         {step === 3 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             <h2 style={{ fontWeight: 700, fontSize: 18, color: 'var(--colors-neutral-01)', margin: 0, paddingBottom: 12, borderBottom: '1px solid var(--neutral-light-medium)' }}>
-              Anexar documentos
+              {t('sfAnexarTitle')}
             </h2>
             <p style={{ fontSize: 14, color: 'var(--neutral-dark-down)', margin: 0 }}>
-              Anexe os documentos necessrios para a anlise da sua solicitação. Formatos aceitos: PDF, JPG, PNG (mx. 10MB cada).
+              {t('sfAnexarDesc')}
             </p>
             {[
-              { label: 'Documento de identificao', required: true },
-              { label: 'Comprovante de residncia',  required: true },
-              { label: 'Outros documentos',          required: false },
+              { label: t('sfDocIdentificacao'), required: true },
+              { label: t('sfCompResidencia'), required: true },
+              { label: t('sfOutrosDocs'), required: false },
             ].map((doc) => (
               <div key={doc.label}
                 style={{ border: '2px dashed var(--neutral-light-down)', borderRadius: 8, padding: '20px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, cursor: 'pointer', transition: 'border-color 0.12s, background 0.12s', background: 'var(--bg-subtle)' }}
@@ -202,14 +202,14 @@ export default function ServicoForm({ service }: { service: Servico }) {
                     <div style={{ fontWeight: 600, fontSize: 14, color: 'var(--neutral-dark-pure)' }}>
                       {doc.label} {doc.required && <span style={{ color: 'var(--error-required)' }}>*</span>}
                     </div>
-                    <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', marginTop: 2 }}>Clique para selecionar o arquivo</div>
+                    <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', marginTop: 2 }}>{t('sfCliqueArquivo')}</div>
                   </div>
                 </div>
                 <button
                   style={{ height: 34, padding: '0 16px', border: '1.5px solid var(--primary-pure)', borderRadius: 6, background: 'white', color: 'var(--primary-pure)', fontWeight: 600, fontSize: 12, cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 }}
                   onClick={e => e.stopPropagation()}
                 >
-                  Selecionar
+                  {t('sfSelecionar')}
                 </button>
               </div>
             ))}
@@ -221,17 +221,17 @@ export default function ServicoForm({ service }: { service: Servico }) {
           {step > 1 && (
             <Button size="md" variant="secondary" onClick={() => setStep(s => s - 1)}>
               <FAIcon icon="fa-regular fa-arrow-left" style={{ fontSize: 14, marginRight: 6 }} />
-              Voltar
+              {t('sfVoltar')}
             </Button>
           )}
           {step < totalSteps ? (
             <Button size="md" variant="primary" onClick={() => setStep(s => s + 1)}>
-              Prximo
+              {t('sfProximo')}
               <FAIcon icon="fa-regular fa-arrow-right" style={{ fontSize: 14, marginLeft: 6 }} />
             </Button>
           ) : (
             <Button size="md" variant="primary" onClick={() => setSubmitted(true)}>
-              Enviar solicitação
+              {t('sfEnviarSolicitacao')}
               <FAIcon icon="fa-regular fa-paper-plane" style={{ fontSize: 14, marginLeft: 6 }} />
             </Button>
           )}
