@@ -132,7 +132,7 @@ export default function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavi
                     onMouseEnter={e => { if (lang !== l) (e.currentTarget as HTMLDivElement).style.background = 'var(--primary-bg-subtle)'; }}
                     onMouseLeave={e => { if (lang !== l) (e.currentTarget as HTMLDivElement).style.background = 'white'; }}
                   >
-                    <span style={{ fontSize: 18 }}>{l === 'pt' ? 'x!x!' : 'x!x!'}</span>
+                    <span style={{ fontSize: 18 }}>{l === 'pt' ? '🇧🇷' : '🇺🇸'}</span>
                     {l === 'pt' ? 'Português' : 'English'}
                     {lang === l && <FAIcon icon="fa-solid fa-check" style={{ fontSize: 12, marginLeft: 'auto' }} />}
                   </div>

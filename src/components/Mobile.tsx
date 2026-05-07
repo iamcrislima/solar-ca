@@ -126,7 +126,7 @@ export function MobileDrawer({ open, onClose, activePage, onNavigate, isLoggedIn
             <FAIcon icon={darkMode ? 'fa-regular fa-moon' : 'fa-regular fa-sun-bright'} style={{ fontSize: 15, color: 'inherit' }} />
           </button>
           <button title={t('idioma')} onClick={() => onSetLang(lang === 'pt' ? 'en' : 'pt')} style={{ flex: 1, height: 40, border: '1.5px solid var(--primary-light)', borderRadius: 8, background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16 }}>
-            {lang === 'pt' ? 'x!x!' : 'x!x!'}
+            {lang === 'pt' ? '🇧🇷' : '🇺🇸'}
           </button>
         </div>
 

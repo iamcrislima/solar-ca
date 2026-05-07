@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Input } from '@1doc/1ds-react';
+import { useT } from '../i18n';
 import { ALL_SERVICES } from '../mocks';
 import FAIcon from './FAIcon';
 
 export default function SearchWithDropdown() {
+  const t = useT();
   const [query, setQuery]             = useState('');
   const [open, setOpen]               = useState(false);
   const [highlighted, setHighlighted] = useState(-1);
@@ -51,7 +53,7 @@ export default function SearchWithDropdown() {
   return (
     <div ref={wrapperRef} style={{ width: '100%', position: 'relative' }}>
       <Input
-        placeholder="Busque pelo serviço desejado"
+        placeholder={t('swdPlaceholder')}
         fullWidth size="md" type="search"
         value={query}
         onChange={handleChange}
@@ -70,7 +72,7 @@ export default function SearchWithDropdown() {
           ))}
           <div style={{ padding: '8px 16px', background: 'var(--bg-subtle)', borderTop: '1px solid var(--neutral-light-medium)', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--neutral-dark-medium)' }}>
             <FAIcon icon="fa-regular fa-circle-info" style={{ fontSize: 12 }} />
-            <span>Pressione Enter para buscar todos os resultados</span>
+            <span>{t('swdPressEnter')}</span>
           </div>
         </div>
       )}
