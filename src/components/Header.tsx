@@ -126,14 +126,14 @@ export default function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavi
             </button>
             {langOpen && (
               <div style={{ position: 'absolute', top: 'calc(100% + 6px)', right: 0, background: 'white', border: '1px solid var(--primary-light)', borderRadius: 8, boxShadow: '0px 8px 24px rgba(24,39,75,0.16)', zIndex: 300, minWidth: 140, overflow: 'hidden' }}>
-                {(['pt', 'en'] as Lang[]).map(l => (
+                {(['pt', 'en', 'es'] as Lang[]).map(l => (
                   <div key={l} onClick={() => { onSetLang(l); setLangOpen(false); }}
-                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', cursor: 'pointer', background: lang === l ? 'var(--primary-bg-hover)' : 'white', fontSize: 14, fontWeight: lang === l ? 700 : 400, color: lang === l ? 'var(--primary-pure)' : 'var(--neutral-dark-pure)', borderBottom: l === 'pt' ? '1px solid var(--neutral-light-medium)' : 'none', transition: 'background 0.1s' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', cursor: 'pointer', background: lang === l ? 'var(--primary-bg-hover)' : 'white', fontSize: 14, fontWeight: lang === l ? 700 : 400, color: lang === l ? 'var(--primary-pure)' : 'var(--neutral-dark-pure)', borderBottom: l !== 'es' ? '1px solid var(--neutral-light-medium)' : 'none', transition: 'background 0.1s' }}
                     onMouseEnter={e => { if (lang !== l) (e.currentTarget as HTMLDivElement).style.background = 'var(--primary-bg-subtle)'; }}
                     onMouseLeave={e => { if (lang !== l) (e.currentTarget as HTMLDivElement).style.background = 'white'; }}
                   >
-                    <span style={{ fontSize: 18 }}>{l === 'pt' ? '🇧🇷' : '🇺🇸'}</span>
-                    {l === 'pt' ? 'Português' : 'English'}
+                    <span style={{ fontSize: 18 }}>{l === 'pt' ? '🇧🇷' : l === 'en' ? '🇺🇸' : '🇪🇸'}</span>
+                    {l === 'pt' ? 'Português' : l === 'en' ? 'English' : 'Español'}
                     {lang === l && <FAIcon icon="fa-solid fa-check" style={{ fontSize: 12, marginLeft: 'auto' }} />}
                   </div>
                 ))}
