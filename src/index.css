@@ -1,8 +1,19 @@
-/* 1DS Design Tokens */
+/* Tokens locais — complementam os tokens @1doc/1ds-tokens importados em main.tsx */
 :root {
+  /* Azul principal */
   --primary-pure: #0058db;
+  --primary-pure-hover: #0046b5;
   --primary-light: #dce6f5;
   --primary-medium: #6393db;
+  --primary-bg-hover: #edf2ff;
+  --primary-bg-subtle: #f0f5ff;
+
+  /* Card e borda */
+  --card-border: #dde3ee;
+  --card-border-hover: #b3c7e6;
+  --icon-bg: #f0f4fb;
+
+  /* Neutros */
   --secondary-light: #dfe7f2;
   --neutral-light-pure: #ffffff;
   --neutral-light-medium: #ebebeb;
@@ -11,8 +22,82 @@
   --neutral-dark-down: #565656;
   --neutral-dark-medium: #7d7d7d;
   --neutral-dark-up: #a3a3a3;
-  --background-color-light: #f4f6f9;
+  --neutral-ink: #222222;
+  --neutral-ink-strong: #1a1a1a;
+  --neutral-label: #8a9ab5;
   --colors-neutral-01: #353535;
+
+  /* Fundo */
+  --background-color-light: #f4f6f9;
+
+  /* Feedback — sucesso */
+  --success-color: #0f6b3e;
+  --success-bg: #e6f9f0;
+  --success-bg-light: #f5fbf7;
+  --success-bg-medium: #e8f5e9;
+  --success-bg-strong: #cef2e1;
+  --success-border-light: #a5d6a7;
+  --success-dark: #1b5e20;
+  --success-darker: #0f4c30;
+
+  /* Feedback — aviso/warning complementar */
+  --warning-bg-light: #ffe9d9;
+  --warning-bg-medium: #fff3e0;
+  --warning-border: #ffb74d;
+  --warning-intense: #e65100;
+  --warning-dark: #99470c;
+  --warning-darker: #bf360c;
+
+  /* Linhas de tabela destacadas */
+  --row-selected-blue: #f5f9ff;
+  --row-selected-red: #fff5f5;
+
+  /* Botão ação sucesso */
+  --success-btn: #1a7a3c;
+
+  /* Informativo azul claro */
+  --info-bg: #f0f6ff;
+  --info-border: #b3cff0;
+  --info-dark: #365d8a;
+
+  /* Warning complementar */
+  --warning-border-light: #ffcf82;
+  --warning-deep: #7a4100;
+
+  /* Feedback — erro */
+  --error-color: #c0182d;
+  --error-bg: #fff0f2;
+  --error-required: #b2132e;
+  --error-border-light: #f5b8c0;
+  --error-dark: #7d1020;
+
+  /* gov.br */
+  --govbr-color: #1351b4;
+  --govbr-hover: #0c3d8a;
+  --govbr-dark: #194280;
+
+  /* Fundo sutil / aviso */
+  --bg-subtle: #f8f9fb;
+  --warning-bg: #fff4e5;
+  --warning-color: #b35c00;
+
+  /* Certificado digital */
+  --cert-color: #22a06b;
+  --cert-bg-hover: #f0faf5;
+
+  /* Badge "Simplificado" / aviso laranja */
+  --badge-simplified-bg: #fff8e6;
+  --badge-simplified-color: #b45a00;
+
+  /* Pendência tipo Comunique-se */
+  --pendencia-comunique-color: #6639ba;
+  --pendencia-comunique-bg: #f2ecfc;
+
+  /* Hero gradient */
+  --hero-gradient: linear-gradient(135deg, #0046b5 0%, #0058db 60%, #1a75e8 100%);
+
+  /* Sombra */
+  --shadow-card: 0px 2px 8px rgba(24, 39, 75, 0.07);
   --shadow-level-3: 0px 6px 8px 0px rgba(24, 39, 75, 0.12), 0px 8px 16px 0px rgba(24, 39, 75, 0.08);
 }
 
