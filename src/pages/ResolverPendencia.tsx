@@ -7,6 +7,91 @@ import DynamicFormRenderer from '../components/DynamicFormRenderer';
 import { FORM_FIELDS_COMUNIQUE, FORM_FIELDS_ANALISE, PENDENCIA_ICON } from '../mocks';
 import { PrazoBadge } from './MinhasPendencias';
 
+// Drawer lateral para visualizar documento
+function DocViewerDrawer({ doc, onClose }: { doc: DocParaAssinar | null; onClose: () => void }) {
+  if (!doc) return null;
+  return createPortal(
+    <>
+      {/* Overlay */}
+      <div
+        onClick={onClose}
+        style={{ position: 'fixed', inset: 0, zIndex: 900, background: 'rgba(0,0,0,0.32)' }}
+      />
+      {/* Painel */}
+      <div style={{
+        position: 'fixed', top: 0, right: 0, bottom: 0, zIndex: 901,
+        width: 'min(680px, 90vw)', background: 'white',
+        boxShadow: '-4px 0 32px rgba(0,0,0,0.18)',
+        display: 'flex', flexDirection: 'column',
+        animation: 'slideInRight 0.22s ease',
+      }}>
+        {/* Header do drawer */}
+        <div style={{ padding: '18px 20px', borderBottom: '1px solid var(--neutral-light-medium)', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--error-bg, #FEF2F2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 18, color: 'var(--error-color)' }} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--neutral-ink-strong)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.nome}</div>
+            <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', marginTop: 2 }}>{doc.tipo} · {doc.paginas}p · {doc.tamanho}</div>
+          </div>
+          <button
+            onClick={onClose}
+            style={{ width: 34, height: 34, border: '1px solid var(--neutral-light-down)', borderRadius: 8, background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--neutral-dark-down)', flexShrink: 0 }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-subtle)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'white'; }}
+          >
+            <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 15 }} />
+          </button>
+        </div>
+        {/* Corpo — simulação de PDF */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: 24, background: 'var(--bg-subtle)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Simulação de páginas do PDF */}
+          {Array.from({ length: Math.min(doc.paginas, 3) }).map((_, pi) => (
+            <div key={pi} style={{ background: 'white', borderRadius: 8, border: '1px solid var(--neutral-light-medium)', padding: '32px 40px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', minHeight: 340 }}>
+              <div style={{ fontSize: 10, color: 'var(--neutral-dark-medium)', textAlign: 'right', marginBottom: 24, fontStyle: 'italic' }}>Página {pi + 1} de {doc.paginas}</div>
+              {pi === 0 && (
+                <>
+                  <div style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', textAlign: 'center', marginBottom: 24 }}>{doc.nome.toUpperCase()}</div>
+                  <div style={{ height: 1, background: 'var(--neutral-light-medium)', marginBottom: 20 }} />
+                  <div style={{ fontSize: 13, color: 'var(--neutral-dark-pure)', lineHeight: '22px' }}>
+                    <strong>Partes:</strong> Município de Florianópolis (Contratante) e a empresa/pessoa identificada no preâmbulo deste instrumento (Contratado).
+                  </div>
+                  <div style={{ fontSize: 13, color: 'var(--neutral-dark-pure)', lineHeight: '22px', marginTop: 14 }}>
+                    <strong>Objeto:</strong> {doc.descricao}. Este termo tem força de escritura pública para todos os fins de direito.
+                  </div>
+                  <div style={{ marginTop: 20, fontSize: 13, color: 'var(--neutral-dark-down)', lineHeight: '20px' }}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Proin et nunc vel orci pellentesque vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.
+                  </div>
+                </>
+              )}
+              {pi > 0 && (
+                <div style={{ fontSize: 13, color: 'var(--neutral-dark-down)', lineHeight: '22px' }}>
+                  Continuação da página {pi + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Proin et nunc vel orci pellentesque vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; viverra aliquam leo.
+                </div>
+              )}
+            </div>
+          ))}
+          {doc.paginas > 3 && (
+            <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--neutral-dark-medium)', padding: 12 }}>... e mais {doc.paginas - 3} página(s)</div>
+          )}
+        </div>
+        {/* Rodapé */}
+        <div style={{ padding: '14px 20px', borderTop: '1px solid var(--neutral-light-medium)', display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>
+          <button
+            onClick={onClose}
+            style={{ height: 38, padding: '0 20px', borderRadius: 8, background: 'var(--primary-pure)', border: 'none', color: 'white', fontWeight: 600, fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
+          >
+            <FAIcon icon="fa-regular fa-check" style={{ fontSize: 13 }} />
+            Fechar visualização
+          </button>
+        </div>
+      </div>
+      <style>{`@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }`}</style>
+    </>,
+    document.body
+  );
+}
+
 //  Modal: Confirmar Assinaturas 
 function ConfirmarAssinaturaModal({ onClose, onConfirmar }: { onClose: () => void; onConfirmar: () => void }) {
   const t = useT();
@@ -126,6 +211,7 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
   const [showConfirmarModal,  setShowConfirmarModal]  = useState(false);
   const [tipoAssMap,          setTipoAssMap]          = useState<Record<string, string>>({});
   const [padraoAssMap,        setPadraoAssMap]        = useState<Record<string, string>>({});
+  const [docViewer,           setDocViewer]           = useState<DocParaAssinar | null>(null);
 
 
   // Estado — Verificar informaes / Complementar dados / Anlise
@@ -207,14 +293,25 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 6, fontSize: 12, color: 'var(--neutral-dark-down)' }}>
             <span><strong style={{ color: 'var(--neutral-dark-medium)' }}>{t('rpTipo')}:</strong> {pendencia?.tipo || '-'}</span>
-            <span></span>
             <span><strong style={{ color: 'var(--neutral-dark-medium)' }}>{t('rpProcesso')}:</strong> {pendencia?.processo || '-'}</span>
             {pendencia?.prazo && (
-              <>
-                <span></span>
-                <PrazoBadge prazo={pendencia.prazo} diasRestantes={pendencia.diasRestantes} finalizada={readOnly} />
-              </>
+              <PrazoBadge prazo={pendencia.prazo} diasRestantes={pendencia.diasRestantes} finalizada={readOnly} />
             )}
+          </div>
+          {/* Solicitante e Descrição */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, marginTop: 10 }}>
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--neutral-label)', marginBottom: 2 }}>Solicitante</div>
+              <div style={{ fontSize: 13, color: 'var(--neutral-ink)', fontWeight: 500 }}>Sistema Solar BPM</div>
+            </div>
+            <div style={{ flex: 1, minWidth: 180 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--neutral-label)', marginBottom: 2 }}>Descrição</div>
+              <div style={{ fontSize: 13, color: 'var(--neutral-dark-pure)', lineHeight: '18px' }}>
+                {pendencia?.titulo
+                  ? `Pendência de ${pendencia.tipo?.toLowerCase() || 'assinatura'} referente ao processo ${pendencia.processo}.`
+                  : 'Revisar e assinar os documentos listados abaixo para concluir o processo.'}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -259,12 +356,11 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
                 {[
                   { w: 50,  label: 'Assinar' },
                   { w: 50,  label: 'Recusar' },
-                  { w: 160, label: 'Tipo assinatura' },
-                  { w: 130, label: 'Padrão' },
+                  { w: 160, label: 'Tipo aceito' },
+                  { w: 130, label: 'Padrão aceito' },
                   { w: undefined, label: 'Nome do documento' },
-                  { w: 150, label: 'Usurio insero' },
-                  { w: 110, label: 'Data insero' },
-                  { w: 48,  label: '' },
+                  { w: 160, label: 'Usuário de inserção' },
+                  { w: 120, label: 'Data de inserção' },
                 ].map((col, ci) => (
                   <th key={col.label || ci} style={{ padding: '10px 14px', textAlign: ci <= 1 ? 'center' : 'left', fontWeight: 700, fontSize: 11, color: 'var(--neutral-dark-medium)', textTransform: 'uppercase', letterSpacing: '0.06em', borderBottom: '1px solid var(--neutral-light-medium)', whiteSpace: 'nowrap', width: col.w }}>
                     {col.label}
@@ -299,64 +395,43 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
                         {recusando && <FAIcon icon="fa-solid fa-xmark" style={{ fontSize: 10, color: 'white' }} />}
                       </div>
                     </td>
-                    {/* Tipo assinatura */}
-                    <td style={{ padding: '8px 14px', borderBottom: '1px solid var(--neutral-light-medium)' }}>
-                      {readOnly ? (
-                        <span style={{ fontSize: 13, color: 'var(--neutral-dark-pure)' }}>{tipoV}</span>
-                      ) : (
-                        <select
-                          value={tipoV}
-                          onChange={e => setTipoAssMap(m => ({ ...m, [doc.id]: e.target.value }))}
-                          style={{ height: 32, border: '1px solid var(--neutral-light-down)', borderRadius: 6, padding: '0 8px', fontSize: 12, color: 'var(--neutral-dark-pure)', outline: 'none', background: 'white', width: '100%' }}
-                        >
-                          <option>ICP Brasil</option>
-                          <option>Sistema</option>
-                        </select>
-                      )}
+                    {/* Tipo aceito — campo fixo */}
+                    <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--neutral-light-medium)' }}>
+                      <span style={{
+                        display: 'inline-block', fontSize: 12, fontWeight: 600,
+                        color: 'var(--primary-pure)', background: 'var(--primary-bg-hover)',
+                        borderRadius: 6, padding: '3px 10px', whiteSpace: 'nowrap',
+                      }}>{tipoV}</span>
                     </td>
-                    {/* Padrão */}
-                    <td style={{ padding: '8px 14px', borderBottom: '1px solid var(--neutral-light-medium)' }}>
-                      {readOnly ? (
-                        <span style={{ fontSize: 13, color: 'var(--neutral-dark-pure)' }}>{padraoV}</span>
-                      ) : (
-                        <select
-                          value={padraoV}
-                          onChange={e => setPadraoAssMap(m => ({ ...m, [doc.id]: e.target.value }))}
-                          style={{ height: 32, border: '1px solid var(--neutral-light-down)', borderRadius: 6, padding: '0 8px', fontSize: 12, color: 'var(--neutral-dark-pure)', outline: 'none', background: 'white', width: '100%' }}
-                        >
-                          <option>PAdES</option>
-                          <option>CAdES</option>
-                          <option>XAdES</option>
-                        </select>
-                      )}
+                    {/* Padrão aceito — campo fixo */}
+                    <td style={{ padding: '10px 14px', borderBottom: '1px solid var(--neutral-light-medium)' }}>
+                      <span style={{
+                        display: 'inline-block', fontSize: 12, fontWeight: 600,
+                        color: 'var(--neutral-dark-medium)', background: 'var(--bg-subtle)',
+                        border: '1px solid var(--neutral-light-medium)',
+                        borderRadius: 6, padding: '3px 10px', whiteSpace: 'nowrap',
+                      }}>{padraoV}</span>
                     </td>
-                    {/* Nome documento */}
+                    {/* Nome documento — clicável abre drawer */}
                     <td style={{ padding: '12px 14px', borderBottom: '1px solid var(--neutral-light-medium)' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div
+                        onClick={() => setDocViewer(doc)}
+                        style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
+                      >
                         <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 14, color: 'var(--error-color)', flexShrink: 0 }} />
                         <div>
-                          <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--primary-pure)', cursor: 'pointer', textDecoration: 'underline' }}>{doc.nome}</div>
-                          <div style={{ fontSize: 11, color: 'var(--neutral-dark-medium)' }}>{doc.tipo}  {doc.paginas}p  {doc.tamanho}</div>
+                          <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--primary-pure)', textDecoration: 'underline' }}>{doc.nome}</div>
+                          <div style={{ fontSize: 11, color: 'var(--neutral-dark-medium)' }}>{doc.tipo} · {doc.paginas}p · {doc.tamanho}</div>
                         </div>
                       </div>
                     </td>
-                    {/* Usurio insero */}
+                    {/* Usuário de inserção */}
                     <td style={{ padding: '12px 14px', borderBottom: '1px solid var(--neutral-light-medium)', fontSize: 13, color: 'var(--neutral-dark-down)', whiteSpace: 'nowrap' }}>
                       Sistema Solar BPM
                     </td>
-                    {/* Data insero */}
+                    {/* Data de inserção */}
                     <td style={{ padding: '12px 14px', borderBottom: '1px solid var(--neutral-light-medium)', fontSize: 13, color: 'var(--neutral-dark-down)', whiteSpace: 'nowrap' }}>
                       {`0${i + 1}/04/2026`}
-                    </td>
-                    {/* Visualizar */}
-                    <td style={{ padding: '8px 14px', borderBottom: '1px solid var(--neutral-light-medium)', textAlign: 'center' }}>
-                      <button
-                        style={{ width: 32, height: 32, border: '1px solid var(--neutral-light-down)', borderRadius: 6, background: 'white', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'var(--neutral-dark-down)' }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-bg-hover)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--primary-pure)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--primary-pure)'; }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'white'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--neutral-light-down)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--neutral-dark-down)'; }}
-                      >
-                        <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 13 }} />
-                      </button>
                     </td>
                   </tr>
                 );
@@ -390,6 +465,7 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
           onConfirmar={onConcluir}
         />
       )}
+      <DocViewerDrawer doc={docViewer} onClose={() => setDocViewer(null)} />
 
       {/*  TEMPLATE: Comunique-se  */}
       {tipo === 'Comunique-se' && (

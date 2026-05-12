@@ -29,7 +29,19 @@
       "Bash(cmd /c \"del /f \\\\\"C:\\\\Users\\\\cristianderson.lima\\\\solar-bpm\\\\.gitignore\\\\\"\")",
       "Bash(git push *)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "PowerShell(\\(Get-Content \"C:\\\\Users\\\\cristianderson.lima\\\\solar-bpm\\\\src\\\\App.tsx\"\\).Count)",
+      "PowerShell(netstat -ano)",
+      "PowerShell(cd \"C:\\\\Users\\\\cristianderson.lima\\\\solar-bpm\"; git log --oneline --all -- src/i18n.tsx 2>&1)",
+      "Bash(ls vercel.json)",
+      "Bash(ls .env.example)",
+      "Bash(ls .gitignore)",
+      "Bash(cat .gitignore)",
+      "Bash(ls C:/Users/cristianderson.lima/solar-bpm/commands/ 2>/dev/null || ls C:/Users/cristianderson.lima/.claude/commands/ 2>/dev/null)",
+      "Bash(git commit -m 'fix: ServiceCard recebe featuredServices[lang] e popularServices[lang] *)",
+      "Bash(grep -v \"\\\\.tsx:[0-9]*:\\\\s*//\")",
+      "Bash(grep -v \"^\\\\s*//\")",
+      "Bash(findstr /i \"fortawesome\")"
     ]
   }
 }
