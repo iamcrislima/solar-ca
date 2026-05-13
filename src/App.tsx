@@ -32,7 +32,7 @@ import ErrorBoundary        from './components/ErrorBoundary';
 //  Componente principal 
 export default function App() {
   const [page,              setPage]              = useState<Page>('home');
-  const [expanded,          setExpanded]          = useState(false);
+  const [expanded,          setExpanded]          = useState(true);
   const [showLogin,         setShowLogin]         = useState(false);
   const [isLoggedIn,        setIsLoggedIn]        = useState(false);
   const [lang,              setLang]              = useState<Lang>('pt');
