@@ -131,7 +131,7 @@ export function MobileDrawer({ open, onClose, activePage, onNavigate, isLoggedIn
         </div>
 
         {/* Solar BPM branding */}
-        <div style={{ padding: '10px 20px', background: 'var(--bg-subtle)', borderTop: '1px solid var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <div style={{ padding: '10px 20px', background: 'white', borderTop: '1px solid var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <img src="/Logo completa.png" alt="SolarBPM" style={{ height: 26, objectFit: 'contain' }} />
         </div>
       </div>

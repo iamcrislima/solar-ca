@@ -150,7 +150,7 @@ export default function SideMenu({ activePage, onNavigate, expanded, onLogin, is
         borderTop: '1px solid var(--primary-light)',
         padding: expanded ? '10px 12px' : '10px 6px',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: '#1a2940',
+        background: 'white',
         transition: 'padding 0.2s ease',
       }}>
         {expanded ? (
