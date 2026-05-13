@@ -1,10 +1,11 @@
 import React from 'react';
 import { useT, useIsMobile, useLang } from '../i18n';
 import type { Page } from '../types';
+import type { Servico } from '../types';
 import FAIcon from '../components/FAIcon';
 import SearchWithDropdown from '../components/SearchWithDropdown';
 import { ServiceCard, CategoryCard } from '../components/ServiceCard';
-import { imgBannerFloripa, featuredServices, popularServices, categories, MOCK_USER } from '../mocks';
+import { imgBannerFloripa, featuredServices, popularServices, categories, MOCK_USER, MOCK_SERVICOS_AV } from '../mocks';
 //  Tela: Home 
 const MOCK_DASH_ATIVIDADES = [
   { icon: 'fa-regular fa-circle-check',     text: 'Pendência "Assinatura de documentos" concluída',  processo: 'PMF2026/000418', date: '20/04/2026', color: 'var(--success-color)' },
@@ -13,10 +14,11 @@ const MOCK_DASH_ATIVIDADES = [
   { icon: 'fa-regular fa-folder-open',      text: 'Processo acessado: Ranking de Sustentabilidade',   processo: 'PMF2026/000322', date: '17/04/2026', color: 'var(--neutral-dark-down)' },
 ];
 
-export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
+export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavigateService }: {
   onNavigateCat: (cat: { label: string; icon: string }) => void;
   isLoggedIn: boolean;
-  onNavigate: (p: Page) => void;
+  onNavigate: (p: Page, filter?: string) => void;
+  onNavigateService?: (svc: Servico) => void;
 }) {
   const t = useT();
   const lang = useLang();
@@ -36,9 +38,9 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
             </div>
             <div style={{ display: 'flex', gap: isMobile ? 10 : 16, flexWrap: 'nowrap' }}>
               {([
-                { label: t('dashPendencias'), value: '3', icon: 'fa-regular fa-bell', onClick: () => onNavigate('minhaspendencias') },
-                { label: t('dashProcessos'),  value: '7', icon: 'fa-regular fa-folder-open', onClick: () => onNavigate('meusprocessos') },
-                { label: t('dashLiberados'),  value: '2', icon: 'fa-regular fa-unlock', onClick: () => onNavigate('processosliberados') },
+                              { label: t('dashPendencias'), value: '3', icon: 'fa-regular fa-bell',        onClick: () => onNavigate('minhaspendencias') },
+                { label: t('dashProcessos'),  value: '7', icon: 'fa-regular fa-folder-open', onClick: () => onNavigate('meusprocessos', 'Em Andamento') },
+                { label: t('dashLiberados'),  value: '2', icon: 'fa-regular fa-unlock',      onClick: () => onNavigate('processosliberados') },
               ] as { label: string; value: string; icon: string; onClick: () => void }[]).map((stat) => (
                 <div
                   key={stat.label}
@@ -123,8 +125,10 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate }: {
         </span>
       </div>
       <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 24 }}>
-        <ServiceCard title={t('emDestaque')}    items={featuredServices[lang]} icon="fa-regular fa-star" />
-        <ServiceCard title={t('maisAcessados')} items={popularServices[lang]}  icon="fa-regular fa-fire" />
+        <ServiceCard title={t('emDestaque')}    items={featuredServices[lang]} icon="fa-regular fa-star"
+          onItemClick={item => { const svc = MOCK_SERVICOS_AV.find(s => s.servico === item); if (svc && onNavigateService) onNavigateService(svc); }} />
+        <ServiceCard title={t('maisAcessados')} items={popularServices[lang]}  icon="fa-regular fa-fire"
+          onItemClick={item => { const svc = MOCK_SERVICOS_AV.find(s => s.servico === item); if (svc && onNavigateService) onNavigateService(svc); }} />
       </div>
       <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, padding: isMobile ? '16px 16px 32px' : '24px 24px 48px', display: 'flex', flexDirection: 'column', gap: 16, boxShadow: '0px 6px 8px rgba(24,39,75,0.12), 0px 8px 16px rgba(24,39,75,0.08)' }}>
         <h2 style={{ fontWeight: 700, fontSize: isMobile ? 18 : 24, color: 'var(--colors-neutral-01)', lineHeight: 1.2, margin: 0 }}>{t('porAssunto')}</h2>

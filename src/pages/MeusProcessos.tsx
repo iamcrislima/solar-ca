@@ -59,11 +59,11 @@ function ProcessoCard({ processo, onClick }: { processo: MeuProcesso; onClick: (
   );
 }
 
-export default function MeusProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void }) {
+export default function MeusProcessos({ onNavigateProcesso, initialFilter }: { onNavigateProcesso: () => void; initialFilter?: 'todos' | ProcessoStatus }) {
   const t = useT();
   const isMobile = useIsMobile();
   const [query, setQuery]   = useState('');
-  const [filtro, setFiltro] = useState<'todos' | ProcessoStatus>('todos');
+  const [filtro, setFiltro] = useState<'todos' | ProcessoStatus>(initialFilter ?? 'todos');
 
   const { total, andamento, concluidos, pendentes } = useMemo(() => ({
     total:      MOCK_MEUS_PROCESSOS.length,
