@@ -149,8 +149,19 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
   const sectionTitle: React.CSSProperties = {
     fontWeight: 700,
     fontSize: 16,
-    color: 'var(--colors-neutral-01)',
+    color: 'var(--neutral-ink-strong)',
     lineHeight: '1.2',
+  };
+
+  const stdTh: React.CSSProperties = {
+    padding: '10px 14px', textAlign: 'left', fontWeight: 700, fontSize: 11,
+    color: 'var(--neutral-dark-medium)', textTransform: 'uppercase', letterSpacing: '0.06em',
+    borderBottom: '1px solid var(--neutral-light-medium)', whiteSpace: 'nowrap',
+    background: 'var(--background-color-light)',
+  };
+  const stdTd: React.CSSProperties = {
+    padding: '12px 14px', fontSize: 13, color: 'var(--neutral-dark-pure)',
+    borderBottom: '1px solid var(--neutral-light-medium)', lineHeight: '20px',
   };
 
   return (
@@ -210,20 +221,20 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
             <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <FAIcon icon="fa-regular fa-building-columns" style={{ fontSize: 14, color: 'var(--neutral-dark-up)' }} />
             </div>
-            <span style={{ fontWeight: 400, fontSize: 16, color: 'var(--neutral-dark-up)', whiteSpace: 'nowrap' }}>SAUDE - Secretaria de Saúde</span>
+            <span style={{ fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-up)', whiteSpace: 'nowrap' }}>SAUDE - Secretaria de Saúde</span>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <FAIcon icon="fa-regular fa-calendar" style={{ fontSize: 14, color: 'var(--neutral-dark-up)' }} />
             </div>
-            <span style={{ fontWeight: 400, fontSize: 16, color: 'var(--neutral-dark-up)', whiteSpace: 'nowrap' }}>{t('pdEntradaEm')}</span>
-            <span style={{ fontWeight: 400, fontSize: 16, color: 'var(--neutral-dark-up)', whiteSpace: 'nowrap' }}>02/09/2025</span>
+            <span style={{ fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-up)', whiteSpace: 'nowrap' }}>{t('pdEntradaEm')}</span>
+            <span style={{ fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-up)', whiteSpace: 'nowrap' }}>02/09/2025</span>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <FAIcon icon="fa-regular fa-folder" style={{ fontSize: 14, color: 'var(--neutral-dark-up)' }} />
             </div>
-            <span style={{ fontWeight: 400, fontSize: 16, color: 'var(--neutral-dark-up)', whiteSpace: 'nowrap' }}>{t('pdProcessoDigital')}</span>
+            <span style={{ fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-up)', whiteSpace: 'nowrap' }}>{t('pdProcessoDigital')}</span>
           </div>
         </div>
       </div>
@@ -262,7 +273,7 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
                   { label: t('pdUnidadeAtual'),     value: 'SolarBPM - Demonstração' },
                 ] as { label: string; value: string }[]).map(row => (
                   <DadosRow key={row.label} label={row.label}>
-                    <span style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-dark-pure)', letterSpacing: '0.08px', whiteSpace: 'nowrap' }}>{row.value}</span>
+                    <span style={{ fontWeight: 600, fontSize: 13, color: 'var(--neutral-dark-pure)', letterSpacing: '0.08px', whiteSpace: 'nowrap' }}>{row.value}</span>
                   </DadosRow>
                 ))}
                 <DadosRow label={t('pdSituacao')} last>
@@ -360,127 +371,132 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
 
       {/* Tab: Tramitações */}
       {activeTab === 'tramitacoes' && (() => {
-        const th: React.CSSProperties = { fontWeight: 600, fontSize: 16, color: 'var(--neutral-dark-medium)', lineHeight: '24px', letterSpacing: '0.08px', padding: '8px 0', borderBottom: '1px solid var(--neutral-light-down)', textAlign: 'left', fontStyle: 'normal' };
-        const td: React.CSSProperties = { fontWeight: 400, fontSize: 16, color: 'var(--neutral-dark-pure)', lineHeight: '24px', letterSpacing: '0.08px', padding: '8px 0' };
+        const rows = [
+          { vol: '1', orgao: 'UN-SAOPAULO', recebido: '02/09/2025', encaminhado: '02/09/2025' },
+          { vol: '1', orgao: 'DIGITAL',     recebido: '02/09/2025', encaminhado: '08/09/2025' },
+          { vol: '1', orgao: 'SAUDE',       recebido: '08/09/2025', encaminhado: '' },
+        ];
         return (
-          <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, padding: 24 }}>
-            <div style={{ ...sectionTitle, marginBottom: 8 }}>{t('tramitacoes')}</div>
-            <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
-              <colgroup>
-                <col style={{ width: '5%' }} />
-                <col style={{ width: '35%' }} />
-                <col style={{ width: '20%' }} />
-                <col style={{ width: '25%' }} />
-                <col style={{ width: '15%' }} />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th style={th}>{t('pdVol')}</th>
-                  <th style={th}>{t('pdOrgaoSetor')}</th>
-                  <th style={th}>{t('pdRecebidoEm')}</th>
-                  <th style={th}>{t('pdEncaminhadoEm')}</th>
-                  <th style={{ ...th, textAlign: 'center' }}>{t('pdDespacho')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {([
-                  { vol: '1', orgao: 'UN-SAOPAULO', recebido: '02/09/2025', encaminhado: '02/09/2025' },
-                  { vol: '1', orgao: 'DIGITAL',     recebido: '02/09/2025', encaminhado: '08/09/2025' },
-                  { vol: '1', orgao: 'SAUDE',       recebido: '08/09/2025', encaminhado: '' },
-                ] as { vol: string; orgao: string; recebido: string; encaminhado: string }[]).map((row, i, arr) => (
-                  <tr key={`${row.orgao}-${row.recebido}`} style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--neutral-light-down)' : 'none' }}>
-                    <td style={td}>{row.vol}</td>
-                    <td style={td}>{row.orgao}</td>
-                    <td style={td}>{row.recebido}</td>
-                    <td style={td}>{row.encaminhado}</td>
-                    <td style={{ ...td, textAlign: 'center' }}>
-                      <div style={{ width: 24, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <FAIcon icon="fa-solid fa-eye" style={{ fontSize: 14, color: 'var(--primary-pure)', cursor: 'pointer' }} onClick={() => setShowDespacho(true)} />
-                      </div>
-                    </td>
+          <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, overflow: 'hidden' }}>
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--neutral-light-medium)', display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <div style={sectionTitle}>{t('tramitacoes')}</div>
+              <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)' }}>{rows.length} registro{rows.length !== 1 ? 's' : ''} encontrado{rows.length !== 1 ? 's' : ''}</div>
+            </div>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
+                <thead>
+                  <tr>
+                    <th style={{ ...stdTh, width: 60 }}>{t('pdVol')}</th>
+                    <th style={stdTh}>{t('pdOrgaoSetor')}</th>
+                    <th style={{ ...stdTh, width: 140 }}>{t('pdRecebidoEm')}</th>
+                    <th style={{ ...stdTh, width: 160 }}>{t('pdEncaminhadoEm')}</th>
+                    <th style={{ ...stdTh, width: 100, textAlign: 'center' }}>{t('pdDespacho')}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {rows.map((row, i) => (
+                    <tr key={`${row.orgao}-${row.recebido}`} style={{ background: i % 2 === 1 ? 'var(--bg-subtle)' : 'white' }}>
+                      <td style={stdTd}>{row.vol}</td>
+                      <td style={stdTd}>{row.orgao}</td>
+                      <td style={stdTd}>{row.recebido}</td>
+                      <td style={{ ...stdTd, color: row.encaminhado ? 'var(--neutral-dark-pure)' : 'var(--neutral-dark-up)' }}>{row.encaminhado || '—'}</td>
+                      <td style={{ ...stdTd, textAlign: 'center' }}>
+                        <button
+                          onClick={() => setShowDespacho(true)}
+                          title="Ver despacho"
+                          style={{ background: 'var(--primary-bg-hover)', border: 'none', borderRadius: 6, width: 32, height: 32, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                          onMouseEnter={e => (e.currentTarget.style.background = 'var(--primary-light)')}
+                          onMouseLeave={e => (e.currentTarget.style.background = 'var(--primary-bg-hover)')}
+                        >
+                          <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 14, color: 'var(--primary-pure)' }} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         );
       })()}
 
       {/* Tab: Movimentações */}
       {activeTab === 'movimentacoes' && (() => {
-        const th: React.CSSProperties = { fontWeight: 600, fontSize: 16, color: 'var(--neutral-dark-medium)', lineHeight: '24px', letterSpacing: '0.08px', padding: '8px 0', borderBottom: '1px solid var(--neutral-light-down)', textAlign: 'left', fontStyle: 'normal' };
-        const td: React.CSSProperties = { fontWeight: 400, fontSize: 16, color: 'var(--neutral-dark-pure)', lineHeight: '24px', letterSpacing: '0.08px', padding: '8px 0', borderBottom: '1px solid var(--neutral-light-down)' };
+        const movRows = [
+          { tarefa: t('pdAnalisarSustentabilidade'), criacao: '02/09/2025', situacao: t('pdFinalizada') },
+        ];
         return (
-          <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, padding: 24 }}>
-            <div style={{ ...sectionTitle, marginBottom: 8 }}>{t('movimentacoes')}</div>
-            <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
-              <colgroup>
-                <col style={{ width: '45%' }} />
-                <col style={{ width: '20%' }} />
-                <col style={{ width: '20%' }} />
-                <col style={{ width: '15%' }} />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th style={th}>{t('pdTipoTarefa')}</th>
-                  <th style={th}>{t('pdDataCriacao')}</th>
-                  <th style={th}>{t('pdSituacaoCol')}</th>
-                  <th style={{ ...th, textAlign: 'center' }}>{t('pdAcoes')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={td}>{t('pdAnalisarSustentabilidade')}</td>
-                  <td style={td}>02/09/2025</td>
-                  <td style={td}>
-                    <span style={{ background: 'var(--success-bg-strong)', color: 'var(--success-darker)', borderRadius: 6, padding: '4px 8px', fontWeight: 600, fontSize: 12, lineHeight: '16px', letterSpacing: '0.06px', whiteSpace: 'nowrap' }}>
-                      {t('pdFinalizada')}
-                    </span>
-                  </td>
-                  <td style={{ ...td, textAlign: 'center' }}>
-                    <div style={{ width: 24, height: 24, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <FAIcon icon="fa-solid fa-eye" style={{ fontSize: 14, color: 'var(--primary-pure)', cursor: 'pointer' }} />
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, overflow: 'hidden' }}>
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--neutral-light-medium)', display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <div style={sectionTitle}>{t('movimentacoes')}</div>
+              <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)' }}>{movRows.length} registro{movRows.length !== 1 ? 's' : ''} encontrado{movRows.length !== 1 ? 's' : ''}</div>
+            </div>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 480 }}>
+                <thead>
+                  <tr>
+                    <th style={stdTh}>{t('pdTipoTarefa')}</th>
+                    <th style={{ ...stdTh, width: 150 }}>{t('pdDataCriacao')}</th>
+                    <th style={{ ...stdTh, width: 150 }}>{t('pdSituacaoCol')}</th>
+                    <th style={{ ...stdTh, width: 80, textAlign: 'center' }}>{t('pdAcoes')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {movRows.map((row, i) => (
+                    <tr key={row.tarefa} style={{ background: i % 2 === 1 ? 'var(--bg-subtle)' : 'white' }}>
+                      <td style={stdTd}>{row.tarefa}</td>
+                      <td style={stdTd}>{row.criacao}</td>
+                      <td style={stdTd}>
+                        <span style={{ background: 'var(--success-bg-strong)', color: 'var(--success-darker)', borderRadius: 100, padding: '2px 12px', fontWeight: 600, fontSize: 12, whiteSpace: 'nowrap' }}>
+                          {row.situacao}
+                        </span>
+                      </td>
+                      <td style={{ ...stdTd, textAlign: 'center' }}>
+                        <button
+                          title="Ver detalhes"
+                          style={{ background: 'var(--primary-bg-hover)', border: 'none', borderRadius: 6, width: 32, height: 32, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                          onMouseEnter={e => (e.currentTarget.style.background = 'var(--primary-light)')}
+                          onMouseLeave={e => (e.currentTarget.style.background = 'var(--primary-bg-hover)')}
+                        >
+                          <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 14, color: 'var(--primary-pure)' }} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         );
       })()}
 
       {/* Tab: Arquivamentos */}
       {activeTab === 'arquivamentos' && (() => {
-        const th: React.CSSProperties = { fontWeight: 600, fontSize: 13, color: 'var(--neutral-dark-medium)', lineHeight: '20px', letterSpacing: '0.06px', padding: '10px 12px', borderBottom: '1px solid var(--neutral-light-medium)', textAlign: 'left', fontStyle: 'normal', background: 'var(--bg-subtle)' };
-        const td: React.CSSProperties = { fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-pure)', lineHeight: '22px', padding: '12px 12px', borderBottom: '1px solid var(--neutral-light-medium)' };
         return (
           <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, overflow: 'hidden' }}>
-            {/* Cabeçalho do card */}
-            <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--neutral-light-medium)', display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <div style={{ ...sectionTitle, margin: 0 }}>{t('arquivamentos')}</div>
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--neutral-light-medium)', display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <div style={sectionTitle}>{t('arquivamentos')}</div>
               <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)' }}>{MOCK_ARQUIVAMENTOS.length} registro{MOCK_ARQUIVAMENTOS.length !== 1 ? 's' : ''} encontrado{MOCK_ARQUIVAMENTOS.length !== 1 ? 's' : ''}</div>
             </div>
-
-            {/* Tabela */}
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 600 }}>
                 <thead>
                   <tr>
-                    <th style={{ ...th, width: 50 }}>{t('pdVol')}</th>
-                    <th style={th}>{t('pdTipoTarefa')}</th>
-                    <th style={{ ...th, width: 130 }}>{t('pdArquivadoEm')}</th>
-                    <th style={{ ...th, width: 80, textAlign: 'center' }}>{t('pdMotivoArq')}</th>
-                    <th style={{ ...th, width: 130 }}>{t('pdReabertoEm')}</th>
-                    <th style={th}>{t('pdMotivoReab')}</th>
+                    <th style={{ ...stdTh, width: 60 }}>{t('pdVol')}</th>
+                    <th style={stdTh}>{t('pdTipoTarefa')}</th>
+                    <th style={{ ...stdTh, width: 140 }}>{t('pdArquivadoEm')}</th>
+                    <th style={{ ...stdTh, width: 80, textAlign: 'center' }}>{t('pdMotivoArq')}</th>
+                    <th style={{ ...stdTh, width: 140 }}>{t('pdReabertoEm')}</th>
+                    <th style={stdTh}>{t('pdMotivoReab')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {MOCK_ARQUIVAMENTOS.map((arq, i) => (
                     <tr key={arq.arquivadoEm} style={{ background: i % 2 === 1 ? 'var(--bg-subtle)' : 'white' }}>
-                      <td style={td}>{arq.vol}</td>
-                      <td style={td}>{arq.tarefa}</td>
-                      <td style={td}>{arq.arquivadoEm}</td>
-                      <td style={{ ...td, textAlign: 'center' }}>
+                      <td style={stdTd}>{arq.vol}</td>
+                      <td style={stdTd}>{arq.tarefa}</td>
+                      <td style={stdTd}>{arq.arquivadoEm}</td>
+                      <td style={{ ...stdTd, textAlign: 'center' }}>
                         <button
                           onClick={() => setMotivoArq({ motivo: arq.motivo, arquivadoEm: arq.arquivadoEm })}
                           title="Ver motivo do arquivamento"
@@ -491,8 +507,8 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
                           <FAIcon icon="fa-regular fa-eye" style={{ fontSize: 14, color: 'var(--primary-pure)' }} />
                         </button>
                       </td>
-                      <td style={{ ...td, color: arq.reabertoEm === '' ? 'var(--neutral-dark-up)' : 'var(--neutral-dark-pure)' }}>{arq.reabertoEm}</td>
-                      <td style={{ ...td, color: arq.motivoReab === '' ? 'var(--neutral-dark-up)' : 'var(--neutral-dark-pure)', fontSize: 13 }}>{arq.motivoReab}</td>
+                      <td style={{ ...stdTd, color: arq.reabertoEm === '' ? 'var(--neutral-dark-up)' : 'var(--neutral-dark-pure)' }}>{arq.reabertoEm || '—'}</td>
+                      <td style={{ ...stdTd, color: arq.motivoReab === '' ? 'var(--neutral-dark-up)' : 'var(--neutral-dark-pure)' }}>{arq.motivoReab || '—'}</td>
                     </tr>
                   ))}
                 </tbody>
