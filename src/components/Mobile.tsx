@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useT } from '../i18n';
 import type { Lang } from '../i18n';
-import { Page } from '../types';
+import type { Page } from '../types';
 import { MOCK_USER } from '../mocks';
 import FAIcon from './FAIcon';
 import ContactModal from './ContactModal';
@@ -21,7 +21,7 @@ export function MobileHeader({ onOpenDrawer, onLogin, isLoggedIn, onNavigate }: 
       <div style={{ flex: 1 }} />
       {isLoggedIn ? (
         <div onClick={() => onNavigate('meusdados')} style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--primary-light)', border: '2px solid var(--primary-pure)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
-          <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--primary-pure)' }}>CL</span>
+          <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--primary-pure)' }}>{MOCK_USER.initials}</span>
         </div>
       ) : (
         <button onClick={onLogin} style={{ background: 'var(--primary-pure)', border: 'none', borderRadius: 6, color: 'white', fontWeight: 600, fontSize: 13, padding: '7px 14px', cursor: 'pointer' }}>
@@ -131,7 +131,7 @@ export function MobileDrawer({ open, onClose, activePage, onNavigate, isLoggedIn
         </div>
 
         {/* Solar BPM branding */}
-        <div style={{ padding: '10px 20px', background: 'var(--bg-subtle)', borderTop: '1px solid var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <div style={{ padding: '10px 20px', background: 'white', borderTop: '1px solid var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <img src="/Logo completa.png" alt="SolarBPM" style={{ height: 26, objectFit: 'contain' }} />
         </div>
       </div>
