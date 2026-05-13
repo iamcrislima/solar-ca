@@ -26,7 +26,7 @@ export const TRANS = {
     nenhumProcesso: 'Nenhum processo encontrado', nenhumDesc: 'Verifique os dados informados e tente novamente',
     resultados: 'Resultados', consultasRecentes: 'Consultas recentes',
     // Consulta Documentos
-    docTitle: 'Consulta de documentos',
+    docTitle: 'Conferência de documentos',
     docDesc: 'Confira se uma cópia impressa corresponde ao documento assinado digitalmente. Informe o código localizado na lateral direita do documento.',
     codigoDoc: 'Código do documento',
     // Processo detalhe tabs

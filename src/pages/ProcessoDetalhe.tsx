@@ -342,7 +342,6 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
       {activeTab === 'documentos' && (
         <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--neutral-light-medium)', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <FAIcon icon="fa-regular fa-folder-open" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
             <span style={{ fontWeight: 700, fontSize: 15, color: 'var(--neutral-dark-pure)' }}>Pasta Digital  PMF2026/000418</span>
           </div>
           <div style={{ background: 'var(--warning-bg-medium)', border: '1px solid var(--warning-border)', borderRadius: 6, padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 10, margin: '12px 16px 0', flexShrink: 0 }}>
@@ -457,14 +456,9 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
         return (
           <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, overflow: 'hidden' }}>
             {/* Cabeçalho do card */}
-            <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--neutral-light-medium)', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 34, height: 34, borderRadius: 8, background: 'var(--primary-bg-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <FAIcon icon="fa-regular fa-box-archive" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
-              </div>
-              <div>
-                <div style={{ ...sectionTitle, margin: 0 }}>{t('arquivamentos')}</div>
-                <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', marginTop: 1 }}>{MOCK_ARQUIVAMENTOS.length} registro{MOCK_ARQUIVAMENTOS.length !== 1 ? 's' : ''} encontrado{MOCK_ARQUIVAMENTOS.length !== 1 ? 's' : ''}</div>
-              </div>
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--neutral-light-medium)', display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <div style={{ ...sectionTitle, margin: 0 }}>{t('arquivamentos')}</div>
+              <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)' }}>{MOCK_ARQUIVAMENTOS.length} registro{MOCK_ARQUIVAMENTOS.length !== 1 ? 's' : ''} encontrado{MOCK_ARQUIVAMENTOS.length !== 1 ? 's' : ''}</div>
             </div>
 
             {/* Tabela */}

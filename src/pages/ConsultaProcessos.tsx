@@ -5,7 +5,7 @@ import { consultasRecentes, ORGAOS, PROCEDENCIAS } from '../mocks';
 import FAIcon from '../components/FAIcon';
 import ConsultaRow from '../components/ConsultaRow';
 import InfoTooltip from '../components/InfoTooltip';
-import { FormSegment, SelectSegment, MobileFormField } from '../components/FormComponents';
+import { FormSegment, SearchableSelect, MobileFormField } from '../components/FormComponents';
 
 export default function ConsultaProcessos({ onNavigateProcesso }: { onNavigateProcesso: () => void }) {
   const t = useT();
@@ -70,8 +70,8 @@ export default function ConsultaProcessos({ onNavigateProcesso }: { onNavigatePr
           </div>
         ) : (
           <div style={{ display: 'inline-flex', alignItems: 'stretch', alignSelf: 'flex-start', border: '1.5px solid var(--primary-pure)', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
-            <SelectSegment label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
-            <SelectSegment label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
+            <SearchableSelect label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
+            <SearchableSelect label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
             <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
             <FormSegment   label={t('ano')}         value={ano}         onChange={v => setAno(v.replace(/\D/g, '').slice(0, 4))}       placeholder="2026"   width={72} center last />
           </div>

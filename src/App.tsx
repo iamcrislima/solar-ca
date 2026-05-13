@@ -29,6 +29,7 @@ import CatServicos          from './pages/CatServicos';
 import ServicoDetalhe       from './pages/ServicoDetalhe';
 import ServicoForm          from './pages/ServicoForm';
 import ErrorBoundary        from './components/ErrorBoundary';
+import Footer               from './components/Footer';
 
 //  Componente principal 
 export default function App() {
@@ -45,6 +46,7 @@ export default function App() {
   const [selectedLiberado,  setSelectedLiberado]  = useState<ProcessoLiberado | null>(null);
   const [isMobile,          setIsMobile]          = useState(() => window.innerWidth < 768);
   const [drawerOpen,        setDrawerOpen]        = useState(false);
+  const [meusProcessosFilter, setMeusProcessosFilter] = useState<'todos' | 'Em Andamento' | 'Concluído' | 'Pendente'>('todos');
 
   function handleLogin()  { setIsLoggedIn(true);  setShowLogin(false); }
   function handleLogout() { setIsLoggedIn(false); setPage('home'); setDrawerOpen(false); }
@@ -70,7 +72,11 @@ export default function App() {
         <HomePage
           onNavigateCat={cat => { setSelectedCat(cat); setPage('cat-servicos'); }}
           isLoggedIn={isLoggedIn}
-          onNavigate={setPage}
+          onNavigate={(p, filter?) => {
+            if (filter) setMeusProcessosFilter(filter as 'todos' | 'Em Andamento' | 'Concluído' | 'Pendente');
+            setPage(p);
+          }}
+          onNavigateService={svc => { setSelectedService(svc); setPage('servico-detalhe'); }}
         />
       )}
       {page === 'consulta'   && (
@@ -92,6 +98,7 @@ export default function App() {
       {page === 'meusprocessos' && (
         <MeusProcessos
           onNavigateProcesso={() => { setSelectedLiberado(null); setPage('processo'); }}
+          initialFilter={meusProcessosFilter}
         />
       )}
       {page === 'minhaspendencias' && (
@@ -168,6 +175,7 @@ export default function App() {
             />
             <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 'calc(64px + env(safe-area-inset-bottom))' }}>
               {pageContent}
+              <Footer onNavigate={setPage} />
             </div>
             <MobileBottomNav
               activePage={page}
@@ -205,6 +213,7 @@ export default function App() {
                 <Breadcrumb page={page} onNavigate={setPage} selectedCat={selectedCat} selectedService={selectedService} />
                 <div style={{ flex: 1, overflowY: 'auto' }}>
                   {pageContent}
+                  <Footer onNavigate={setPage} />
                 </div>
               </div>
             </div>
