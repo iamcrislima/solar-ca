@@ -3,6 +3,7 @@ import { useT, useIsMobile, useLang } from '../i18n';
 import type { Page } from '../types';
 import type { Servico } from '../types';
 import FAIcon from '../components/FAIcon';
+import Footer from '../components/Footer';
 import SearchWithDropdown from '../components/SearchWithDropdown';
 import { ServiceCard, CategoryCard } from '../components/ServiceCard';
 import { imgBannerFloripa, featuredServices, popularServices, categories, MOCK_USER, MOCK_SERVICOS_AV } from '../mocks';
@@ -24,6 +25,7 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavi
   const lang = useLang();
   const isMobile = useIsMobile();
   return (
+    <>
     <div style={{ display: 'flex', flexDirection: 'column', gap: isLoggedIn ? 24 : (isMobile ? 24 : 48), padding: isMobile ? '16px 16px 48px 16px' : '16px 24px 48px 24px' }}>
 
       {/*  Dashboard pós-login  */}
@@ -93,7 +95,7 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavi
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--neutral-ink)', lineHeight: 1.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{at.text}</div>
-                    <div style={{ fontSize: 11, color: 'var(--neutral-dark-medium)', marginTop: 2 }}>{at.processo}  {at.date}</div>
+                    <div style={{ fontSize: 11, color: 'var(--neutral-dark-medium)', marginTop: 2 }}>{at.processo} · {at.date}</div>
                   </div>
                 </div>
               ))}
@@ -137,6 +139,8 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavi
         </div>
       </div>
     </div>
+    <Footer onNavigate={(p) => onNavigate(p)} />
+    </>
   );
 }
 

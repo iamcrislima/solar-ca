@@ -104,7 +104,7 @@ export default function MeusDados() {
 
         {/*  Identificao  */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <h2 style={{ fontWeight: 700, fontSize: 15, color: 'var(--colors-neutral-01)', margin: 0, paddingBottom: 8, borderBottom: '1px solid var(--neutral-light-medium)' }}>{t('identificacao')}</h2>
+          <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0, paddingBottom: 8, borderBottom: '1px solid var(--neutral-light-medium)' }}>{t('identificacao')}</h2>
           {alertBanner(t('mdCompletarCadastro'))}
           <div style={{ display: 'flex', gap: 16 }}>
             <Field label={t('mdCpf')} flex={1}>
@@ -118,7 +118,7 @@ export default function MeusDados() {
 
         {/*  Acesso (e-mails)  */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <h2 style={{ fontWeight: 700, fontSize: 15, color: 'var(--colors-neutral-01)', margin: 0, paddingBottom: 8, borderBottom: '1px solid var(--neutral-light-medium)' }}>{t('mdEmailAcesso')}</h2>
+          <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0, paddingBottom: 8, borderBottom: '1px solid var(--neutral-light-medium)' }}>{t('mdEmailAcesso')}</h2>
           <div style={{ display: 'flex', gap: 16 }}>
             <Field label={t('mdEmail')}>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} style={inp} />
@@ -132,7 +132,7 @@ export default function MeusDados() {
         {/*  E-mails adicionais  */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 8, borderBottom: '1px solid var(--neutral-light-medium)' }}>
-            <h2 style={{ fontWeight: 700, fontSize: 15, color: 'var(--colors-neutral-01)', margin: 0 }}>{t('mdEmailAdicional')}</h2>
+            <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>{t('mdEmailAdicional')}</h2>
             <Button size="sm" variant="primary" onClick={() => { if (novoEmail.trim()) { setEmailsAdicionais(v => [...v, novoEmail.trim()]); setNovoEmail(''); } }}>
               <FAIcon icon="fa-regular fa-plus" style={{ fontSize: 13, marginRight: 4 }} />{t('mdIncluir')}
             </Button>
@@ -167,7 +167,7 @@ export default function MeusDados() {
 
         {/*  Dados pessoais  */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <h2 style={{ fontWeight: 700, fontSize: 15, color: 'var(--colors-neutral-01)', margin: 0, paddingBottom: 8, borderBottom: '1px solid var(--neutral-light-medium)' }}>{t('dadosPessoais')}</h2>
+          <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0, paddingBottom: 8, borderBottom: '1px solid var(--neutral-light-medium)' }}>{t('dadosPessoais')}</h2>
           <div style={{ display: 'flex', gap: 16 }}>
             <Field label={t('mdSexo')}>
               <div style={{ position: 'relative' }}>
@@ -195,7 +195,7 @@ export default function MeusDados() {
 
         {/*  Endereo  */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <h2 style={{ fontWeight: 700, fontSize: 15, color: 'var(--colors-neutral-01)', margin: 0, paddingBottom: 8, borderBottom: '1px solid var(--neutral-light-medium)' }}>{t('endereco')}</h2>
+          <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0, paddingBottom: 8, borderBottom: '1px solid var(--neutral-light-medium)' }}>{t('endereco')}</h2>
           <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end' }}>
             <Field label={t('mdCep')} flex="none">
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -303,7 +303,7 @@ export default function MeusDados() {
           >
             {t('tsCancelar')}
           </button>
-          <Button size="md" variant="primary" style={{ minWidth: 200 }}>{t('tsAlterar')}</Button>
+          <Button size="md" variant="primary" disabled={!senhaAtual || !senha || senha !== confirmarSenha} style={{ minWidth: 200 }}>{t('tsAlterar')}</Button>
         </div>
       </div>
       )}

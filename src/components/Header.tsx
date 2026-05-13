@@ -116,13 +116,13 @@ export default function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavi
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
 
           {/* Alto contraste */}
-          <button title={t('altoContraste')} onClick={onToggleContrast} style={iconBtn(highContrast)}>
+          <button title={t('altoContraste')} aria-label={t('altoContraste')} onClick={onToggleContrast} style={iconBtn(highContrast)}>
             <FAIcon icon="fa-regular fa-circle-half-stroke" style={{ fontSize: 16, color: 'inherit' }} />
           </button>
 
           {/* Idioma */}
           <div ref={langRef} style={{ position: 'relative' }}>
-            <button title={t('idioma')} onClick={() => setLangOpen(o => !o)} style={iconBtn(langOpen)}>
+            <button title={t('idioma')} aria-label={t('idioma')} aria-expanded={langOpen} onClick={() => setLangOpen(o => !o)} style={iconBtn(langOpen)}>
               <FAIcon icon="fa-regular fa-globe" style={{ fontSize: 16, color: 'inherit' }} />
             </button>
             {langOpen && (
@@ -143,7 +143,7 @@ export default function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavi
           </div>
 
           {/* Modo escuro */}
-          <button title={t('modoEscuro')} onClick={onToggleDark} style={iconBtn(darkMode)}>
+          <button title={t('modoEscuro')} aria-label={t('modoEscuro')} onClick={onToggleDark} style={iconBtn(darkMode)}>
             <FAIcon icon={darkMode ? 'fa-regular fa-moon' : 'fa-regular fa-sun-bright'} style={{ fontSize: 16, color: 'inherit' }} />
           </button>
         </div>

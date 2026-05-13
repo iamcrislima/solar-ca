@@ -8,7 +8,7 @@ import FAIcon from '../components/FAIcon';
 // Linha de tabela de dados básicos
 function DadosRow({ label, children, last = false }: { label: string; children: React.ReactNode; last?: boolean }) {
   return (
-    <div style={{ borderBottom: last ? 'none' : '1px solid var(--neutral-light-down)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', fontSize: 16, color: 'var(--neutral-dark-pure)', letterSpacing: '0.08px' }}>
+    <div style={{ borderBottom: last ? 'none' : '1px solid var(--neutral-light-down)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', fontSize: 14, color: 'var(--neutral-dark-pure)', letterSpacing: '0.08px' }}>
       <span style={{ fontWeight: 400 }}>{label}</span>
       {children}
     </div>
@@ -20,7 +20,7 @@ function TableHeader({ cols }: { cols: { label: string; width?: number | string;
   return (
     <div style={{ borderBottom: '1px solid var(--neutral-light-down)', display: 'flex', alignItems: 'center', padding: '8px 0', gap: 0 }}>
       {cols.map((col) => (
-        <div key={col.label} style={{ ...(col.flex !== undefined ? { flex: col.flex } : { width: col.width, flexShrink: 0 }), fontWeight: 600, fontSize: 16, color: 'var(--neutral-dark-medium)', letterSpacing: '0.08px', lineHeight: '24px', textAlign: col.center ? 'center' : 'left' }}>
+        <div key={col.label} style={{ ...(col.flex !== undefined ? { flex: col.flex } : { width: col.width, flexShrink: 0 }), fontWeight: 600, fontSize: 14, color: 'var(--neutral-dark-medium)', letterSpacing: '0.08px', lineHeight: '24px', textAlign: col.center ? 'center' : 'left' }}>
           {col.label}
         </div>
       ))}
@@ -99,7 +99,7 @@ function DespachoModal({ onClose }: { onClose: () => void }) {
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
       <div style={{ background: 'white', borderRadius: 12, padding: '28px 32px', width: '100%', maxWidth: 560, boxShadow: '0px 10px 40px rgba(0,0,0,0.18)', display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2 style={{ fontWeight: 700, fontSize: 18, color: 'var(--neutral-ink-strong)', margin: 0 }}>Despacho</h2>
+          <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>Despacho</h2>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--neutral-dark-medium)', padding: 4 }}>
             <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 18 }} />
           </button>

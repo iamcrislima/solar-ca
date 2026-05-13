@@ -29,8 +29,6 @@ import CatServicos          from './pages/CatServicos';
 import ServicoDetalhe       from './pages/ServicoDetalhe';
 import ServicoForm          from './pages/ServicoForm';
 import ErrorBoundary        from './components/ErrorBoundary';
-import Footer               from './components/Footer';
-
 //  Componente principal 
 export default function App() {
   const [page,              setPage]              = useState<Page>('home');
@@ -175,7 +173,6 @@ export default function App() {
             />
             <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 'calc(64px + env(safe-area-inset-bottom))' }}>
               {pageContent}
-              <Footer onNavigate={setPage} />
             </div>
             <MobileBottomNav
               activePage={page}
@@ -213,7 +210,6 @@ export default function App() {
                 <Breadcrumb page={page} onNavigate={setPage} selectedCat={selectedCat} selectedService={selectedService} />
                 <div style={{ flex: 1, overflowY: 'auto' }}>
                   {pageContent}
-                  <Footer onNavigate={setPage} />
                 </div>
               </div>
             </div>

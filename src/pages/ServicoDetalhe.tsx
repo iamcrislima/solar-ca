@@ -83,7 +83,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
 
             {/* O que  */}
             <div>
-              <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <FAIcon icon="fa-regular fa-circle-info" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
                 {t('solOQueE')}
               </h2>
@@ -94,7 +94,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
 
             {/* Informaes */}
             <div>
-              <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <FAIcon icon="fa-regular fa-clock" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
                 {t('sdInformacoesTitle')}
               </h2>
@@ -120,7 +120,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
 
             {/* Como solicitar */}
             <div>
-              <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <FAIcon icon="fa-regular fa-list-check" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
                 {t('sdComoSolicitar')}
               </h2>
@@ -139,7 +139,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
 
           {/* Box Documentos necessrios */}
           <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 24 }}>
-            <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
               <FAIcon icon="fa-regular fa-paperclip" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
               {t('solDocsTitle')}
             </h2>
@@ -155,7 +155,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
 
           {/* Box Links relacionados */}
           <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 24 }}>
-            <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
               <FAIcon icon="fa-regular fa-link" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
               {t('solLinksTitle')}
             </h2>
@@ -171,7 +171,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
 
           {/* Box Fluxo */}
           <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 24 }}>
-            <h2 style={{ fontWeight: 700, fontSize: 17, color: 'var(--colors-neutral-01)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
               <FAIcon icon="fa-regular fa-diagram-project" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
               {t('sdFluxoTitle')}
             </h2>
