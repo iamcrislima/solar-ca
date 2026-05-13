@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useT } from '../i18n';
+import { useT, useIsMobile } from '../i18n';
 import type { Pendencia, PendenciaStatus, PendenciaTipo } from '../types';
 import { MOCK_PENDENCIAS, PENDENCIA_ICON, pendenciaTipoKey } from '../mocks';
 import FAIcon from '../components/FAIcon';
@@ -116,7 +116,7 @@ function PendenciaCard({ pendencia, onResolver, onVer }: { pendencia: Pendencia;
           onClick={onVer}
           style={{
             marginTop: 4,
-            height: 42, width: '100%', borderRadius: 8, background: 'white',
+            height: 44, width: '100%', borderRadius: 8, background: 'white',
             border: '1.5px solid var(--neutral-light-down)', color: 'var(--neutral-dark-down)',
             fontWeight: 600, fontSize: 13,
             cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
@@ -151,6 +151,7 @@ function PendenciaCard({ pendencia, onResolver, onVer }: { pendencia: Pendencia;
 
 export default function MinhasPendencias({ onNavigateProcesso, onResolverPendencia }: { onNavigateProcesso: () => void; onResolverPendencia: (p: Pendencia) => void }) {
   const t = useT();
+  const isMobile = useIsMobile();
   const [query, setQuery]   = useState('');
   const [filtro, setFiltro] = useState<'todas' | 'aberto' | 'vencendo' | 'finalizadas'>('aberto');
 
@@ -188,7 +189,7 @@ export default function MinhasPendencias({ onNavigateProcesso, onResolverPendenc
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: isMobile ? '16px 16px 48px 16px' : '24px 24px 48px 24px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: 280 }}>
           <h1 style={{ fontWeight: 700, fontSize: 24, color: 'var(--neutral-ink-strong)', margin: 0 }}>
@@ -224,7 +225,7 @@ export default function MinhasPendencias({ onNavigateProcesso, onResolverPendenc
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 14 }}>
         <StatCard
           icon="fa-regular fa-list-check" label={t('mpendTotal')} value={total}
           color="var(--primary-pure)" bg="var(--primary-bg-hover)"
@@ -300,7 +301,7 @@ export default function MinhasPendencias({ onNavigateProcesso, onResolverPendenc
       </div>
 
       {filtradas.length > 0 ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(520px, 1fr))', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(460px, 1fr))', gap: 12 }}>
           {filtradas.map(p => (
             <PendenciaCard
               key={p.id}

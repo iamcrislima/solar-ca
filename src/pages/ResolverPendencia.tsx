@@ -323,7 +323,7 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
           <div>
             <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>{t('rpAssinaturaTitle')}</h2>
             <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', margin: '4px 0 0 0', lineHeight: 1.5 }}>
-              {readOnly ? 'Assinatura concluda. Veja o resultado abaixo.' : t('rpAssinaturaDesc')}
+              {readOnly ? 'Assinatura concluída. Veja o resultado abaixo.' : t('rpAssinaturaDesc')}
             </p>
           </div>
           {!readOnly && (
@@ -473,14 +473,14 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
           <div>
             <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>Responder comunicado</h2>
             <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', margin: '4px 0 0 0', lineHeight: 1.5 }}>
-              {readOnly ? 'Resposta enviada. Esta pendncia j foi concluda.' : 'Preencha os campos abaixo para responder ao comunicado da unidade.'}
+              {readOnly ? 'Resposta enviada. Esta pendência já foi concluída.' : 'Preencha os campos abaixo para responder ao comunicado da unidade.'}
             </p>
           </div>
           {/* Mensagem da unidade */}
           <div style={{ background: 'var(--background-color-light)', border: '1px solid var(--card-border)', borderRadius: 8, padding: '14px 16px' }}>
             <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--neutral-label)', marginBottom: 6 }}>Comunicado da unidade</div>
             <div style={{ fontSize: 14, color: 'var(--neutral-dark-pure)', lineHeight: '22px' }}>
-              Prezado(a), solicitamos que informe sobre a documentao de residncia referente ao processo {pendencia?.processo}. Verifique se os documentos apresentados correspondem ao endereo atual e, se necessrio, encaminhe nova documentao atualizada.
+              Prezado(a), solicitamos que informe sobre a documentação de residência referente ao processo {pendencia?.processo}. Verifique se os documentos apresentados correspondem ao endereço atual e, se necessário, encaminhe nova documentação atualizada.
             </div>
           </div>
           <DynamicFormRenderer fields={FORM_FIELDS_COMUNIQUE} readOnly={readOnly} />
@@ -502,9 +502,9 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
         return (
           <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
-              <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>Verificar informaes cadastrais</h2>
+              <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>Verificar informações cadastrais</h2>
               <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', margin: '4px 0 0 0', lineHeight: 1.5 }}>
-                {readOnly ? 'Informaes verificadas. Esta pendncia j foi concluda.' : 'Confirme se as informaes abaixo esto corretas. Marque cada item verificado.'}
+                {readOnly ? 'Informações verificadas. Esta pendência já foi concluída.' : 'Confirme se as informações abaixo estão corretas. Marque cada item verificado.'}
               </p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -529,7 +529,7 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
                 disabled={readOnly}
                 value={readOnly ? 'Todos os dados foram verificados e esto corretos. Nenhuma divergncia encontrada.' : observacao}
                 onChange={e => setObservacao(e.target.value)}
-                placeholder="Informe se h alguma divergncia ou correo necessria..."
+                placeholder="Informe se há alguma divergência ou correção necessária..."
                 rows={3}
                 style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? 'var(--bg-subtle)' : 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, padding: '10px 14px', fontSize: 14, color: readOnly ? 'var(--neutral-dark-down)' : 'var(--neutral-dark-pure)', outline: 'none', resize: 'vertical' }}
                 onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = 'var(--primary-pure)'; }}
@@ -544,9 +544,9 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
       {tipo === 'Análise de documentos' && (
         <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>
-            <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>Anlise de documentos</h2>
+            <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>Análise de documentos</h2>
             <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', margin: '4px 0 0 0', lineHeight: 1.5 }}>
-              {readOnly ? 'Anlise concluda. Veja o resultado abaixo.' : 'Preencha os campos de anlise tcnica e emita seu parecer.'}
+              {readOnly ? 'Análise concluída. Veja o resultado abaixo.' : 'Preencha os campos de análise técnica e emita seu parecer.'}
             </p>
           </div>
           {/* Documentos para reviso */}
@@ -584,14 +584,14 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
           <div>
             <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>Complementar dados do processo</h2>
             <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', margin: '4px 0 0 0', lineHeight: 1.5 }}>
-              {readOnly ? 'Dados complementados. Esta pendncia j foi concluda.' : 'Anexe a documentao solicitada e descreva as informaes adicionais necessrias.'}
+              {readOnly ? 'Dados complementados. Esta pendência já foi concluída.' : 'Anexe a documentação solicitada e descreva as informações adicionais necessárias.'}
             </p>
           </div>
           {/* O que foi solicitado */}
           <div style={{ background: 'var(--warning-bg)', border: '1px solid var(--warning-border-light)', borderRadius: 8, padding: '12px 16px', display: 'flex', alignItems: 'flex-start', gap: 10 }}>
             <FAIcon icon="fa-regular fa-triangle-exclamation" style={{ fontSize: 14, color: 'var(--warning-color)', flexShrink: 0, marginTop: 2 }} />
             <div style={{ fontSize: 13, color: 'var(--warning-deep)', lineHeight: '20px' }}>
-              <strong>Documentao solicitada:</strong> Comprovante de endereo atualizado (emitido nos ltimos 90 dias) e comprovante de renda dos ltimos 3 meses.
+              <strong>Documentação solicitada:</strong> Comprovante de endereço atualizado (emitido nos últimos 90 dias) e comprovante de renda dos últimos 3 meses.
             </div>
           </div>
           {/* Upload */}
@@ -623,9 +623,9 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
             <label style={LABEL_STYLE}>Informaes adicionais</label>
             <textarea
               disabled={readOnly}
-              value={readOnly ? 'Documentos enviados conforme solicitação. O comprovante de endereo  referente ao ms de maro/2026 e o comprovante de renda cobre o trimestre de janeiro a maro de 2026.' : observacao}
+              value={readOnly ? 'Documentos enviados conforme solicitação. O comprovante de endereço é referente ao mês de março/2026 e o comprovante de renda cobre o trimestre de janeiro a março de 2026.' : observacao}
               onChange={e => setObservacao(e.target.value)}
-              placeholder="Descreva informaes adicionais que julgar pertinentes..."
+              placeholder="Descreva informações adicionais que julgar pertinentes..."
               rows={3}
               style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? 'var(--bg-subtle)' : 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, padding: '10px 14px', fontSize: 14, color: readOnly ? 'var(--neutral-dark-down)' : 'var(--neutral-dark-pure)', outline: 'none', resize: 'vertical' }}
               onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = 'var(--primary-pure)'; }}
@@ -648,8 +648,9 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
           </button>
           <button
             onClick={tipo === 'Assinatura de documentos' ? () => setShowConfirmarModal(true) : onConcluir}
-            style={{ height: 44, padding: '0 24px', borderRadius: 8, background: 'var(--primary-pure)', border: '1.5px solid var(--primary-pure)', color: 'white', fontWeight: 700, fontSize: 14, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0px 2px 6px rgba(0,88,219,0.24)' }}
-            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-pure-hover)'}
+            disabled={tipo === 'Assinatura de documentos' && paraAssinar.size === 0 && paraRecusar.size === 0}
+            style={{ height: 44, padding: '0 24px', borderRadius: 8, background: 'var(--primary-pure)', border: '1.5px solid var(--primary-pure)', color: 'white', fontWeight: 700, fontSize: 14, cursor: tipo === 'Assinatura de documentos' && paraAssinar.size === 0 && paraRecusar.size === 0 ? 'not-allowed' : 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0px 2px 6px rgba(0,88,219,0.24)', opacity: tipo === 'Assinatura de documentos' && paraAssinar.size === 0 && paraRecusar.size === 0 ? 0.5 : 1 }}
+            onMouseEnter={e => { if (!(tipo === 'Assinatura de documentos' && paraAssinar.size === 0 && paraRecusar.size === 0)) (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-pure-hover)'; }}
             onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-pure)'}
           >
             <FAIcon icon={tipo === 'Assinatura de documentos' ? 'fa-regular fa-signature' : 'fa-regular fa-circle-check'} style={{ fontSize: 15 }} />
@@ -668,7 +669,7 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
             onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}
           >
             <FAIcon icon="fa-regular fa-arrow-left" style={{ fontSize: 13 }} />
-            Voltar s pendncias
+            Voltar às pendências
           </button>
         </div>
       )}

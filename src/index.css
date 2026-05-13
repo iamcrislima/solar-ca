@@ -114,6 +114,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+input, select, textarea, button {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary-pure, #0058db);
+  outline-offset: 2px;
+}
+
 /* Override 1ds Button primary style to match Figma */
 .btn-entrar {
   background-color: var(--primary-pure) !important;

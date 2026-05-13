@@ -13,7 +13,12 @@ export default function Breadcrumb({ page, onNavigate, selectedCat, selectedServ
   const sep = <span style={{ ...txt, fontWeight: 700 }}>/</span>;
 
   const link = (label: string, onClick: () => void): React.ReactElement => (
-    <span onClick={onClick} style={{ ...txt, fontWeight: 400, cursor: 'pointer' }}>{label}</span>
+    <span
+      onClick={onClick}
+      style={{ ...txt, fontWeight: 400, cursor: 'pointer', textDecoration: 'underline' }}
+      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'var(--primary-pure)'; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--neutral-dark-down)'; }}
+    >{label}</span>
   );
 
   const inSolicitacao = page === 'solicitacao' || page === 'cat-servicos' || page === 'servico-detalhe' || page === 'servico-form';
@@ -83,7 +88,7 @@ export default function Breadcrumb({ page, onNavigate, selectedCat, selectedServ
         }</>
       )}
       {page === 'servico-form' && selectedService && (
-        <>{sep}<span style={{ ...txt, fontWeight: 400 }}>Solicitar</span></>
+        <>{sep}<span style={{ ...txt, fontWeight: 400 }}>Nova solicitação</span></>
       )}
     </div>
   );

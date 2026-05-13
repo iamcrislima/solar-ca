@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useT } from '../i18n';
+import { useT, useIsMobile } from '../i18n';
 import { ProcessoLiberado } from '../types';
 import FAIcon from '../components/FAIcon';
 import StatCard from '../components/StatCard';
 //  Mock & Tela: Processos Liberados 
 
 const MOCK_LIBERADOS: ProcessoLiberado[] = [
-  { id: 'l1', numero: 'SolarBPM 2026/000848', interessado: 'Fernando Naim Schmitz',  cpf: '006.334.989-20', liberadoEm: '29/03/2026', terminaEm: '29/04/2026', ativo: true,  anexos: 3, orgao: 'SAUDE - Secretaria da Sade' },
-  { id: 'l2', numero: 'PMF 2026/000721',      interessado: 'Filipe Otvio Reis',      cpf: '123.456.789-00', liberadoEm: '15/03/2026', terminaEm: '15/04/2026', ativo: true,  anexos: 1, orgao: 'SEFAZ - Secretaria da Fazenda' },
+  { id: 'l1', numero: 'SolarBPM 2026/000848', interessado: 'Fernando Naim Schmitz',  cpf: '006.334.989-20', liberadoEm: '29/03/2026', terminaEm: '29/04/2026', ativo: true,  anexos: 3, orgao: 'SAUDE - Secretaria da Saúde' },
+  { id: 'l2', numero: 'PMF 2026/000721',      interessado: 'Filipe Otávio Reis',      cpf: '123.456.789-00', liberadoEm: '15/03/2026', terminaEm: '15/04/2026', ativo: true,  anexos: 1, orgao: 'SEFAZ - Secretaria da Fazenda' },
   { id: 'l3', numero: 'PMF 2025/009812',      interessado: 'Fernando Naim Schmitz',  cpf: '006.334.989-20', liberadoEm: '10/10/2025', terminaEm: '10/11/2025', ativo: false, anexos: 5, orgao: 'IPUF - Instituto de Planejamento Urbano' },
   { id: 'l4', numero: 'PMF 2025/008234',      interessado: 'Cris Lima',               cpf: '043.792.234-00', liberadoEm: '22/08/2025', terminaEm: '22/09/2025', ativo: false, anexos: 2, orgao: 'SMC - Secretaria de Mobilidade' },
   { id: 'l5', numero: 'PMF 2025/007109',      interessado: 'Fernando Naim Schmitz',  cpf: '006.334.989-20', liberadoEm: '12/07/2025', terminaEm: '12/08/2025', ativo: false, anexos: 4, orgao: 'SMDU - Desenvolvimento Urbano' },
-  { id: 'l6', numero: 'PMF 2025/006055',      interessado: 'Cris Lima',               cpf: '043.792.234-00', liberadoEm: '03/06/2025', terminaEm: '03/07/2025', ativo: false, anexos: 1, orgao: 'SAUDE - Secretaria da Sade' },
+  { id: 'l6', numero: 'PMF 2025/006055',      interessado: 'Cris Lima',               cpf: '043.792.234-00', liberadoEm: '03/06/2025', terminaEm: '03/07/2025', ativo: false, anexos: 1, orgao: 'SAUDE - Secretaria da Saúde' },
 ];
 
 // Nomes mock de arquivos por slot
@@ -177,6 +177,7 @@ function ProcessoLiberadoCard({ item, onVerAnexos }: { item: ProcessoLiberado; o
 
 export default function ProcessosLiberados({ onVerAnexos }: { onVerAnexos: (item: ProcessoLiberado) => void }) {
   const t = useT();
+  const isMobile = useIsMobile();
   const [query, setQuery]         = useState('');
   const [filtro, setFiltro]       = useState<'todos' | 'ativos' | 'expirados'>('ativos');
   const [expiradoModal, setExpiradoModal] = useState<ProcessoLiberado | null>(null);
@@ -207,7 +208,7 @@ export default function ProcessosLiberados({ onVerAnexos }: { onVerAnexos: (item
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: isMobile ? '16px 16px 48px 16px' : '24px 24px 48px 24px' }}>
       {/* Ttulo + descrio + aes */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: 280 }}>

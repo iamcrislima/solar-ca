@@ -93,7 +93,7 @@ export default function ServicoForm({ service }: { service: Servico }) {
         {/*  Step 1: Dados pessoais  */}
         {step === 1 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <h2 style={{ fontWeight: 700, fontSize: 18, color: 'var(--colors-neutral-01)', margin: 0, paddingBottom: 12, borderBottom: '1px solid var(--neutral-light-medium)' }}>
+            <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0, paddingBottom: 12, borderBottom: '1px solid var(--neutral-light-medium)' }}>
               {t('sfDadosSolicitante')}
             </h2>
             <div style={{ display: 'flex', gap: 16 }}>
@@ -128,7 +128,7 @@ export default function ServicoForm({ service }: { service: Servico }) {
         {/*  Step 2: Detalhes  */}
         {step === 2 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <h2 style={{ fontWeight: 700, fontSize: 18, color: 'var(--colors-neutral-01)', margin: 0, paddingBottom: 12, borderBottom: '1px solid var(--neutral-light-medium)' }}>
+            <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0, paddingBottom: 12, borderBottom: '1px solid var(--neutral-light-medium)' }}>
               {t('sfDetalhesTitle')}
             </h2>
             <div style={{ display: 'flex', gap: 16 }}>
@@ -178,7 +178,7 @@ export default function ServicoForm({ service }: { service: Servico }) {
         {/*  Step 3: Documentos  */}
         {step === 3 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <h2 style={{ fontWeight: 700, fontSize: 18, color: 'var(--colors-neutral-01)', margin: 0, paddingBottom: 12, borderBottom: '1px solid var(--neutral-light-medium)' }}>
+            <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0, paddingBottom: 12, borderBottom: '1px solid var(--neutral-light-medium)' }}>
               {t('sfAnexarTitle')}
             </h2>
             <p style={{ fontSize: 14, color: 'var(--neutral-dark-down)', margin: 0 }}>

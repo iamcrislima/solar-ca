@@ -67,7 +67,7 @@ export default function LoginModal({ onClose, onLogin }: { onClose: () => void; 
             /*  LOGIN  */
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16, flex: 1, marginTop: 32 }}>
               <p style={{ fontWeight: 700, fontSize: 24, color: 'var(--neutral-dark-pure)', margin: 0, letterSpacing: '0.12px' }}>
-                Boas vindas ao FloripaOn
+                {t('boasVindas')}
               </p>
 
               {/*  gov.br PRIMEIRO (opção principal)  */}
@@ -211,11 +211,16 @@ export default function LoginModal({ onClose, onLogin }: { onClose: () => void; 
               </div>
 
               <button style={{
-                width: '100%', height: 40, border: '1px solid var(--primary-pure)', borderRadius: 8,
-                background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-                fontWeight: 600, fontSize: 14, color: 'var(--govbr-dark)',
-              }}>
-                Entrar com <strong style={{ fontWeight: 700, fontSize: 18, letterSpacing: '0.09px' }}>gov.br</strong>
+                width: '100%', height: 52, border: 'none', borderRadius: 10,
+                background: 'var(--govbr-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                fontWeight: 700, fontSize: 15, color: 'white',
+                boxShadow: '0px 2px 8px rgba(19,81,180,0.30)', transition: 'background 0.12s',
+              }}
+                onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--govbr-hover)'}
+                onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--govbr-color)'}
+              >
+                <FAIcon icon="fa-regular fa-shield-check" style={{ fontSize: 18 }} />
+                Entrar com <strong style={{ fontSize: 20, letterSpacing: '0.09px' }}>gov.br</strong>
               </button>
             </div>
           )}
