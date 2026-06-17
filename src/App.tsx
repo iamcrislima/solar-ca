@@ -28,6 +28,7 @@ import SolicitacaoServicos  from './pages/SolicitacaoServicos';
 import CatServicos          from './pages/CatServicos';
 import ServicoDetalhe       from './pages/ServicoDetalhe';
 import ServicoForm          from './pages/ServicoForm';
+import CadastroPage         from './pages/CadastroPage';
 import ErrorBoundary        from './components/ErrorBoundary';
 //  Componente principal 
 export default function App() {
@@ -149,13 +150,19 @@ export default function App() {
       {page === 'servico-form' && selectedService && (
         <ServicoForm service={selectedService} />
       )}
+      {page === 'cadastro' && (
+        <CadastroPage
+          onVoltar={() => setPage('home')}
+          onEntrar={() => { setPage('home'); setShowLogin(true); }}
+        />
+      )}
     </>
   );
 
   return (
     <LangContext.Provider value={lang}>
       <IsMobileContext.Provider value={isMobile}>
-        {showLogin && <LoginModal onClose={() => setShowLogin(false)} onLogin={handleLogin} />}
+        {showLogin && <LoginModal onClose={() => setShowLogin(false)} onLogin={handleLogin} onShowCadastro={() => setPage('cadastro')} />}
 
         {isMobile ? (
           /*  Layout mobile  */

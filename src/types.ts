@@ -1,5 +1,5 @@
 //  Tipo de página
-export type Page = 'home' | 'consulta' | 'processo' | 'documentos' | 'meusdados' | 'meusprocessos' | 'minhaspendencias' | 'pendencia-resolver' | 'processosliberados' | 'solicitacao' | 'cat-servicos' | 'servico-detalhe' | 'servico-form';
+export type Page = 'home' | 'consulta' | 'processo' | 'documentos' | 'meusdados' | 'meusprocessos' | 'minhaspendencias' | 'pendencia-resolver' | 'processosliberados' | 'solicitacao' | 'cat-servicos' | 'servico-detalhe' | 'servico-form' | 'cadastro';
 
 //  Status de processo
 export type ProcessoStatus = 'Concluído' | 'Em Andamento' | 'Pendente';
