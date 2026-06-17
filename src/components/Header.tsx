@@ -5,6 +5,7 @@ import type { Lang } from '../i18n';
 import type { Page } from '../types';
 import { ALL_SERVICES, MOCK_USER, SIDEBAR_COLLAPSED } from '../mocks';
 import FAIcon from './FAIcon';
+import TermosModal from './TermosModal';
 
 function HeaderSearch() {
   const t = useT();
@@ -70,8 +71,9 @@ export default function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavi
   lang: Lang; onSetLang: (l: Lang) => void;
 }) {
   const t = useT();
-  const [avatarOpen, setAvatarOpen] = useState(false);
-  const [langOpen,   setLangOpen]   = useState(false);
+  const [avatarOpen,  setAvatarOpen]  = useState(false);
+  const [langOpen,    setLangOpen]    = useState(false);
+  const [showTermos,  setShowTermos]  = useState(false);
   const avatarRef = useRef<HTMLDivElement>(null);
   const langRef   = useRef<HTMLDivElement>(null);
 
@@ -92,6 +94,7 @@ export default function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavi
   });
 
   return (
+    <>
     <div style={{ background: 'white', borderBottom: '1px solid var(--primary-light)', height: 56, display: 'flex', alignItems: 'center', flexShrink: 0 }}>
       {/* Toggle sidebar */}
       <div title="Expandir/retrair menu" onClick={onToggle}
@@ -182,6 +185,14 @@ export default function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavi
                   <FAIcon icon="fa-regular fa-user" style={{ fontSize: 14, color: 'var(--primary-pure)' }} />
                   {t('meusDados')}
                 </div>
+                <div onClick={() => { setAvatarOpen(false); setShowTermos(true); }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', cursor: 'pointer', fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-pure)', transition: 'background 0.1s', borderBottom: '1px solid var(--neutral-light-medium)' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'var(--primary-bg-subtle)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'transparent'; }}
+                >
+                  <FAIcon icon="fa-regular fa-file-lines" style={{ fontSize: 14, color: 'var(--primary-pure)' }} />
+                  Termos de Uso
+                </div>
                 <div onClick={() => { setAvatarOpen(false); onLogout(); }}
                   style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', cursor: 'pointer', fontWeight: 400, fontSize: 14, color: 'var(--error-color)', transition: 'background 0.1s' }}
                   onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'var(--error-bg)'; }}
@@ -198,6 +209,8 @@ export default function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavi
         )}
       </div>
     </div>
+    {showTermos && <TermosModal onClose={() => setShowTermos(false)} />}
+    </>
   );
 }
 

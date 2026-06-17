@@ -3,8 +3,9 @@ import { Button } from '@1doc/1ds-react';
 import { useT, useIsMobile } from '../i18n';
 import { imgFloripa } from '../mocks';
 import FAIcon from './FAIcon';
+import TermosModal from './TermosModal';
 
-export default function LoginModal({ onClose, onLogin }: { onClose: () => void; onLogin: () => void }) {
+export default function LoginModal({ onClose, onLogin, onShowCadastro }: { onClose: () => void; onLogin: () => void; onShowCadastro?: () => void }) {
   const t = useT();
   const isMobile = useIsMobile();
   const [view,          setView]          = useState<'login' | 'recovery'>('login');
@@ -13,6 +14,7 @@ export default function LoginModal({ onClose, onLogin }: { onClose: () => void; 
   const [showSenha,     setShowSenha]     = useState(false);
   const [emailRecov,    setEmailRecov]    = useState('');
   const [showLoginForm, setShowLoginForm] = useState(false);
+  const [showTermos,    setShowTermos]    = useState(false);
 
   const label: React.CSSProperties = {
     fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-pure)', lineHeight: '20px',
@@ -27,6 +29,8 @@ export default function LoginModal({ onClose, onLogin }: { onClose: () => void; 
   };
 
   return (
+    <>
+    {showTermos && <TermosModal onClose={() => setShowTermos(false)} />}
     <div style={{
       position: 'fixed', inset: 0, zIndex: 1000,
       background: isMobile ? 'white' : 'rgba(0,0,0,0.45)',
@@ -167,6 +171,28 @@ export default function LoginModal({ onClose, onLogin }: { onClose: () => void; 
                     </span>
                   </div>
                   <Button size="md" variant="primary" onClick={() => { onLogin(); onClose(); }} style={{ width: '100%' }}>Entrar</Button>
+
+                  {/* Criar conta */}
+                  <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', textAlign: 'center', margin: 0 }}>
+                    Não possui conta?{' '}
+                    <span
+                      onClick={() => { onClose(); if (onShowCadastro) onShowCadastro(); }}
+                      style={{ fontWeight: 700, color: 'var(--primary-pure)', cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                      Criar conta
+                    </span>
+                  </p>
+
+                  {/* Termos */}
+                  <p style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', textAlign: 'center', margin: 0 }}>
+                    Ao entrar você concorda com os{' '}
+                    <span
+                      onClick={() => setShowTermos(true)}
+                      style={{ fontWeight: 600, color: 'var(--primary-pure)', cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                      Termos de Uso e Política de Privacidade
+                    </span>
+                  </p>
                 </div>
               )}
             </div>
@@ -227,6 +253,7 @@ export default function LoginModal({ onClose, onLogin }: { onClose: () => void; 
         </div>
       </div>
     </div>
+    </>
   );
 }
 
