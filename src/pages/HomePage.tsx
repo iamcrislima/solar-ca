@@ -15,15 +15,27 @@ const MOCK_DASH_ATIVIDADES = [
   { icon: 'fa-regular fa-folder-open',      text: 'Processo acessado: Ranking de Sustentabilidade',   processo: 'PMF2026/000322', date: '17/04/2026', color: 'var(--neutral-dark-down)' },
 ];
 
-export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavigateService }: {
+export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavigateService, onNavigateProtected }: {
   onNavigateCat: (cat: { label: string; icon: string }) => void;
   isLoggedIn: boolean;
   onNavigate: (p: Page, filter?: string) => void;
   onNavigateService?: (svc: Servico) => void;
+  onNavigateProtected: (p: Page) => void;
 }) {
   const t = useT();
   const lang = useLang();
   const isMobile = useIsMobile();
+
+  const ACTION_CARDS: { icon: string; title: string; desc: string; page: Page; requiresLogin: boolean }[] = [
+    { icon: 'fa-regular fa-file-circle-plus',    title: t('solicitacaoServicos'),  desc: t('cardSolicitacaoDesc'),       page: 'solicitacao',        requiresLogin: false },
+    { icon: 'fa-regular fa-file-magnifying-glass',title: t('conferenciaDocumentos'),desc: t('cardDocumentosDesc'),        page: 'documentos',         requiresLogin: false },
+    { icon: 'fa-regular fa-magnifying-glass',    title: t('consultaProcessos'),    desc: t('cardConsultaDesc'),           page: 'consulta',           requiresLogin: false },
+    { icon: 'fa-regular fa-folder-open',         title: t('meusProcessos'),        desc: t('cardMeusProcessosDesc'),      page: 'meusprocessos',      requiresLogin: true },
+    { icon: 'fa-regular fa-bell',                title: t('minhasPendencias'),     desc: t('cardMinhasPendenciasDesc'),   page: 'minhaspendencias',   requiresLogin: true },
+    { icon: 'fa-regular fa-unlock',              title: t('processosLiberados'),   desc: t('cardProcessosLiberadosDesc'), page: 'processosliberados', requiresLogin: true },
+    { icon: 'fa-regular fa-file-signature',      title: t('assinaturaDigital'),    desc: t('cardAssinaturaDigitalDesc'),  page: 'minhaspendencias',   requiresLogin: true },
+  ];
+
   return (
     <>
     <div style={{ display: 'flex', flexDirection: 'column', gap: isLoggedIn ? 24 : (isMobile ? 24 : 48), padding: isMobile ? '16px 16px 48px 16px' : '16px 24px 48px 24px' }}>
@@ -126,6 +138,53 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavi
           {t('iptuDesc')}
         </span>
       </div>
+
+      {/* Cards de ação rápida */}
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+          <h2 style={{ fontWeight: 700, fontSize: isMobile ? 16 : 18, color: 'var(--neutral-ink-strong)', margin: 0 }}>{t('acaoServicosTitle')}</h2>
+          {!isLoggedIn && (
+            <span style={{ fontSize: 11, color: 'var(--neutral-dark-medium)', fontWeight: 400 }}>
+              — 3 serviços sem login
+            </span>
+          )}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(210px, 1fr))', gap: 12 }}>
+          {ACTION_CARDS.map(card => {
+            const locked = card.requiresLogin && !isLoggedIn;
+            return (
+              <div
+                key={card.icon}
+                onClick={() => locked ? onNavigateProtected(card.page) : onNavigate(card.page)}
+                style={{ position: 'relative', background: 'white', border: '1px solid #dde3ee', borderRadius: 14, padding: isMobile ? '16px 14px 14px' : '20px 16px 16px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 10, boxShadow: '0px 2px 8px rgba(24,39,75,0.06)', transition: 'all 0.18s ease' }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLDivElement; el.style.borderColor = '#a5c2e8'; el.style.boxShadow = '0px 8px 24px rgba(0,88,219,0.13)'; el.style.transform = 'translateY(-3px)'; }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLDivElement; el.style.borderColor = '#dde3ee'; el.style.boxShadow = '0px 2px 8px rgba(24,39,75,0.06)'; el.style.transform = 'translateY(0)'; }}
+              >
+                {/* Texto + badge inline */}
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 4 }}>
+                    <div style={{ fontWeight: 700, fontSize: 13, color: locked ? '#8d9ab0' : '#1a2332', lineHeight: 1.3 }}>{card.title}</div>
+                    {locked && (
+                      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 3, background: '#f4f6f9', border: '1px solid #e4e9f0', borderRadius: 100, padding: '2px 7px 2px 5px', marginTop: 1 }}>
+                        <FAIcon icon="fa-regular fa-lock" style={{ fontSize: 9, color: '#8d9ab0' }} />
+                        <span style={{ fontSize: 9, fontWeight: 600, color: '#8d9ab0', whiteSpace: 'nowrap' }}>{t('loginNecessario')}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div style={{ fontSize: 11, color: '#8d9ab0', lineHeight: 1.5 }}>{card.desc}</div>
+                </div>
+                {/* Seta */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <div style={{ width: 26, height: 26, borderRadius: 7, background: locked ? '#f2f4f7' : '#edf2ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FAIcon icon="fa-regular fa-arrow-right" style={{ fontSize: 11, color: locked ? '#b0bac7' : '#0058db' }} />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 24 }}>
         <ServiceCard title={t('emDestaque')}    items={featuredServices[lang]} icon="fa-regular fa-star"
           onItemClick={item => { const svc = MOCK_SERVICOS_AV.find(s => s.servico === item); if (svc && onNavigateService) onNavigateService(svc); }} />

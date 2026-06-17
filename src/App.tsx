@@ -45,9 +45,15 @@ export default function App() {
   const [isMobile,          setIsMobile]          = useState(() => window.innerWidth < 768);
   const [drawerOpen,        setDrawerOpen]        = useState(false);
   const [meusProcessosFilter, setMeusProcessosFilter] = useState<'todos' | 'Em Andamento' | 'Concluído' | 'Pendente'>('todos');
+  const [pendingPage, setPendingPage] = useState<Page | null>(null);
 
-  function handleLogin()  { setIsLoggedIn(true);  setShowLogin(false); }
+  function handleLogin()  { setIsLoggedIn(true); setShowLogin(false); if (pendingPage) { setPage(pendingPage); setPendingPage(null); } }
   function handleLogout() { setIsLoggedIn(false); setPage('home'); setDrawerOpen(false); }
+
+  function handleNavigateProtected(p: Page) {
+    if (!isLoggedIn) { setPendingPage(p); setShowLogin(true); }
+    else setPage(p);
+  }
 
   useEffect(() => {
     const check = () => setIsMobile(prev => { const next = window.innerWidth < 768; return prev === next ? prev : next; });
@@ -75,6 +81,7 @@ export default function App() {
             setPage(p);
           }}
           onNavigateService={svc => { setSelectedService(svc); setPage('servico-detalhe'); }}
+          onNavigateProtected={handleNavigateProtected}
         />
       )}
       {page === 'consulta'   && (
