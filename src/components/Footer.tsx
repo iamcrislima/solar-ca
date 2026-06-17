@@ -67,13 +67,13 @@ export default function Footer({ onNavigate }: { onNavigate: (p: Page) => void }
             </div>
             <div>
               <div style={{ fontWeight: 800, fontSize: 20, letterSpacing: '-0.3px', lineHeight: 1.1 }}>FloripaOn</div>
-              <div style={{ fontWeight: 400, fontSize: 12, color: 'rgba(255,255,255,0.70)', marginTop: 3, lineHeight: 1.4 }}>
+              <div style={{ fontWeight: 400, fontSize: 12, color: 'rgba(255,255,255,0.88)', marginTop: 3, lineHeight: 1.4 }}>
                 Prefeitura Municipal de Florianópolis
               </div>
             </div>
           </div>
 
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, maxWidth: 320 }}>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.88)', lineHeight: 1.7, maxWidth: 320 }}>
             Portal oficial de serviços digitais da Prefeitura de Florianópolis.
             Solicite, acompanhe e gerencie seus processos com agilidade e segurança.
           </p>
@@ -105,7 +105,7 @@ export default function Footer({ onNavigate }: { onNavigate: (p: Page) => void }
 
         {/* Coluna 2 — Links rápidos */}
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.55)', marginBottom: 18 }}>
+          <div style={{ fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.85)', marginBottom: 18 }}>
             Links Rápidos
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -124,7 +124,7 @@ export default function Footer({ onNavigate }: { onNavigate: (p: Page) => void }
                 onMouseEnter={e => (e.currentTarget.style.color = 'white')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.80)')}
               >
-                <FAIcon icon={link.icon} style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', flexShrink: 0 }} />
+                <FAIcon icon={link.icon} style={{ fontSize: 13, color: 'rgba(255,255,255,0.70)', flexShrink: 0 }} />
                 {link.label}
               </button>
             ))}
@@ -133,7 +133,7 @@ export default function Footer({ onNavigate }: { onNavigate: (p: Page) => void }
 
         {/* Coluna 3 — Central de Atendimento */}
         <div>
-          <div style={{ fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.55)', marginBottom: 18 }}>
+          <div style={{ fontWeight: 700, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'rgba(255,255,255,0.85)', marginBottom: 18 }}>
             Central de Atendimento
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -172,10 +172,10 @@ export default function Footer({ onNavigate }: { onNavigate: (p: Page) => void }
           margin: '0 auto',
         }}
       >
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)' }}>
+        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)' }}>
           © {new Date().getFullYear()} Prefeitura Municipal de Florianópolis. Todos os direitos reservados.
         </span>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>
+        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)' }}>
           Powered by Solar BPM · v1.0
         </span>
       </div>

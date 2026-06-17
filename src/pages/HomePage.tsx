@@ -48,7 +48,7 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavi
             <div>
               <div style={{ fontWeight: 400, fontSize: 14, color: 'rgba(255,255,255,0.80)', marginBottom: 4 }}>{t('dashOla')},</div>
               <div style={{ fontWeight: 700, fontSize: isMobile ? 18 : 22, color: 'white', lineHeight: 1.2 }}>{MOCK_USER.nome}</div>
-              <div style={{ fontWeight: 400, fontSize: 13, color: 'rgba(255,255,255,0.70)', marginTop: 4 }}>{t('bemVindo')}</div>
+              <div style={{ fontWeight: 400, fontSize: 13, color: 'rgba(255,255,255,0.88)', marginTop: 4 }}>{t('bemVindo')}</div>
             </div>
             <div style={{ display: 'flex', gap: isMobile ? 10 : 16, flexWrap: 'nowrap' }}>
               {([
@@ -65,7 +65,7 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavi
                 >
                   <FAIcon icon={stat.icon} style={{ fontSize: isMobile ? 16 : 18, color: 'rgba(255,255,255,0.80)' }} />
                   <span style={{ fontWeight: 700, fontSize: isMobile ? 22 : 28, color: 'white', lineHeight: 1 }}>{stat.value}</span>
-                  <span style={{ fontWeight: 400, fontSize: isMobile ? 10 : 11, color: 'rgba(255,255,255,0.75)', textAlign: 'center', lineHeight: 1.3 }}>{stat.label}</span>
+                  <span style={{ fontWeight: 400, fontSize: isMobile ? 10 : 11, color: 'rgba(255,255,255,0.90)', textAlign: 'center', lineHeight: 1.3 }}>{stat.label}</span>
                 </div>
               ))}
             </div>
@@ -163,20 +163,20 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavi
                 {/* Texto + badge inline */}
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 4 }}>
-                    <div style={{ fontWeight: 700, fontSize: 13, color: locked ? '#8d9ab0' : '#1a2332', lineHeight: 1.3 }}>{card.title}</div>
+                    <div style={{ fontWeight: 700, fontSize: 13, color: locked ? '#5f6b7a' : '#1a2332', lineHeight: 1.3 }}>{card.title}</div>
                     {locked && (
                       <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 3, background: '#f4f6f9', border: '1px solid #e4e9f0', borderRadius: 100, padding: '2px 7px 2px 5px', marginTop: 1 }}>
-                        <FAIcon icon="fa-regular fa-lock" style={{ fontSize: 9, color: '#8d9ab0' }} />
-                        <span style={{ fontSize: 9, fontWeight: 600, color: '#8d9ab0', whiteSpace: 'nowrap' }}>{t('loginNecessario')}</span>
+                        <FAIcon icon="fa-regular fa-lock" style={{ fontSize: 9, color: '#5f6b7a' }} />
+                        <span style={{ fontSize: 9, fontWeight: 600, color: '#5f6b7a', whiteSpace: 'nowrap' }}>{t('loginNecessario')}</span>
                       </div>
                     )}
                   </div>
-                  <div style={{ fontSize: 11, color: '#8d9ab0', lineHeight: 1.5 }}>{card.desc}</div>
+                  <div style={{ fontSize: 11, color: '#5f6b7a', lineHeight: 1.5 }}>{card.desc}</div>
                 </div>
                 {/* Seta */}
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <div style={{ width: 26, height: 26, borderRadius: 7, background: locked ? '#f2f4f7' : '#edf2ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <FAIcon icon="fa-regular fa-arrow-right" style={{ fontSize: 11, color: locked ? '#b0bac7' : '#0058db' }} />
+                    <FAIcon icon="fa-regular fa-arrow-right" style={{ fontSize: 11, color: locked ? '#6b7280' : '#0058db' }} />
                   </div>
                 </div>
               </div>
