@@ -8,7 +8,7 @@ export const imgBannerFloripa = '/floripa.jpg';
 export const imgFloripa       = '/Floripa 02.jpg';
 
 //  Usuário logado (mock) 
-export const MOCK_USER = { nome: 'Cris Lima', cpf: '043.792.234-00', initials: 'CL' };
+export const MOCK_USER = { nome: 'Cris Lima', cpf: '012.345.678-90', initials: 'CL' };
 
 //  Layout sidebar 
 export const SIDEBAR_COLLAPSED = 48;
@@ -230,15 +230,15 @@ export function pendenciaTipoKey(tipo: PendenciaTipo): 'tipoAssinatura' | 'tipoV
 }
 
 export const MOCK_PENDENCIAS: Pendencia[] = [
-  { id: 'p1', tipo: 'Verificar informações',    criadaEm: '15/04/2026', prazo: '22/04/2026', diasRestantes: 2,    status: 'Aberta',      processo: 'PMF2026/000418', interessado: 'Fernando Naim Schmitz', titulo: 'Verificar informações solicitadas sobre renda' },
+  { id: 'p1', tipo: 'Verificar informações',    criadaEm: '15/04/2026', prazo: '22/04/2026', diasRestantes: 2,    status: 'Aberta',      processo: 'PMF2026/000418', interessado: 'João da Silva Santos', titulo: 'Verificar informações solicitadas sobre renda' },
   { id: 'p2', tipo: 'Assinatura de documentos', criadaEm: '14/04/2026', prazo: '21/04/2026', diasRestantes: 1,    status: 'Aberta',      processo: 'PMF2026/000392', interessado: 'Empresa de Transportes', titulo: 'Assinatura de contrato de prestação' },
-  { id: 'p3', tipo: 'Comunique-se',             criadaEm: '12/04/2026', prazo: '19/04/2026', diasRestantes: -1,   status: 'Aberta',      processo: 'PMF2026/000367', interessado: 'Fernando Naim Schmitz', titulo: 'Responder questionamento sobre documentação' },
+  { id: 'p3', tipo: 'Comunique-se',             criadaEm: '12/04/2026', prazo: '19/04/2026', diasRestantes: -1,   status: 'Aberta',      processo: 'PMF2026/000367', interessado: 'João da Silva Santos', titulo: 'Responder questionamento sobre documentação' },
   { id: 'p4', tipo: 'Assinatura de documentos', criadaEm: '11/04/2026', prazo: '25/04/2026', diasRestantes: 5,    status: 'Aberta',      processo: 'PMF2026/000341', interessado: 'Filipe Otávio Reis',    titulo: 'Assinatura de declaração de residência' },
-  { id: 'p5', tipo: 'Complementar dados',       criadaEm: '10/04/2026', prazo: null,         diasRestantes: null, status: 'Aberta',      processo: 'PMF2026/000298', interessado: 'Fernando Naim Schmitz', titulo: 'Anexar comprovante de endereço atualizado' },
-  { id: 'p6', tipo: 'Análise de documentos',    criadaEm: '08/04/2026', prazo: '28/04/2026', diasRestantes: 8,    status: 'Aberta',      processo: 'PMF2026/000275', interessado: 'Fernando Naim Schmitz', titulo: 'Analisar parecer técnico da vistoria' },
-  { id: 'p7', tipo: 'Assinatura de documentos', criadaEm: '05/04/2026', prazo: '12/04/2026', diasRestantes: -8,   status: 'Aberta',      processo: 'PMF2026/000244', interessado: 'Fernando Naim Schmitz', titulo: 'Assinatura de termo de compromisso' },
-  { id: 'p8', tipo: 'Comunique-se',             criadaEm: '02/04/2026', prazo: '09/04/2026', diasRestantes: -11,  status: 'Finalizada',  processo: 'PMF2026/000221', interessado: 'Fernando Naim Schmitz', titulo: 'Responder sobre histórico escolar' },
-  { id: 'p9', tipo: 'Verificar informações',    criadaEm: '28/03/2026', prazo: '04/04/2026', diasRestantes: -16,  status: 'Finalizada',  processo: 'PMF2026/000198', interessado: 'Fernando Naim Schmitz', titulo: 'Verificar dados cadastrais' },
+  { id: 'p5', tipo: 'Complementar dados',       criadaEm: '10/04/2026', prazo: null,         diasRestantes: null, status: 'Aberta',      processo: 'PMF2026/000298', interessado: 'João da Silva Santos', titulo: 'Anexar comprovante de endereço atualizado' },
+  { id: 'p6', tipo: 'Análise de documentos',    criadaEm: '08/04/2026', prazo: '28/04/2026', diasRestantes: 8,    status: 'Aberta',      processo: 'PMF2026/000275', interessado: 'João da Silva Santos', titulo: 'Analisar parecer técnico da vistoria' },
+  { id: 'p7', tipo: 'Assinatura de documentos', criadaEm: '05/04/2026', prazo: '12/04/2026', diasRestantes: -8,   status: 'Aberta',      processo: 'PMF2026/000244', interessado: 'João da Silva Santos', titulo: 'Assinatura de termo de compromisso' },
+  { id: 'p8', tipo: 'Comunique-se',             criadaEm: '02/04/2026', prazo: '09/04/2026', diasRestantes: -11,  status: 'Finalizada',  processo: 'PMF2026/000221', interessado: 'João da Silva Santos', titulo: 'Responder sobre histórico escolar' },
+  { id: 'p9', tipo: 'Verificar informações',    criadaEm: '28/03/2026', prazo: '04/04/2026', diasRestantes: -16,  status: 'Finalizada',  processo: 'PMF2026/000198', interessado: 'João da Silva Santos', titulo: 'Verificar dados cadastrais' },
 ];
 
 // Ícone e cor para cada tipo de pendência
@@ -252,12 +252,12 @@ export const PENDENCIA_ICON: Record<PendenciaTipo, { icon: string; color: string
 
 //  Mock: processos liberados 
 export const MOCK_LIBERADOS: ProcessoLiberado[] = [
-  { id: 'l1', numero: 'PMF2026/000848', interessado: 'Fernando Naim Schmitz', cpf: '006.334.989-20', liberadoEm: '29/03/2026', terminaEm: '29/04/2026', ativo: true,  anexos: 3, orgao: 'SAUDE - Secretaria da Saúde' },
-  { id: 'l2', numero: 'PMF2026/000721', interessado: 'Filipe Otávio Reis',    cpf: '123.456.789-00', liberadoEm: '15/03/2026', terminaEm: '15/04/2026', ativo: true,  anexos: 1, orgao: 'SEFAZ - Secretaria da Fazenda' },
-  { id: 'l3', numero: 'PMF2025/009812', interessado: 'Fernando Naim Schmitz', cpf: '006.334.989-20', liberadoEm: '10/10/2025', terminaEm: '10/11/2025', ativo: false, anexos: 5, orgao: 'IPUF - Instituto de Planejamento Urbano' },
-  { id: 'l4', numero: 'PMF2025/008234', interessado: 'Cris Lima',             cpf: '043.792.234-00', liberadoEm: '22/08/2025', terminaEm: '22/09/2025', ativo: false, anexos: 2, orgao: 'SMC - Secretaria de Mobilidade' },
-  { id: 'l5', numero: 'PMF2025/007109', interessado: 'Fernando Naim Schmitz', cpf: '006.334.989-20', liberadoEm: '12/07/2025', terminaEm: '12/08/2025', ativo: false, anexos: 4, orgao: 'SMDU - Desenvolvimento Urbano' },
-  { id: 'l6', numero: 'PMF2025/006055', interessado: 'Cris Lima',             cpf: '043.792.234-00', liberadoEm: '03/06/2025', terminaEm: '03/07/2025', ativo: false, anexos: 1, orgao: 'SAUDE - Secretaria da Saúde' },
+  { id: 'l1', numero: 'PMF2026/000848', interessado: 'João da Silva Santos',  cpf: '098.765.432-10', liberadoEm: '29/03/2026', terminaEm: '29/04/2026', ativo: true,  anexos: 3, orgao: 'SAUDE - Secretaria da Saúde' },
+  { id: 'l2', numero: 'PMF2026/000721', interessado: 'Filipe Otávio Reis',   cpf: '123.456.789-00', liberadoEm: '15/03/2026', terminaEm: '15/04/2026', ativo: true,  anexos: 1, orgao: 'SEFAZ - Secretaria da Fazenda' },
+  { id: 'l3', numero: 'PMF2025/009812', interessado: 'João da Silva Santos',  cpf: '098.765.432-10', liberadoEm: '10/10/2025', terminaEm: '10/11/2025', ativo: false, anexos: 5, orgao: 'IPUF - Instituto de Planejamento Urbano' },
+  { id: 'l4', numero: 'PMF2025/008234', interessado: 'Cris Lima',             cpf: '012.345.678-90', liberadoEm: '22/08/2025', terminaEm: '22/09/2025', ativo: false, anexos: 2, orgao: 'SMC - Secretaria de Mobilidade' },
+  { id: 'l5', numero: 'PMF2025/007109', interessado: 'João da Silva Santos',  cpf: '098.765.432-10', liberadoEm: '12/07/2025', terminaEm: '12/08/2025', ativo: false, anexos: 4, orgao: 'SMDU - Desenvolvimento Urbano' },
+  { id: 'l6', numero: 'PMF2025/006055', interessado: 'Cris Lima',             cpf: '012.345.678-90', liberadoEm: '03/06/2025', terminaEm: '03/07/2025', ativo: false, anexos: 1, orgao: 'SAUDE - Secretaria da Saúde' },
 ];
 
 // Nomes mock de arquivos por slot

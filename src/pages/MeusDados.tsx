@@ -31,19 +31,19 @@ export default function MeusDados() {
   const [showSenhaAtual,   setShowSenhaAtual]   = useState(false);
   const [showSenha,        setShowSenha]        = useState(false);
   const [showConfSenha,    setShowConfSenha]    = useState(false);
-  const [email,            setEmail]            = useState('emaildoandersonalves@gmail.com');
-  const [confirmarEmail,   setConfirmarEmail]   = useState('emaildoandersonalves@gmail.com');
+  const [email,            setEmail]            = useState('usuario.exemplo@email.com');
+  const [confirmarEmail,   setConfirmarEmail]   = useState('usuario.exemplo@email.com');
   const [sexo,             setSexo]             = useState('Masculino');
-  const [nascimento,       setNascimento]       = useState('08/08/1988');
+  const [nascimento,       setNascimento]       = useState('01/01/1990');
   const [nacionalidade,    setNacionalidade]    = useState('brasileiro');
-  const [telefone,         setTelefone]         = useState('(86) 99968-8687');
-  const [cep,              setCep]              = useState('81230-170');
-  const [estado,           setEstado]           = useState('PR');
-  const [cidade,           setCidade]           = useState('Curitiba');
-  const [bairro,           setBairro]           = useState('Campo Comprido');
-  const [logradouro,       setLogradouro]       = useState('Rua Renato Polatti');
-  const [numero,           setNumero]           = useState('3651');
-  const [complemento,      setComplemento]      = useState('b6 75');
+  const [telefone,         setTelefone]         = useState('(48) 91234-5678');
+  const [cep,              setCep]              = useState('88010-000');
+  const [estado,           setEstado]           = useState('SC');
+  const [cidade,           setCidade]           = useState('Florianópolis');
+  const [bairro,           setBairro]           = useState('Centro');
+  const [logradouro,       setLogradouro]       = useState('Rua das Flores');
+  const [numero,           setNumero]           = useState('123');
+  const [complemento,      setComplemento]      = useState('Apto 45');
   const [resideFloripa,    setResideFloripa]    = useState('');
   const [emailsAdicionais, setEmailsAdicionais] = useState<string[]>([]);
   const [novoEmail,        setNovoEmail]        = useState('');
@@ -156,7 +156,7 @@ export default function MeusDados() {
                   <tr key={em} style={{ borderBottom: '1px solid var(--neutral-light-medium)' }}>
                     <td style={{ fontSize: 14, color: 'var(--neutral-dark-pure)', padding: '8px 0' }}>{em}</td>
                     <td style={{ textAlign: 'center' }}>
-                      <FAIcon icon="fa-regular fa-trash" style={{ fontSize: 15, color: 'var(--error-color)', cursor: 'pointer' }} />
+                      <FAIcon icon="fa-regular fa-trash" aria-label={`Remover e-mail ${em}`} style={{ fontSize: 15, color: 'var(--error-color)', cursor: 'pointer' }} />
                     </td>
                   </tr>
                 ))}
@@ -259,19 +259,19 @@ export default function MeusDados() {
           <Field label={t('tsSenhaAtual')}>
             <div style={passwordBox}>
               <input type={showSenhaAtual ? 'text' : 'password'} value={senhaAtual} onChange={e => setSenhaAtual(e.target.value)} placeholder={t('tsSenhaAtualPh')} style={inpPassword} />
-              <FAIcon icon={showSenhaAtual ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} style={{ fontSize: 15, color: 'var(--neutral-dark-medium)', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowSenhaAtual(v => !v)} />
+              <FAIcon icon={showSenhaAtual ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} aria-label={showSenhaAtual ? 'Ocultar senha atual' : 'Mostrar senha atual'} style={{ fontSize: 15, color: 'var(--neutral-dark-medium)', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowSenhaAtual(v => !v)} />
             </div>
           </Field>
           <Field label={t('tsNovaSenha')}>
             <div style={passwordBox}>
               <input type={showSenha ? 'text' : 'password'} value={senha} onChange={e => setSenha(e.target.value)} placeholder={t('tsNovaSenhaPh')} style={inpPassword} />
-              <FAIcon icon={showSenha ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} style={{ fontSize: 15, color: 'var(--neutral-dark-medium)', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowSenha(v => !v)} />
+              <FAIcon icon={showSenha ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} aria-label={showSenha ? 'Ocultar nova senha' : 'Mostrar nova senha'} style={{ fontSize: 15, color: 'var(--neutral-dark-medium)', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowSenha(v => !v)} />
             </div>
           </Field>
           <Field label={t('tsConfirmarSenha')}>
             <div style={passwordBox}>
               <input type={showConfSenha ? 'text' : 'password'} value={confirmarSenha} onChange={e => setConfirmarSenha(e.target.value)} placeholder={t('tsConfirmarSenhaPh')} style={inpPassword} />
-              <FAIcon icon={showConfSenha ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} style={{ fontSize: 15, color: 'var(--neutral-dark-medium)', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowConfSenha(v => !v)} />
+              <FAIcon icon={showConfSenha ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} aria-label={showConfSenha ? 'Ocultar confirmação de senha' : 'Mostrar confirmação de senha'} style={{ fontSize: 15, color: 'var(--neutral-dark-medium)', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowConfSenha(v => !v)} />
             </div>
           </Field>
         </div>

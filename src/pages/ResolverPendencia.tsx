@@ -36,6 +36,7 @@ function DocViewerDrawer({ doc, onClose }: { doc: DocParaAssinar | null; onClose
           </div>
           <button
             onClick={onClose}
+            aria-label="Fechar visualizador"
             style={{ width: 34, height: 34, border: '1px solid var(--neutral-light-down)', borderRadius: 8, background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--neutral-dark-down)', flexShrink: 0 }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-subtle)'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'white'; }}
@@ -185,8 +186,6 @@ function ConfirmarAssinaturaModal({ onClose, onConfirmar }: { onClose: () => voi
   );
 }
 
-// Tela: Resolver Pendência
-
 const LABEL_STYLE: React.CSSProperties = {
   display: 'block', fontWeight: 600, fontSize: 11, color: 'var(--neutral-label)',
   letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6,
@@ -213,8 +212,7 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
   const [padraoAssMap,        setPadraoAssMap]        = useState<Record<string, string>>({});
   const [docViewer,           setDocViewer]           = useState<DocParaAssinar | null>(null);
 
-
-  // Estado — Verificar informaes / Complementar dados / Anlise
+  // Estado — Verificar informações / Complementar dados / Análise
   const [observacao, setObservacao] = useState('');
   const [docComplementar, setDocComplementar] = useState('');
   const [itensVerificados, setItensVerificados] = useState<Set<string>>(new Set());
@@ -248,6 +246,23 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
   }
 
   const iconInfo = pendencia ? PENDENCIA_ICON[pendencia.tipo] : PENDENCIA_ICON['Assinatura de documentos'];
+
+  // Campos do template "Verificar informações"
+  const CAMPOS_VERIFICAR = [
+    { id: 'nome',     label: 'Nome completo',       valor: 'JOÃO DA SILVA SANTOS' },
+    { id: 'cpf',      label: 'CPF',                 valor: '098.765.432-10' },
+    { id: 'endereco', label: 'Endereço',             valor: 'Rua das Flores, 123 — Bairro Centro, Florianópolis — SC' },
+    { id: 'telefone', label: 'Telefone de contato', valor: '(48) 99123-4567' },
+    { id: 'email',    label: 'E-mail',              valor: 'joao.santos@email.com' },
+  ] as const;
+
+  function toggleVerificarItem(id: string) {
+    setItensVerificados(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
@@ -340,6 +355,7 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
               </button>
               {(totalAssinar > 0 || totalRecusar > 0) && (
                 <button onClick={limparSelecao}
+                  aria-label="Limpar seleção"
                   style={{ height: 34, padding: '0 12px', border: '1.5px solid var(--neutral-light-down)', borderRadius: 6, background: 'white', color: 'var(--neutral-dark-down)', fontWeight: 600, fontSize: 12, cursor: 'pointer' }}>
                   <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 11 }} />
                 </button>
@@ -487,60 +503,48 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
         </div>
       )}
 
-      {/*  TEMPLATE: Verificar informaes  */}
-      {tipo === 'Verificar informações' && (() => {
-        const campos = [
-          { id: 'nome',      label: 'Nome completo',           valor: 'FERNANDO NAIM SCHMITZ' },
-          { id: 'cpf',       label: 'CPF',                     valor: '006.334.989-20' },
-          { id: 'endereco',  label: 'Endereço',                valor: 'Rua das Flores, 123  Bairro Centro, Florianpolis  SC' },
-          { id: 'telefone',  label: 'Telefone de contato',     valor: '(48) 99123-4567' },
-          { id: 'email',     label: 'E-mail',                  valor: 'fernando.schmitz@email.com' },
-        ];
-        const toggleItem = (id: string) => {
-          setItensVerificados(prev => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next; });
-        };
-        return (
-          <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div>
-              <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>Verificar informações cadastrais</h2>
-              <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', margin: '4px 0 0 0', lineHeight: 1.5 }}>
-                {readOnly ? 'Informações verificadas. Esta pendência já foi concluída.' : 'Confirme se as informações abaixo estão corretas. Marque cada item verificado.'}
-              </p>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {campos.map(c => {
-                const checked = readOnly || itensVerificados.has(c.id);
-                return (
-                  <div key={c.id} onClick={() => !readOnly && toggleItem(c.id)} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 16px', background: checked ? 'var(--success-bg-light)' : 'white', border: `1.5px solid ${checked ? 'var(--success-border-light)' : 'var(--card-border)'}`, borderRadius: 8, cursor: readOnly ? 'default' : 'pointer', transition: 'all 0.12s' }}>
-                    <div style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${checked ? 'var(--success-color)' : 'var(--neutral-dark-up)'}`, background: checked ? 'var(--success-color)' : 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      {checked && <FAIcon icon="fa-solid fa-check" style={{ fontSize: 11, color: 'white' }} />}
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--neutral-label)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>{c.label}</div>
-                      <div style={{ fontSize: 14, color: 'var(--neutral-ink)', fontWeight: 500 }}>{c.valor}</div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div>
-              <label style={LABEL_STYLE}>Observaes (opcional)</label>
-              <textarea
-                disabled={readOnly}
-                value={readOnly ? 'Todos os dados foram verificados e esto corretos. Nenhuma divergncia encontrada.' : observacao}
-                onChange={e => setObservacao(e.target.value)}
-                placeholder="Informe se há alguma divergência ou correção necessária..."
-                rows={3}
-                style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? 'var(--bg-subtle)' : 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, padding: '10px 14px', fontSize: 14, color: readOnly ? 'var(--neutral-dark-down)' : 'var(--neutral-dark-pure)', outline: 'none', resize: 'vertical' }}
-                onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = 'var(--primary-pure)'; }}
-                onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = 'var(--neutral-light-down)'}
-              />
-            </div>
+      {/*  TEMPLATE: Verificar informações  */}
+      {tipo === 'Verificar informações' && (
+        <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div>
+            <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>Verificar informações cadastrais</h2>
+            <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', margin: '4px 0 0 0', lineHeight: 1.5 }}>
+              {readOnly ? 'Informações verificadas. Esta pendência já foi concluída.' : 'Confirme se as informações abaixo estão corretas. Marque cada item verificado.'}
+            </p>
           </div>
-        );
-      })()}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {CAMPOS_VERIFICAR.map(c => {
+              const checked = readOnly || itensVerificados.has(c.id);
+              return (
+                <div key={c.id} onClick={() => !readOnly && toggleVerificarItem(c.id)} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 16px', background: checked ? 'var(--success-bg-light)' : 'white', border: `1.5px solid ${checked ? 'var(--success-border-light)' : 'var(--card-border)'}`, borderRadius: 8, cursor: readOnly ? 'default' : 'pointer', transition: 'all 0.12s' }}>
+                  <div style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${checked ? 'var(--success-color)' : 'var(--neutral-dark-up)'}`, background: checked ? 'var(--success-color)' : 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    {checked && <FAIcon icon="fa-solid fa-check" style={{ fontSize: 11, color: 'white' }} />}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--neutral-label)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>{c.label}</div>
+                    <div style={{ fontSize: 14, color: 'var(--neutral-ink)', fontWeight: 500 }}>{c.valor}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div>
+            <label style={LABEL_STYLE}>Observações (opcional)</label>
+            <textarea
+              disabled={readOnly}
+              value={readOnly ? 'Todos os dados foram verificados e estão corretos. Nenhuma divergência encontrada.' : observacao}
+              onChange={e => setObservacao(e.target.value)}
+              placeholder="Informe se há alguma divergência ou correção necessária..."
+              rows={3}
+              style={{ width: '100%', boxSizing: 'border-box', background: readOnly ? 'var(--bg-subtle)' : 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, padding: '10px 14px', fontSize: 14, color: readOnly ? 'var(--neutral-dark-down)' : 'var(--neutral-dark-pure)', outline: 'none', resize: 'vertical' }}
+              onFocus={e => { if (!readOnly) (e.currentTarget as HTMLTextAreaElement).style.borderColor = 'var(--primary-pure)'; }}
+              onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = 'var(--neutral-light-down)'}
+            />
+          </div>
+        </div>
+      )}
 
-      {/*  TEMPLATE: Anlise de documentos  */}
+      {/*  TEMPLATE: Análise de documentos  */}
       {tipo === 'Análise de documentos' && (
         <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 24, boxShadow: '0px 4px 12px rgba(24,39,75,0.08)', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>
@@ -560,7 +564,7 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
                 <FAIcon icon="fa-regular fa-file-pdf" style={{ fontSize: 16, color: 'var(--error-color)', flexShrink: 0 }} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--neutral-ink-strong)' }}>{doc.nome}</div>
-                  <div style={{ fontSize: 11, color: 'var(--neutral-dark-medium)' }}>PDF  {doc.paginas} pginas</div>
+                  <div style={{ fontSize: 11, color: 'var(--neutral-dark-medium)' }}>PDF · {doc.paginas} páginas</div>
                 </div>
                 {doc.status ? (
                   <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 100, background: doc.status === 'Aprovado' ? 'var(--success-bg)' : 'var(--warning-bg)', color: doc.status === 'Aprovado' ? 'var(--success-color)' : 'var(--warning-color)', whiteSpace: 'nowrap' }}>{doc.status}</span>
@@ -618,9 +622,9 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
               </label>
             )}
           </div>
-          {/* Observaes */}
+          {/* Observações */}
           <div>
-            <label style={LABEL_STYLE}>Informaes adicionais</label>
+            <label style={LABEL_STYLE}>Informações adicionais</label>
             <textarea
               disabled={readOnly}
               value={readOnly ? 'Documentos enviados conforme solicitação. O comprovante de endereço é referente ao mês de março/2026 e o comprovante de renda cobre o trimestre de janeiro a março de 2026.' : observacao}
@@ -635,7 +639,7 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
         </div>
       )}
 
-      {/*  Barra de aes (apenas em modo edio)  */}
+      {/*  Barra de ações (apenas em modo edição)  */}
       {!readOnly && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, flexWrap: 'wrap' }}>
           <button

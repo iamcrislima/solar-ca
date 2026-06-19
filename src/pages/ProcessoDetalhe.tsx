@@ -5,7 +5,6 @@ import type { ProcessoTab, ProcessoLiberado } from '../types';
 import { MOCK_ARQUIVAMENTOS } from '../mocks';
 import FAIcon from '../components/FAIcon';
 
-// Linha de tabela de dados básicos
 function DadosRow({ label, children, last = false }: { label: string; children: React.ReactNode; last?: boolean }) {
   return (
     <div style={{ borderBottom: last ? 'none' : '1px solid var(--neutral-light-down)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', fontSize: 14, color: 'var(--neutral-dark-pure)', letterSpacing: '0.08px' }}>
@@ -15,20 +14,6 @@ function DadosRow({ label, children, last = false }: { label: string; children: 
   );
 }
 
-// Cabeçalho de tabela (colunas)
-function TableHeader({ cols }: { cols: { label: string; width?: number | string; flex?: number | string; center?: boolean }[] }) {
-  return (
-    <div style={{ borderBottom: '1px solid var(--neutral-light-down)', display: 'flex', alignItems: 'center', padding: '8px 0', gap: 0 }}>
-      {cols.map((col) => (
-        <div key={col.label} style={{ ...(col.flex !== undefined ? { flex: col.flex } : { width: col.width, flexShrink: 0 }), fontWeight: 600, fontSize: 14, color: 'var(--neutral-dark-medium)', letterSpacing: '0.08px', lineHeight: '24px', textAlign: col.center ? 'center' : 'left' }}>
-          {col.label}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// Modal: Motivo de Arquivamento
 function MotivoArquivamentoModal({ motivo, arquivadoEm, onClose }: {
   motivo: typeof MOCK_ARQUIVAMENTOS[0]['motivo'];
   arquivadoEm: string;
@@ -52,7 +37,7 @@ function MotivoArquivamentoModal({ motivo, arquivadoEm, onClose }: {
               <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', marginTop: 2 }}>Arquivado em {arquivadoEm}</div>
             </div>
           </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--neutral-dark-medium)', padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={onClose} aria-label="Fechar" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--neutral-dark-medium)', padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 18 }} />
           </button>
         </div>
@@ -92,15 +77,14 @@ function MotivoArquivamentoModal({ motivo, arquivadoEm, onClose }: {
   );
 }
 
-// Modal: Despacho
 function DespachoModal({ onClose }: { onClose: () => void }) {
-  return (
+  return createPortal(
     <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.40)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
       <div style={{ background: 'white', borderRadius: 12, padding: '28px 32px', width: '100%', maxWidth: 560, boxShadow: '0px 10px 40px rgba(0,0,0,0.18)', display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2 style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: 0 }}>Despacho</h2>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--neutral-dark-medium)', padding: 4 }}>
+          <button onClick={onClose} aria-label="Fechar" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--neutral-dark-medium)', padding: 4 }}>
             <FAIcon icon="fa-regular fa-xmark" style={{ fontSize: 18 }} />
           </button>
         </div>
@@ -114,7 +98,8 @@ function DespachoModal({ onClose }: { onClose: () => void }) {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -329,7 +314,7 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
               <div style={sectionTitle}>{t('pdInteressados')}</div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {([
-                  { initials: 'FS', name: 'Fernando Naim Schmitz', role: t('pdRequerente') },
+                  { initials: 'JS', name: 'João da Silva Santos', role: t('pdRequerente') },
                   { initials: 'CL', name: 'Cris Lima',             role: t('pdRequerente') },
                 ] as { initials: string; name: string; role: string }[]).map((person, i, arr) => (
                   <div key={person.initials} style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--neutral-light-down)' : 'none', display: 'flex', alignItems: 'center', padding: '8px 0', gap: 8 }}>
@@ -404,6 +389,7 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
                         <button
                           onClick={() => setShowDespacho(true)}
                           title="Ver despacho"
+                          aria-label="Ver despacho"
                           style={{ background: 'var(--primary-bg-hover)', border: 'none', borderRadius: 6, width: 32, height: 32, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                           onMouseEnter={e => (e.currentTarget.style.background = 'var(--primary-light)')}
                           onMouseLeave={e => (e.currentTarget.style.background = 'var(--primary-bg-hover)')}
@@ -454,6 +440,7 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
                       <td style={{ ...stdTd, textAlign: 'center' }}>
                         <button
                           title="Ver detalhes"
+                          aria-label="Ver detalhes da movimentação"
                           style={{ background: 'var(--primary-bg-hover)', border: 'none', borderRadius: 6, width: 32, height: 32, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                           onMouseEnter={e => (e.currentTarget.style.background = 'var(--primary-light)')}
                           onMouseLeave={e => (e.currentTarget.style.background = 'var(--primary-bg-hover)')}
@@ -500,6 +487,7 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
                         <button
                           onClick={() => setMotivoArq({ motivo: arq.motivo, arquivadoEm: arq.arquivadoEm })}
                           title="Ver motivo do arquivamento"
+                          aria-label="Ver motivo do arquivamento"
                           style={{ background: 'var(--primary-bg-hover)', border: 'none', borderRadius: 6, width: 32, height: 32, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                           onMouseEnter={e => (e.currentTarget.style.background = 'var(--primary-light)')}
                           onMouseLeave={e => (e.currentTarget.style.background = 'var(--primary-bg-hover)')}
@@ -521,7 +509,6 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
       {showDespacho && <DespachoModal onClose={() => setShowDespacho(false)} />}
       {motivoArq && <MotivoArquivamentoModal motivo={motivoArq.motivo} arquivadoEm={motivoArq.arquivadoEm} onClose={() => setMotivoArq(null)} />}
 
-      {/* Keep TableHeader in scope to avoid unused warning */}
     </div>
   );
 }
