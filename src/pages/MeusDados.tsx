@@ -108,7 +108,7 @@ export default function MeusDados() {
           {alertBanner(t('mdCompletarCadastro'))}
           <div style={{ display: 'flex', gap: 16 }}>
             <Field label={t('mdCpf')} flex={1}>
-              <input value="043.792.234-00" readOnly style={inpReadOnly} />
+              <input value={MOCK_USER.cpf} readOnly style={inpReadOnly} />
             </Field>
             <Field label={t('mdNomeCompleto')} flex={2}>
               <input value={nome} onChange={e => setNome(e.target.value)} style={inp} />
