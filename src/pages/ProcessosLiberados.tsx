@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useT, useIsMobile } from '../i18n';
 import { ProcessoLiberado } from '../types';
+import { formatOrgao } from '../format';
 import FAIcon from '../components/FAIcon';
 import StatCard from '../components/StatCard';
 
@@ -105,8 +106,8 @@ function ProcessoLiberadoCard({ item, onVerAnexos }: { item: ProcessoLiberado; o
             <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--primary-pure)', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {item.numero}
             </div>
-            <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {item.orgao}
+            <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={formatOrgao(item.orgao)}>
+              {formatOrgao(item.orgao)}
             </div>
           </div>
         </div>

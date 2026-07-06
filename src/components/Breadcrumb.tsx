@@ -1,12 +1,13 @@
 import React from 'react';
 import { useT } from '../i18n';
-import type { Page, Servico } from '../types';
+import type { Page, Servico, ProcessoLiberado } from '../types';
 
-export default function Breadcrumb({ page, onNavigate, selectedCat, selectedService }: {
+export default function Breadcrumb({ page, onNavigate, selectedCat, selectedService, selectedLiberado }: {
   page: Page;
   onNavigate: (p: Page) => void;
   selectedCat?: { label: string; icon: string } | null;
   selectedService?: Servico | null;
+  selectedLiberado?: ProcessoLiberado | null;
 }) {
   const t = useT();
   const txt: React.CSSProperties = { fontSize: 14, color: 'var(--neutral-dark-down)' };
@@ -30,11 +31,16 @@ export default function Breadcrumb({ page, onNavigate, selectedCat, selectedServ
       </span>
 
       {/* Consulta de processos */}
-      {(page === 'consulta' || page === 'processo') && (
-        <>{sep}{link(t('consultaProcessos'), () => onNavigate('consulta'))}</>
+      {page === 'consulta' && (
+        <>{sep}<span style={{ ...txt, fontWeight: 400 }}>{t('consultaProcessos')}</span></>
       )}
       {page === 'processo' && (
-        <>{sep}<span style={{ ...txt, fontWeight: 400 }}>PMF2026/000418</span></>
+        selectedLiberado ? (
+          /* Veio de Processos Liberados → mantém o usuário nesse contexto */
+          <>{sep}{link(t('processosLiberados'), () => onNavigate('processosliberados'))}{sep}<span style={{ ...txt, fontWeight: 400 }}>{selectedLiberado.numero}</span></>
+        ) : (
+          <>{sep}{link(t('consultaProcessos'), () => onNavigate('consulta'))}{sep}<span style={{ ...txt, fontWeight: 400 }}>PMF2026/000418</span></>
+        )
       )}
 
       {/* Conferência de documentos */}
@@ -50,6 +56,11 @@ export default function Breadcrumb({ page, onNavigate, selectedCat, selectedServ
       {/* Meus processos */}
       {page === 'meusprocessos' && (
         <>{sep}<span style={{ ...txt, fontWeight: 400 }}>{t('meusProcessos')}</span></>
+      )}
+
+      {/* Todas as atividades */}
+      {page === 'atividades' && (
+        <>{sep}<span style={{ ...txt, fontWeight: 400 }}>{t('atvTitle')}</span></>
       )}
 
       {/* Minhas pendências */}

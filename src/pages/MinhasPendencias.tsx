@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useT, useIsMobile } from '../i18n';
-import type { Pendencia, PendenciaStatus, PendenciaTipo } from '../types';
-import { MOCK_PENDENCIAS, PENDENCIA_ICON, pendenciaTipoKey } from '../mocks';
+import type { Pendencia, PendenciaStatus } from '../types';
+import { MOCK_PENDENCIAS } from '../mocks';
 import FAIcon from '../components/FAIcon';
 import StatCard from '../components/StatCard';
 
@@ -51,7 +51,6 @@ export function PrazoBadge({ prazo, diasRestantes, finalizada }: { prazo: string
 
 function PendenciaCard({ pendencia, onResolver, onVer }: { pendencia: Pendencia; onResolver: () => void; onVer: () => void }) {
   const t = useT();
-  const iconInfo = PENDENCIA_ICON[pendencia.tipo as PendenciaTipo];
   const finalizada = pendencia.status === 'Finalizada';
 
   return (
@@ -66,17 +65,7 @@ function PendenciaCard({ pendencia, onResolver, onVer }: { pendencia: Pendencia;
       onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0px 2px 8px rgba(24,39,75,0.07)'; (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--card-border)'; }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-          <span style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontSize: 11, color: iconInfo.color,
-            fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.3,
-            background: iconInfo.bg, borderRadius: 6, padding: '4px 10px',
-          }}>
-            {t(pendenciaTipoKey(pendencia.tipo as PendenciaTipo))}
-          </span>
-          <PendenciaStatusBadge status={pendencia.status} />
-        </div>
+        <PendenciaStatusBadge status={pendencia.status} />
         <PrazoBadge prazo={pendencia.prazo} diasRestantes={pendencia.diasRestantes} finalizada={finalizada} />
       </div>
 

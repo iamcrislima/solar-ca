@@ -6,21 +6,16 @@ import FAIcon from '../components/FAIcon';
 import Footer from '../components/Footer';
 import SearchWithDropdown from '../components/SearchWithDropdown';
 import { ServiceCard, CategoryCard } from '../components/ServiceCard';
-import { imgBannerFloripa, featuredServices, popularServices, categories, MOCK_USER, MOCK_SERVICOS_AV } from '../mocks';
-//  Tela: Home 
-const MOCK_DASH_ATIVIDADES = [
-  { icon: 'fa-regular fa-circle-check',     text: 'Pendência "Assinatura de documentos" concluída',  processo: 'PMF2026/000418', date: '20/04/2026', color: 'var(--success-color)' },
-  { icon: 'fa-regular fa-file-circle-plus', text: 'Nova solicitação criada: Alvará de Obra',          processo: 'PMF2026/000501', date: '19/04/2026', color: 'var(--primary-pure)' },
-  { icon: 'fa-regular fa-triangle-exclamation', text: 'Pendência de assinatura aguardando ação',   processo: 'PMF2026/000392', date: '18/04/2026', color: 'var(--error-color)' },
-  { icon: 'fa-regular fa-folder-open',      text: 'Processo acessado: Ranking de Sustentabilidade',   processo: 'PMF2026/000322', date: '17/04/2026', color: 'var(--neutral-dark-down)' },
-];
+import { imgBannerFloripa, featuredServices, popularServices, categories, MOCK_USER, MOCK_SERVICOS_AV, MOCK_ATIVIDADES, ATIVIDADE_TIPO_META, HOME_ATIVIDADES_LIMIT } from '../mocks';
+//  Tela: Home
 
-export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavigateService, onNavigateProtected }: {
+export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavigateService, onNavigateProtected, onOpenTermos }: {
   onNavigateCat: (cat: { label: string; icon: string }) => void;
   isLoggedIn: boolean;
   onNavigate: (p: Page, filter?: string) => void;
   onNavigateService?: (svc: Servico) => void;
   onNavigateProtected: (p: Page) => void;
+  onOpenTermos?: () => void;
 }) {
   const t = useT();
   const lang = useLang();
@@ -97,20 +92,25 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavi
           <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: 20, boxShadow: '0px 2px 8px rgba(24,39,75,0.07)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
               <span style={{ fontWeight: 700, fontSize: 15, color: 'var(--neutral-ink-strong)' }}>{t('dashHistoricoTitle')}</span>
-              <span onClick={() => onNavigate('meusprocessos')} style={{ fontWeight: 600, fontSize: 12, color: 'var(--primary-pure)', cursor: 'pointer', textDecoration: 'underline' }}>{t('dashVerTodos')}</span>
+              <span onClick={() => onNavigate('atividades')} style={{ fontWeight: 600, fontSize: 12, color: 'var(--primary-pure)', cursor: 'pointer', textDecoration: 'underline' }}>{t('dashVerTodos')}</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {MOCK_DASH_ATIVIDADES.map((at, i) => (
-                <div key={at.processo} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '11px 0', borderBottom: i < MOCK_DASH_ATIVIDADES.length - 1 ? '1px solid var(--neutral-light-medium)' : 'none' }}>
-                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: at.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <FAIcon icon={at.icon} style={{ fontSize: 15, color: at.color }} />
+              {MOCK_ATIVIDADES.slice(0, HOME_ATIVIDADES_LIMIT).map((at, i, arr) => {
+                const meta = ATIVIDADE_TIPO_META[at.tipo];
+                return (
+                  <div key={at.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '11px 0', borderBottom: i < arr.length - 1 ? '1px solid var(--neutral-light-medium)' : 'none' }}>
+                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: meta.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <FAIcon icon={meta.icon} style={{ fontSize: 15, color: meta.color }} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--neutral-ink)', lineHeight: 1.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{at.text}</div>
+                      <div style={{ fontSize: 11, color: 'var(--neutral-dark-medium)', marginTop: 2 }}>
+                        <span style={{ color: meta.color, fontWeight: 600 }}>{(t as (k: string) => string)(meta.labelKey)}</span> · {at.ref} · {at.date}
+                      </div>
+                    </div>
                   </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--neutral-ink)', lineHeight: 1.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{at.text}</div>
-                    <div style={{ fontSize: 11, color: 'var(--neutral-dark-medium)', marginTop: 2 }}>{at.processo} · {at.date}</div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -198,7 +198,7 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavi
         </div>
       </div>
     </div>
-    <Footer onNavigate={(p) => onNavigate(p)} />
+    <Footer onNavigate={(p) => onNavigate(p)} onOpenTermos={onOpenTermos} />
     </>
   );
 }

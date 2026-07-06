@@ -5,6 +5,7 @@ import type { Pendencia, DocParaAssinar } from '../types';
 import FAIcon from '../components/FAIcon';
 import DynamicFormRenderer from '../components/DynamicFormRenderer';
 import { FORM_FIELDS_COMUNIQUE, FORM_FIELDS_ANALISE, PENDENCIA_ICON } from '../mocks';
+import { formatOrgao } from '../format';
 import { PrazoBadge } from './MinhasPendencias';
 
 // Drawer lateral para visualizar documento
@@ -307,25 +308,16 @@ export default function ResolverPendencia({ pendencia, onVoltar, onConcluir }: {
             )}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 6, fontSize: 12, color: 'var(--neutral-dark-down)' }}>
-            <span><strong style={{ color: 'var(--neutral-dark-medium)' }}>{t('rpTipo')}:</strong> {pendencia?.tipo || '-'}</span>
             <span><strong style={{ color: 'var(--neutral-dark-medium)' }}>{t('rpProcesso')}:</strong> {pendencia?.processo || '-'}</span>
             {pendencia?.prazo && (
               <PrazoBadge prazo={pendencia.prazo} diasRestantes={pendencia.diasRestantes} finalizada={readOnly} />
             )}
           </div>
-          {/* Solicitante e Descrição */}
+          {/* Solicitante (órgão) */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, marginTop: 10 }}>
             <div>
               <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--neutral-label)', marginBottom: 2 }}>Solicitante</div>
-              <div style={{ fontSize: 13, color: 'var(--neutral-ink)', fontWeight: 500 }}>Sistema Solar BPM</div>
-            </div>
-            <div style={{ flex: 1, minWidth: 180 }}>
-              <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--neutral-label)', marginBottom: 2 }}>Descrição</div>
-              <div style={{ fontSize: 13, color: 'var(--neutral-dark-pure)', lineHeight: '18px' }}>
-                {pendencia?.titulo
-                  ? `Pendência de ${pendencia.tipo?.toLowerCase() || 'assinatura'} referente ao processo ${pendencia.processo}.`
-                  : 'Revisar e assinar os documentos listados abaixo para concluir o processo.'}
-              </div>
+              <div style={{ fontSize: 13, color: 'var(--neutral-ink)', fontWeight: 500 }}>{pendencia?.solicitante ? formatOrgao(pendencia.solicitante) : 'PMF — Prefeitura Municipal de Florianópolis'}</div>
             </div>
           </div>
         </div>

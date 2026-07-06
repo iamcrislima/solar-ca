@@ -1,5 +1,5 @@
 //  Tipo de página
-export type Page = 'home' | 'consulta' | 'processo' | 'documentos' | 'meusdados' | 'meusprocessos' | 'minhaspendencias' | 'pendencia-resolver' | 'processosliberados' | 'solicitacao' | 'cat-servicos' | 'servico-detalhe' | 'servico-form' | 'cadastro';
+export type Page = 'home' | 'consulta' | 'processo' | 'documentos' | 'meusdados' | 'meusprocessos' | 'minhaspendencias' | 'pendencia-resolver' | 'processosliberados' | 'solicitacao' | 'cat-servicos' | 'servico-detalhe' | 'servico-form' | 'cadastro' | 'atividades';
 
 //  Status de processo
 export type ProcessoStatus = 'Concluído' | 'Em Andamento' | 'Pendente';
@@ -13,7 +13,7 @@ export interface ConsultaRecente {
 }
 
 //  Aba do processo
-export type ProcessoTab = 'dados' | 'documentos' | 'tramitacoes' | 'movimentacoes' | 'arquivamentos';
+export type ProcessoTab = 'dados' | 'documentos' | 'tramitacoes' | 'movimentacoes' | 'arquivamentos' | 'numeros-externos';
 
 //  Meu processo
 export interface MeuProcesso {
@@ -39,6 +39,7 @@ export interface Pendencia {
   processo: string;
   interessado: string;
   titulo: string;
+  solicitante: string; // órgão solicitante no formato "SIGLA — Nome"
 }
 
 //  Processo liberado
@@ -76,6 +77,36 @@ export interface DocParaAssinar {
   assinado?: boolean;
 }
 
+//  Documento-modelo / complementar de um serviço (não é upload)
+export interface ServicoDocumento {
+  nome: string;
+  descricao?: string;
+  arquivoModelo?: string; // nome do arquivo-modelo disponível para download
+}
+
+//  Detalhamento do serviço (espelha o Cadastro de Serviços do SolarBPM).
+//  Cada campo preenchido vira uma seção; campos vazios são omitidos.
+export interface ServicoDetalheConfig {
+  modo: 'campos' | 'agrupamento';
+  classificacao?: string;   // se ausente, usa `categoria`
+  unidadePath?: string;     // caminho da unidade responsável (ex.: 'ADM / Administração')
+  // modo 'campos' — conteúdo em HTML renderizado:
+  descricaoResumida?: string;   // obrigatório no modo campos
+  descricaoDetalhada?: string;
+  requisitos?: string;
+  comoSolicitar?: string;
+  conteudoDependente?: string;
+  infoTaxa?: string;
+  // modo 'agrupamento' — texto livre único em HTML:
+  descricao?: string;
+  // seções adicionais (renderizadas só quando houver conteúdo):
+  documentosSolicitar?: ServicoDocumento[];
+  linksRelacionados?: { label: string; url: string }[];
+  documentosDownload?: ServicoDocumento[];
+  diagramaFluxo?: boolean;
+  documentacaoFluxo?: string; // HTML
+}
+
 //  Tipo de serviço municipal
 export interface Servico {
   servico: string;
@@ -84,4 +115,11 @@ export interface Servico {
   destino: string[];
   agrupado?: boolean;
   htmlContent?: string;
+  // Opção de abertura configurada no SolarBPM:
+  //  'solarbpm' (padrão) → abre o formulário dinâmico no portal
+  //  'terceiro'          → redireciona para um link externo (sem formulário)
+  opcaoAbertura?: 'solarbpm' | 'terceiro';
+  linkExterno?: string;
+  // Detalhamento data-driven ("Mais informações")
+  detalhe?: ServicoDetalheConfig;
 }

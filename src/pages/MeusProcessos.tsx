@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useT, useIsMobile } from '../i18n';
 import type { MeuProcesso, ProcessoStatus } from '../types';
 import { MOCK_MEUS_PROCESSOS } from '../mocks';
+import { formatOrgao } from '../format';
 import FAIcon from '../components/FAIcon';
 import StatusBadge from '../components/StatusBadge';
 import StatCard from '../components/StatCard';
@@ -37,8 +38,8 @@ function ProcessoCard({ processo, onClick }: { processo: MeuProcesso; onClick: (
           <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--neutral-label)', letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 2 }}>
             {t('mpOrgao')}
           </div>
-          <div style={{ fontSize: 13, color: 'var(--neutral-dark-pure)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {processo.orgao}
+          <div style={{ fontSize: 13, color: 'var(--neutral-dark-pure)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={formatOrgao(processo.orgao)}>
+            {formatOrgao(processo.orgao)}
           </div>
         </div>
         <div>

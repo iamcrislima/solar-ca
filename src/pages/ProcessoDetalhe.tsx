@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useT, useIsMobile } from '../i18n';
 import type { ProcessoTab, ProcessoLiberado } from '../types';
 import { MOCK_ARQUIVAMENTOS } from '../mocks';
+import { formatOrgao } from '../format';
 import FAIcon from '../components/FAIcon';
 
 function DadosRow({ label, children, last = false }: { label: string; children: React.ReactNode; last?: boolean }) {
@@ -113,11 +114,12 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
   const tabs: { key: ProcessoTab; label: string }[] = liberadoItem
     ? [{ key: 'documentos', label: t('documentos') }]
     : [
-        { key: 'dados',         label: t('dadosProcesso') },
-        { key: 'documentos',    label: t('documentos') },
-        { key: 'tramitacoes',   label: t('tramitacoes') },
-        { key: 'movimentacoes', label: t('movimentacoes') },
-        { key: 'arquivamentos', label: t('arquivamentos') },
+        { key: 'dados',            label: t('dadosProcesso') },
+        { key: 'documentos',       label: t('documentos') },
+        { key: 'tramitacoes',      label: t('tramitacoes') },
+        { key: 'movimentacoes',    label: t('movimentacoes') },
+        { key: 'arquivamentos',    label: t('arquivamentos') },
+        { key: 'numeros-externos', label: t('numerosExternos') },
       ];
 
   const cardStyle: React.CSSProperties = {
@@ -165,7 +167,7 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <div style={{ fontWeight: 700, fontSize: isMobile ? 13 : 16, color: 'var(--neutral-dark-up)', lineHeight: '1.2' }}>
-              PMF2026/000418
+              {liberadoItem ? liberadoItem.numero : 'PMF2026/000418'}
             </div>
             <div style={{ fontWeight: 700, fontSize: isMobile ? 18 : 24, color: 'var(--neutral-dark-pure)', lineHeight: 1 }}>
               Ranking de Sustentabilidade
@@ -206,7 +208,7 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
             <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <FAIcon icon="fa-regular fa-building-columns" style={{ fontSize: 14, color: 'var(--neutral-dark-up)' }} />
             </div>
-            <span style={{ fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-up)', whiteSpace: 'nowrap' }}>SAUDE - Secretaria de Saúde</span>
+            <span style={{ fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-up)', whiteSpace: 'nowrap' }}>{liberadoItem ? formatOrgao(liberadoItem.orgao) : 'SAUDE — Secretaria de Saúde'}</span>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -502,6 +504,59 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
                 </tbody>
               </table>
             </div>
+          </div>
+        );
+      })()}
+
+      {/* Tab: Números externos */}
+      {activeTab === 'numeros-externos' && (() => {
+        const rows = [
+          { tipo: 'SEI',                numero: '23106.045821/2025-14', origem: 'MEC — Ministério da Educação',            data: '01/09/2025', vinculo: 'Ofício de origem' },
+          { tipo: 'Ofício',            numero: 'OF. 2145/2025-GAB',     origem: 'ALESC — Assembleia Legislativa de SC',   data: '03/09/2025', vinculo: 'Solicitação' },
+          { tipo: 'Protocolo externo', numero: 'PE-2025-0098234',        origem: 'CASAN — Companhia Catarinense de Águas', data: '05/09/2025', vinculo: 'Documento anexo' },
+        ];
+        return (
+          <div style={{ background: 'white', border: '1px solid var(--neutral-light-down)', borderRadius: 8, overflow: 'hidden' }}>
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--neutral-light-medium)', display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <div style={sectionTitle}>{t('numerosExternos')}</div>
+              <div style={{ fontSize: 12, color: 'var(--neutral-dark-medium)' }}>{rows.length} registro{rows.length !== 1 ? 's' : ''} encontrado{rows.length !== 1 ? 's' : ''}</div>
+            </div>
+            {rows.length === 0 ? (
+              <div style={{ padding: '40px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 56, height: 56, background: 'var(--primary-bg-hover)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FAIcon icon="fa-regular fa-hashtag" style={{ fontSize: 20, color: 'var(--primary-pure)' }} />
+                </div>
+                <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--neutral-ink)' }}>{t('neNenhumTitle')}</div>
+                <div style={{ fontSize: 12, color: 'var(--neutral-label)', textAlign: 'center', maxWidth: 360 }}>{t('neNenhumDesc')}</div>
+              </div>
+            ) : (
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 640 }}>
+                  <thead>
+                    <tr>
+                      <th style={{ ...stdTh, width: 150 }}>{t('neTipo')}</th>
+                      <th style={stdTh}>{t('neNumero')}</th>
+                      <th style={stdTh}>{t('neOrigem')}</th>
+                      <th style={{ ...stdTh, width: 130 }}>{t('neData')}</th>
+                      <th style={{ ...stdTh, width: 160 }}>{t('neVinculo')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((row, i) => (
+                      <tr key={row.numero} style={{ background: i % 2 === 1 ? 'var(--bg-subtle)' : 'white' }}>
+                        <td style={stdTd}>
+                          <span style={{ display: 'inline-block', fontSize: 12, fontWeight: 600, color: 'var(--primary-pure)', background: 'var(--primary-bg-hover)', borderRadius: 6, padding: '3px 10px', whiteSpace: 'nowrap' }}>{row.tipo}</span>
+                        </td>
+                        <td style={{ ...stdTd, fontWeight: 600, whiteSpace: 'nowrap' }}>{row.numero}</td>
+                        <td style={stdTd}>{row.origem}</td>
+                        <td style={stdTd}>{row.data}</td>
+                        <td style={{ ...stdTd, color: 'var(--neutral-dark-down)' }}>{row.vinculo}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         );
       })()}

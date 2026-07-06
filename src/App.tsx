@@ -9,6 +9,7 @@ import type { Page, Pendencia, ProcessoLiberado, Servico } from './types';
 
 //  Components 
 import LoginModal   from './components/LoginModal';
+import TermosModal  from './components/TermosModal';
 import Header       from './components/Header';
 import SideMenu     from './components/SideMenu';
 import Breadcrumb   from './components/Breadcrumb';
@@ -28,6 +29,7 @@ import SolicitacaoServicos  from './pages/SolicitacaoServicos';
 import CatServicos          from './pages/CatServicos';
 import ServicoDetalhe       from './pages/ServicoDetalhe';
 import ServicoForm          from './pages/ServicoForm';
+import TodasAtividades      from './pages/TodasAtividades';
 import CadastroPage         from './pages/CadastroPage';
 import ErrorBoundary        from './components/ErrorBoundary';
 //  Componente principal 
@@ -48,7 +50,37 @@ export default function App() {
   const [meusProcessosFilter, setMeusProcessosFilter] = useState<'todos' | 'Em Andamento' | 'Concluído' | 'Pendente'>('todos');
   const [pendingPage, setPendingPage] = useState<Page | null>(null);
 
-  function handleLogin()  { setIsLoggedIn(true); setShowLogin(false); if (pendingPage) { setPage(pendingPage); setPendingPage(null); } }
+  // Aceite de termos (mock do endpoint via localStorage) — timestamp ISO do aceite, ou null se pendente.
+  const [termosAceiteEm, setTermosAceiteEm] = useState<string | null>(() => {
+    try { return localStorage.getItem('termos-aceite'); } catch { return null; }
+  });
+  const [showTermosGate, setShowTermosGate] = useState(false); // gate obrigatório no 1º acesso
+  const [showTermosView, setShowTermosView] = useState(false); // consulta dentro do portal
+
+  function finalizeLogin() {
+    setIsLoggedIn(true);
+    setShowLogin(false);
+    if (pendingPage) { setPage(pendingPage); setPendingPage(null); }
+  }
+  function handleLogin() {
+    setShowLogin(false);
+    // Termos novos não aceitos → bloqueia no login até o aceite.
+    if (!termosAceiteEm) { setShowTermosGate(true); return; }
+    finalizeLogin();
+  }
+  function handleAceitarTermos() {
+    let now = '';
+    try { now = new Date().toISOString(); } catch { /* noop */ }
+    try { localStorage.setItem('termos-aceite', now); } catch { /* noop */ }
+    setTermosAceiteEm(now);
+    setShowTermosGate(false);
+    finalizeLogin();
+  }
+  function handleVoltarTermos() {
+    // Voltar → cancela o acesso (não conclui o login).
+    setShowTermosGate(false);
+    setPendingPage(null);
+  }
   function handleLogout() { setIsLoggedIn(false); setPage('home'); setDrawerOpen(false); }
 
   function handleNavigateProtected(p: Page) {
@@ -83,6 +115,7 @@ export default function App() {
           }}
           onNavigateService={svc => { setSelectedService(svc); setPage('servico-detalhe'); }}
           onNavigateProtected={handleNavigateProtected}
+          onOpenTermos={() => setShowTermosView(true)}
         />
       )}
       {page === 'consulta'   && (
@@ -150,6 +183,7 @@ export default function App() {
       {page === 'servico-form' && selectedService && (
         <ServicoForm service={selectedService} />
       )}
+      {page === 'atividades' && <TodasAtividades />}
       {page === 'cadastro' && (
         <CadastroPage
           onVoltar={() => setPage('home')}
@@ -163,6 +197,8 @@ export default function App() {
     <LangContext.Provider value={lang}>
       <IsMobileContext.Provider value={isMobile}>
         {showLogin && <LoginModal onClose={() => setShowLogin(false)} onLogin={handleLogin} onShowCadastro={() => setPage('cadastro')} />}
+        {showTermosGate && <TermosModal mode="aceite" onClose={handleVoltarTermos} onAceitar={handleAceitarTermos} />}
+        {showTermosView && <TermosModal mode="view" aceiteEm={termosAceiteEm} onClose={() => setShowTermosView(false)} />}
 
         {isMobile ? (
           /*  Layout mobile  */
@@ -210,6 +246,7 @@ export default function App() {
               onToggleContrast={() => setHighContrast(c => !c)}
               lang={lang}
               onSetLang={setLang}
+              termosAceiteEm={termosAceiteEm}
             />
             <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
               <SideMenu
@@ -219,9 +256,10 @@ export default function App() {
                 onLogin={() => setShowLogin(true)}
                 isLoggedIn={isLoggedIn}
                 onLogout={handleLogout}
+                processoFromLiberados={!!selectedLiberado}
               />
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
-                <Breadcrumb page={page} onNavigate={setPage} selectedCat={selectedCat} selectedService={selectedService} />
+                <Breadcrumb page={page} onNavigate={setPage} selectedCat={selectedCat} selectedService={selectedService} selectedLiberado={selectedLiberado} />
                 <div style={{ flex: 1, overflowY: 'auto' }}>
                   {pageContent}
                 </div>

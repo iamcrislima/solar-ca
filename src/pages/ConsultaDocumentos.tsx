@@ -14,9 +14,17 @@ export default function ConsultaDocumentos() {
   const [numero,      setNumero]      = useState('');
   const [ano,         setAno]         = useState('');
   const [codigo,      setCodigo]      = useState('');
+  const [erros,       setErros]       = useState<{ numero: boolean; ano: boolean; codigo: boolean }>({ numero: false, ano: false, codigo: false });
 
-  function handleLimpar() { setOrgao(ORGAOS[0]); setProcedencia(PROCEDENCIAS[0]); setNumero(''); setAno(''); setCodigo(''); }
-  function handleConsultar() { /* busca */ }
+  function handleLimpar() { setOrgao(ORGAOS[0]); setProcedencia(PROCEDENCIAS[0]); setNumero(''); setAno(''); setCodigo(''); setErros({ numero: false, ano: false, codigo: false }); }
+  function handleConsultar() {
+    const errNumero = numero.trim() === '';
+    const errAno    = ano.trim() === '';
+    const errCodigo = codigo.trim() === '';
+    if (errNumero || errAno || errCodigo) { setErros({ numero: errNumero, ano: errAno, codigo: errCodigo }); return; }
+    setErros({ numero: false, ano: false, codigo: false });
+    /* busca */
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: isMobile ? '16px 16px 48px 16px' : '24px 24px 48px 24px' }}>
@@ -52,20 +60,20 @@ export default function ConsultaDocumentos() {
                     </select>
                   </MobileFormField>
                   <div style={{ display: 'flex', gap: 10 }}>
-                    <MobileFormField label={t('numero')} style={{ flex: 1 }}>
-                      <input value={numero} onChange={e => setNumero(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="000000" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontSize: 15, color: 'var(--neutral-ink)', padding: 0 }} />
+                    <MobileFormField label={t('numero')} style={{ flex: 1 }} error={erros.numero}>
+                      <input value={numero} onChange={e => { setNumero(e.target.value.replace(/\D/g, '').slice(0, 10)); if (erros.numero) setErros(p => ({ ...p, numero: false })); }} placeholder="000000" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontSize: 15, color: 'var(--neutral-ink)', padding: 0 }} />
                     </MobileFormField>
-                    <MobileFormField label={t('ano')} style={{ width: 90 }}>
-                      <input value={ano} onChange={e => setAno(e.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="2026" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontSize: 15, color: 'var(--neutral-ink)', padding: 0 }} />
+                    <MobileFormField label={t('ano')} style={{ width: 90 }} error={erros.ano}>
+                      <input value={ano} onChange={e => { setAno(e.target.value.replace(/\D/g, '').slice(0, 4)); if (erros.ano) setErros(p => ({ ...p, ano: false })); }} placeholder="2026" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontSize: 15, color: 'var(--neutral-ink)', padding: 0 }} />
                     </MobileFormField>
                   </div>
                 </div>
               ) : (
-                <div style={{ display: 'inline-flex', alignItems: 'stretch', alignSelf: 'flex-start', border: '1.5px solid var(--primary-pure)', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+                <div style={{ display: 'inline-flex', alignItems: 'stretch', alignSelf: 'flex-start', border: `1.5px solid ${erros.numero || erros.ano ? 'var(--error-color)' : 'var(--primary-pure)'}`, borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
                   <SearchableSelect label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
                   <SearchableSelect label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
-                  <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
-                  <FormSegment   label={t('ano')}         value={ano}         onChange={v => setAno(v.replace(/\D/g, '').slice(0, 4))}       placeholder="2026" width={72} center last />
+                  <FormSegment   label={t('numero')}      value={numero}      onChange={v => { setNumero(v.replace(/\D/g, '').slice(0, 10)); if (erros.numero) setErros(p => ({ ...p, numero: false })); }}  placeholder="000000" width={120} center error={erros.numero} />
+                  <FormSegment   label={t('ano')}         value={ano}         onChange={v => { setAno(v.replace(/\D/g, '').slice(0, 4)); if (erros.ano) setErros(p => ({ ...p, ano: false })); }}       placeholder="2026" width={72} center last error={erros.ano} />
                 </div>
               )}
             </div>
@@ -77,17 +85,17 @@ export default function ConsultaDocumentos() {
                 <InfoTooltip text={t('tooltipDocumento')} />
               </div>
               {isMobile ? (
-                <MobileFormField label={t('codigoDoc')}>
+                <MobileFormField label={t('codigoDoc')} error={erros.codigo}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <input value={codigo} onChange={e => setCodigo(e.target.value)} placeholder="Ex: 00U61ULQ" style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: 15, color: 'var(--neutral-ink)', padding: 0 }} />
+                    <input value={codigo} onChange={e => { setCodigo(e.target.value); if (erros.codigo) setErros(p => ({ ...p, codigo: false })); }} placeholder="Ex: 00U61ULQ" style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: 15, color: 'var(--neutral-ink)', padding: 0 }} />
                     <FAIcon icon="fa-regular fa-barcode-scan" style={{ color: 'var(--neutral-dark-medium)', fontSize: 16 }} />
                   </div>
                 </MobileFormField>
               ) : (
-                <div style={{ display: 'inline-flex', alignItems: 'stretch', alignSelf: 'flex-start', border: '1.5px solid var(--primary-pure)', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+                <div style={{ display: 'inline-flex', alignItems: 'stretch', alignSelf: 'flex-start', border: `1.5px solid ${erros.codigo ? 'var(--error-color)' : 'var(--primary-pure)'}`, borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '8px 14px', width: 200 }}>
-                    <label style={{ fontWeight: 700, fontSize: 10, color: 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{t('codigoDoc')}</label>
-                    <input value={codigo} onChange={e => setCodigo(e.target.value)} placeholder="Ex: 00U61ULQ" style={{ border: 'none', outline: 'none', background: 'transparent', fontWeight: 400, fontSize: 15, color: 'var(--neutral-ink)', padding: 0, width: '100%' }} />
+                    <label style={{ fontWeight: 700, fontSize: 10, color: erros.codigo ? 'var(--error-color)' : 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{t('codigoDoc')}</label>
+                    <input value={codigo} onChange={e => { setCodigo(e.target.value); if (erros.codigo) setErros(p => ({ ...p, codigo: false })); }} placeholder="Ex: 00U61ULQ" style={{ border: 'none', outline: 'none', background: 'transparent', fontWeight: 400, fontSize: 15, color: 'var(--neutral-ink)', padding: 0, width: '100%' }} />
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', padding: '0 14px', borderLeft: '1px solid var(--card-border-hover)', color: 'var(--neutral-dark-medium)', fontSize: 15 }}>
                     <FAIcon icon="fa-regular fa-barcode-scan" />
@@ -96,6 +104,13 @@ export default function ConsultaDocumentos() {
               )}
             </div>
           </div>
+
+          {(erros.numero || erros.ano || erros.codigo) && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--error-color)', fontSize: 12, fontWeight: 600 }}>
+              <FAIcon icon="fa-regular fa-circle-exclamation" style={{ fontSize: 12 }} />
+              {t('erroConsultaDoc')}
+            </div>
+          )}
 
           {/* Botões */}
           <div style={{ display: 'flex', gap: 10 }}>

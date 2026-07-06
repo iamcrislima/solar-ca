@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import FAIcon from './FAIcon';
 
-export function FormSegment({ label, value, onChange, placeholder, width, last = false, center = false, maxLength }: {
-  label: string; value: string; onChange: (v: string) => void; placeholder?: string; width?: number | string; last?: boolean; center?: boolean; maxLength?: number;
+export function FormSegment({ label, value, onChange, placeholder, width, last = false, center = false, maxLength, error = false }: {
+  label: string; value: string; onChange: (v: string) => void; placeholder?: string; width?: number | string; last?: boolean; center?: boolean; maxLength?: number; error?: boolean;
 }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: width ? 'none' : 1, width: width ?? undefined, borderRight: last ? 'none' : '1px solid var(--card-border-hover)', padding: '8px 14px' }}>
-      <label style={{ fontWeight: 700, fontSize: 10, color: 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px', textAlign: center ? 'center' : 'left' }}>{label}</label>
+      <label style={{ fontWeight: 700, fontSize: 10, color: error ? 'var(--error-color)' : 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px', textAlign: center ? 'center' : 'left' }}>{label}</label>
       <input value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} maxLength={maxLength}
         style={{ border: 'none', outline: 'none', background: 'transparent', fontWeight: 400, fontSize: 15, color: 'var(--neutral-ink)', padding: 0, width: '100%', textAlign: center ? 'center' : 'left' }} />
     </div>
@@ -101,10 +101,10 @@ export function SearchableSelect({ label, value, onChange, options, placeholder,
   );
 }
 
-export function MobileFormField({ label, children, style }: { label: string; children: React.ReactNode; style?: React.CSSProperties }) {
+export function MobileFormField({ label, children, style, error = false }: { label: string; children: React.ReactNode; style?: React.CSSProperties; error?: boolean }) {
   return (
-    <div style={{ border: '1.5px solid var(--primary-pure)', borderRadius: 8, background: 'white', padding: '8px 14px', display: 'flex', flexDirection: 'column', gap: 3, ...style }}>
-      <label style={{ fontWeight: 700, fontSize: 10, color: 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{label}</label>
+    <div style={{ border: `1.5px solid ${error ? 'var(--error-color)' : 'var(--primary-pure)'}`, borderRadius: 8, background: 'white', padding: '8px 14px', display: 'flex', flexDirection: 'column', gap: 3, ...style }}>
+      <label style={{ fontWeight: 700, fontSize: 10, color: error ? 'var(--error-color)' : 'var(--neutral-label)', letterSpacing: '0.07em', textTransform: 'uppercase', lineHeight: '14px' }}>{label}</label>
       {children}
     </div>
   );

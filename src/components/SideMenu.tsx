@@ -5,13 +5,14 @@ import { SIDEBAR_COLLAPSED, SIDEBAR_EXPANDED } from '../mocks';
 import FAIcon from './FAIcon';
 import ContactModal from './ContactModal';
 
-export default function SideMenu({ activePage, onNavigate, expanded, onLogin, isLoggedIn, onLogout }: {
+export default function SideMenu({ activePage, onNavigate, expanded, onLogin, isLoggedIn, onLogout, processoFromLiberados = false }: {
   activePage: Page;
   onNavigate: (page: Page) => void;
   expanded: boolean;
   onLogin: () => void;
   isLoggedIn: boolean;
   onLogout: () => void;
+  processoFromLiberados?: boolean; // true quando o detalhe/anexos veio de "Processos liberados"
 }) {
   const t = useT();
   const [showContact, setShowContact] = useState(false);
@@ -31,7 +32,7 @@ export default function SideMenu({ activePage, onNavigate, expanded, onLogin, is
   const items = isLoggedIn ? [...baseItems, ...loggedInItems] : baseItems;
 
   const effectivePage: Page =
-    activePage === 'processo' ? 'consulta' :
+    activePage === 'processo' ? (processoFromLiberados ? 'processosliberados' : 'consulta') :
     (activePage === 'cat-servicos' || activePage === 'servico-detalhe' || activePage === 'servico-form') ? 'solicitacao' :
     activePage;
 

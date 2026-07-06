@@ -63,12 +63,13 @@ function HeaderSearch() {
   );
 }
 
-export default function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavigate, darkMode, onToggleDark, highContrast, onToggleContrast, lang, onSetLang }: {
+export default function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavigate, darkMode, onToggleDark, highContrast, onToggleContrast, lang, onSetLang, termosAceiteEm = null }: {
   onToggle: () => void; onLogin: () => void; isLoggedIn: boolean; onLogout: () => void;
   onNavigate: (p: Page) => void;
   darkMode: boolean; onToggleDark: () => void;
   highContrast: boolean; onToggleContrast: () => void;
   lang: Lang; onSetLang: (l: Lang) => void;
+  termosAceiteEm?: string | null; // timestamp ISO do aceite (null se ainda não aceito)
 }) {
   const t = useT();
   const [avatarOpen,  setAvatarOpen]  = useState(false);
@@ -209,7 +210,7 @@ export default function Header({ onToggle, onLogin, isLoggedIn, onLogout, onNavi
         )}
       </div>
     </div>
-    {showTermos && <TermosModal onClose={() => setShowTermos(false)} />}
+    {showTermos && <TermosModal mode="view" aceiteEm={termosAceiteEm} onClose={() => setShowTermos(false)} />}
     </>
   );
 }

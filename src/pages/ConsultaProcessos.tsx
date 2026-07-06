@@ -15,10 +15,15 @@ export default function ConsultaProcessos({ onNavigateProcesso }: { onNavigatePr
   const [numero,      setNumero]      = useState('');
   const [ano,         setAno]         = useState('');
   const [resultados,  setResultados]  = useState<typeof consultasRecentes | null>(null);
+  const [erros,       setErros]       = useState<{ numero: boolean; ano: boolean }>({ numero: false, ano: false });
 
-  function handleLimpar() { setOrgao(ORGAOS[0]); setProcedencia(PROCEDENCIAS[0]); setNumero(''); setAno(''); setResultados(null); }
+  function handleLimpar() { setOrgao(ORGAOS[0]); setProcedencia(PROCEDENCIAS[0]); setNumero(''); setAno(''); setResultados(null); setErros({ numero: false, ano: false }); }
 
   function handleConsultar() {
+    const errNumero = numero.trim() === '';
+    const errAno    = ano.trim() === '';
+    if (errNumero || errAno) { setErros({ numero: errNumero, ano: errAno }); setResultados(null); return; }
+    setErros({ numero: false, ano: false });
     const found = consultasRecentes.filter(c => {
       const numMatch = !numero || c.numero.toLowerCase().includes(numero.toLowerCase());
       const anoMatch = !ano    || c.numero.includes(ano);
@@ -60,20 +65,26 @@ export default function ConsultaProcessos({ onNavigateProcesso }: { onNavigatePr
               </select>
             </MobileFormField>
             <div style={{ display: 'flex', gap: 10 }}>
-              <MobileFormField label={t('numero')} style={{ flex: 1 }}>
-                <input value={numero} onChange={e => setNumero(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="000000" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontSize: 15, color: 'var(--neutral-ink)', padding: 0 }} />
+              <MobileFormField label={t('numero')} style={{ flex: 1 }} error={erros.numero}>
+                <input value={numero} onChange={e => { setNumero(e.target.value.replace(/\D/g, '').slice(0, 10)); if (erros.numero) setErros(p => ({ ...p, numero: false })); }} placeholder="000000" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontSize: 15, color: 'var(--neutral-ink)', padding: 0 }} />
               </MobileFormField>
-              <MobileFormField label={t('ano')} style={{ width: 90 }}>
-                <input value={ano} onChange={e => setAno(e.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="2026" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontSize: 15, color: 'var(--neutral-ink)', padding: 0 }} />
+              <MobileFormField label={t('ano')} style={{ width: 90 }} error={erros.ano}>
+                <input value={ano} onChange={e => { setAno(e.target.value.replace(/\D/g, '').slice(0, 4)); if (erros.ano) setErros(p => ({ ...p, ano: false })); }} placeholder="2026" style={{ width: '100%', border: 'none', outline: 'none', background: 'transparent', fontSize: 15, color: 'var(--neutral-ink)', padding: 0 }} />
               </MobileFormField>
             </div>
           </div>
         ) : (
-          <div style={{ display: 'inline-flex', alignItems: 'stretch', alignSelf: 'flex-start', border: '1.5px solid var(--primary-pure)', borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'stretch', alignSelf: 'flex-start', border: `1.5px solid ${erros.numero || erros.ano ? 'var(--error-color)' : 'var(--primary-pure)'}`, borderRadius: 8, overflow: 'hidden', background: 'white', minHeight: 58 }}>
             <SearchableSelect label={t('orgao')}       value={orgao}       onChange={setOrgao}       options={ORGAOS}       width={150} />
             <SearchableSelect label={t('procedencia')} value={procedencia} onChange={setProcedencia} options={PROCEDENCIAS} width={160} />
-            <FormSegment   label={t('numero')}      value={numero}      onChange={v => setNumero(v.replace(/\D/g, '').slice(0, 10))}  placeholder="000000" width={120} center />
-            <FormSegment   label={t('ano')}         value={ano}         onChange={v => setAno(v.replace(/\D/g, '').slice(0, 4))}       placeholder="2026"   width={72} center last />
+            <FormSegment   label={t('numero')}      value={numero}      onChange={v => { setNumero(v.replace(/\D/g, '').slice(0, 10)); if (erros.numero) setErros(p => ({ ...p, numero: false })); }}  placeholder="000000" width={120} center error={erros.numero} />
+            <FormSegment   label={t('ano')}         value={ano}         onChange={v => { setAno(v.replace(/\D/g, '').slice(0, 4)); if (erros.ano) setErros(p => ({ ...p, ano: false })); }}       placeholder="2026"   width={72} center last error={erros.ano} />
+          </div>
+        )}
+        {(erros.numero || erros.ano) && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--error-color)', fontSize: 12, fontWeight: 600 }}>
+            <FAIcon icon="fa-regular fa-circle-exclamation" style={{ fontSize: 12 }} />
+            {t('erroConsultaProcesso')}
           </div>
         )}
         <div style={{ display: 'flex', gap: 10 }}>

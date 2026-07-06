@@ -4,7 +4,7 @@ import type { Page } from '../types';
 import FAIcon from './FAIcon';
 
 // ── Footer ──────────────────────────────────────────────────────────────────
-export default function Footer({ onNavigate }: { onNavigate: (p: Page) => void }) {
+export default function Footer({ onNavigate, onOpenTermos }: { onNavigate: (p: Page) => void; onOpenTermos?: () => void }) {
   const t = useT();
   const isMobile = useIsMobile();
 
@@ -175,9 +175,22 @@ export default function Footer({ onNavigate }: { onNavigate: (p: Page) => void }
         <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)' }}>
           © {new Date().getFullYear()} Prefeitura Municipal de Florianópolis. Todos os direitos reservados.
         </span>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)' }}>
-          Powered by Solar BPM · v1.0
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+          {onOpenTermos && (
+            <button
+              onClick={onOpenTermos}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 12, color: 'rgba(255,255,255,0.80)', textDecoration: 'underline', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'white')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.80)')}
+            >
+              <FAIcon icon="fa-regular fa-file-shield" style={{ fontSize: 12 }} />
+              Termos de uso e Política de privacidade
+            </button>
+          )}
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)' }}>
+            Powered by Solar BPM · v1.0
+          </span>
+        </div>
       </div>
     </footer>
   );

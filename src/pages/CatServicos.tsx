@@ -20,6 +20,12 @@ export default function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNa
     ? catServices.filter(s => s.servico.toLowerCase().includes(search.toLowerCase()))
     : catServices;
 
+  // Opção de abertura "Terceiro" redireciona para o link externo; senão abre o formulário.
+  function handleSolicitar(svc: Servico) {
+    if (svc.opcaoAbertura === 'terceiro' && svc.linkExterno) { window.open(svc.linkExterno, '_blank', 'noopener,noreferrer'); return; }
+    onNavigateForm(svc);
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 24px 48px 24px' }}>
 
@@ -95,12 +101,13 @@ export default function CatServicos({ catLabel, catIcon, onNavigateDetalhe, onNa
                 >
                   {t('solMaisInfo')}
                 </button>
-                <button onClick={() => onNavigateForm(svc)}
-                  style={{ flex: 1, height: 32, border: 'none', borderRadius: 6, background: 'var(--primary-pure)', color: 'white', fontWeight: 600, fontSize: 12, cursor: 'pointer', transition: 'background 0.12s' }}
+                <button onClick={() => handleSolicitar(svc)}
+                  style={{ flex: 1, height: 32, border: 'none', borderRadius: 6, background: 'var(--primary-pure)', color: 'white', fontWeight: 600, fontSize: 12, cursor: 'pointer', transition: 'background 0.12s', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-pure-hover)'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-pure)'; }}
                 >
                   {t('solSolicitar')}
+                  {svc.opcaoAbertura === 'terceiro' && <FAIcon icon="fa-regular fa-arrow-up-right-from-square" style={{ fontSize: 10 }} />}
                 </button>
               </div>
             </div>

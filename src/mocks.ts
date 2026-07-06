@@ -204,18 +204,18 @@ export const consultasRecentes: ConsultaRecente[] = [
 
 //  Mock: processos do usuário 
 export const MOCK_MEUS_PROCESSOS: MeuProcesso[] = [
-  { numero: 'PMF2026/000418', titulo: 'Solicitação de Cartão Nacional do Idoso', orgao: 'Secretaria de Assistência Social', dataAbertura: '05/04/2026', atualizadoEm: '18/04/2026', status: 'Em Andamento' },
-  { numero: 'PMF2026/000392', titulo: 'Solicitação de IPTU  isenção', orgao: 'Secretaria da Fazenda', dataAbertura: '02/04/2026', atualizadoEm: '15/04/2026', status: 'Pendente' },
-  { numero: 'PMF2026/000367', titulo: 'Ligação de Água e Ramal', orgao: 'CASAN / SEINFRA', dataAbertura: '28/03/2026', atualizadoEm: '14/04/2026', status: 'Em Andamento' },
-  { numero: 'PMF2026/000341', titulo: 'Matrícula Escolar Municipal', orgao: 'Secretaria de Educação', dataAbertura: '20/03/2026', atualizadoEm: '12/04/2026', status: 'Concluído' },
-  { numero: 'PMF2026/000298', titulo: 'Licença Ambiental  obra residencial', orgao: 'Secretaria do Meio Ambiente', dataAbertura: '15/03/2026', atualizadoEm: '10/04/2026', status: 'Pendente' },
-  { numero: 'PMF2026/000275', titulo: 'Aprovação de projeto arquitetônico', orgao: 'Secretaria de Urbanismo', dataAbertura: '10/03/2026', atualizadoEm: '08/04/2026', status: 'Em Andamento' },
-  { numero: 'PMF2026/000244', titulo: 'Fala, cidadão  reclamação iluminação', orgao: 'Ouvidoria Municipal', dataAbertura: '05/03/2026', atualizadoEm: '06/04/2026', status: 'Concluído' },
-  { numero: 'PMF2026/000221', titulo: 'Mobilidade Urbana  passe livre estudantil', orgao: 'Secretaria de Mobilidade', dataAbertura: '02/03/2026', atualizadoEm: '02/04/2026', status: 'Em Andamento' },
-  { numero: 'PMF2026/000198', titulo: 'Solicitação de poda de árvore', orgao: 'Secretaria do Meio Ambiente', dataAbertura: '25/02/2026', atualizadoEm: '28/03/2026', status: 'Concluído' },
-  { numero: 'PMF2026/000174', titulo: 'Vistoria de habite-se', orgao: 'Secretaria de Urbanismo', dataAbertura: '20/02/2026', atualizadoEm: '22/03/2026', status: 'Concluído' },
-  { numero: 'PMF2026/000152', titulo: 'Retificação de área  imóvel urbano', orgao: 'Secretaria de Urbanismo', dataAbertura: '15/02/2026', atualizadoEm: '18/03/2026', status: 'Em Andamento' },
-  { numero: 'PMF2026/000128', titulo: 'Alvará de construção', orgao: 'Secretaria de Urbanismo', dataAbertura: '10/02/2026', atualizadoEm: '14/03/2026', status: 'Pendente' },
+  { numero: 'PMF2026/000418', titulo: 'Solicitação de Cartão Nacional do Idoso', orgao: 'SEMAS — Secretaria Municipal de Assistência Social', dataAbertura: '05/04/2026', atualizadoEm: '18/04/2026', status: 'Em Andamento' },
+  { numero: 'PMF2026/000392', titulo: 'Solicitação de IPTU  isenção', orgao: 'SMF — Secretaria Municipal da Fazenda', dataAbertura: '02/04/2026', atualizadoEm: '15/04/2026', status: 'Pendente' },
+  { numero: 'PMF2026/000367', titulo: 'Ligação de Água e Ramal', orgao: 'SEINFRA — Secretaria Municipal de Infraestrutura', dataAbertura: '28/03/2026', atualizadoEm: '14/04/2026', status: 'Em Andamento' },
+  { numero: 'PMF2026/000341', titulo: 'Matrícula Escolar Municipal', orgao: 'SME — Secretaria Municipal de Educação', dataAbertura: '20/03/2026', atualizadoEm: '12/04/2026', status: 'Concluído' },
+  { numero: 'PMF2026/000298', titulo: 'Licença Ambiental  obra residencial', orgao: 'SMMA — Secretaria Municipal do Meio Ambiente', dataAbertura: '15/03/2026', atualizadoEm: '10/04/2026', status: 'Pendente' },
+  { numero: 'PMF2026/000275', titulo: 'Aprovação de projeto arquitetônico', orgao: 'SMDU — Secretaria Municipal de Desenvolvimento Urbano', dataAbertura: '10/03/2026', atualizadoEm: '08/04/2026', status: 'Em Andamento' },
+  { numero: 'PMF2026/000244', titulo: 'Fala, cidadão  reclamação iluminação', orgao: 'OUV — Ouvidoria Municipal', dataAbertura: '05/03/2026', atualizadoEm: '06/04/2026', status: 'Concluído' },
+  { numero: 'PMF2026/000221', titulo: 'Mobilidade Urbana  passe livre estudantil', orgao: 'SMM — Secretaria Municipal de Mobilidade', dataAbertura: '02/03/2026', atualizadoEm: '02/04/2026', status: 'Em Andamento' },
+  { numero: 'PMF2026/000198', titulo: 'Solicitação de poda de árvore', orgao: 'SMMA — Secretaria Municipal do Meio Ambiente', dataAbertura: '25/02/2026', atualizadoEm: '28/03/2026', status: 'Concluído' },
+  { numero: 'PMF2026/000174', titulo: 'Vistoria de habite-se', orgao: 'SMDU — Secretaria Municipal de Desenvolvimento Urbano', dataAbertura: '20/02/2026', atualizadoEm: '22/03/2026', status: 'Concluído' },
+  { numero: 'PMF2026/000152', titulo: 'Retificação de área  imóvel urbano', orgao: 'SMDU — Secretaria Municipal de Desenvolvimento Urbano', dataAbertura: '15/02/2026', atualizadoEm: '18/03/2026', status: 'Em Andamento' },
+  { numero: 'PMF2026/000128', titulo: 'Alvará de construção', orgao: 'SMDU — Secretaria Municipal de Desenvolvimento Urbano', dataAbertura: '10/02/2026', atualizadoEm: '14/03/2026', status: 'Pendente' },
 ];
 
 //  Mock: pendências do usuário 
@@ -230,15 +230,15 @@ export function pendenciaTipoKey(tipo: PendenciaTipo): 'tipoAssinatura' | 'tipoV
 }
 
 export const MOCK_PENDENCIAS: Pendencia[] = [
-  { id: 'p1', tipo: 'Verificar informações',    criadaEm: '15/04/2026', prazo: '22/04/2026', diasRestantes: 2,    status: 'Aberta',      processo: 'PMF2026/000418', interessado: 'João da Silva Santos', titulo: 'Verificar informações solicitadas sobre renda' },
-  { id: 'p2', tipo: 'Assinatura de documentos', criadaEm: '14/04/2026', prazo: '21/04/2026', diasRestantes: 1,    status: 'Aberta',      processo: 'PMF2026/000392', interessado: 'Empresa de Transportes', titulo: 'Assinatura de contrato de prestação' },
-  { id: 'p3', tipo: 'Comunique-se',             criadaEm: '12/04/2026', prazo: '19/04/2026', diasRestantes: -1,   status: 'Aberta',      processo: 'PMF2026/000367', interessado: 'João da Silva Santos', titulo: 'Responder questionamento sobre documentação' },
-  { id: 'p4', tipo: 'Assinatura de documentos', criadaEm: '11/04/2026', prazo: '25/04/2026', diasRestantes: 5,    status: 'Aberta',      processo: 'PMF2026/000341', interessado: 'Maria Oliveira Costa',    titulo: 'Assinatura de declaração de residência' },
-  { id: 'p5', tipo: 'Complementar dados',       criadaEm: '10/04/2026', prazo: null,         diasRestantes: null, status: 'Aberta',      processo: 'PMF2026/000298', interessado: 'João da Silva Santos', titulo: 'Anexar comprovante de endereço atualizado' },
-  { id: 'p6', tipo: 'Análise de documentos',    criadaEm: '08/04/2026', prazo: '28/04/2026', diasRestantes: 8,    status: 'Aberta',      processo: 'PMF2026/000275', interessado: 'João da Silva Santos', titulo: 'Analisar parecer técnico da vistoria' },
-  { id: 'p7', tipo: 'Assinatura de documentos', criadaEm: '05/04/2026', prazo: '12/04/2026', diasRestantes: -8,   status: 'Aberta',      processo: 'PMF2026/000244', interessado: 'João da Silva Santos', titulo: 'Assinatura de termo de compromisso' },
-  { id: 'p8', tipo: 'Comunique-se',             criadaEm: '02/04/2026', prazo: '09/04/2026', diasRestantes: -11,  status: 'Finalizada',  processo: 'PMF2026/000221', interessado: 'João da Silva Santos', titulo: 'Responder sobre histórico escolar' },
-  { id: 'p9', tipo: 'Verificar informações',    criadaEm: '28/03/2026', prazo: '04/04/2026', diasRestantes: -16,  status: 'Finalizada',  processo: 'PMF2026/000198', interessado: 'João da Silva Santos', titulo: 'Verificar dados cadastrais' },
+  { id: 'p1', tipo: 'Verificar informações',    criadaEm: '15/04/2026', prazo: '22/04/2026', diasRestantes: 2,    status: 'Aberta',      processo: 'PMF2026/000418', interessado: 'João da Silva Santos', titulo: 'Verificar informações solicitadas sobre renda', solicitante: 'SEMAS — Secretaria Municipal de Assistência Social' },
+  { id: 'p2', tipo: 'Assinatura de documentos', criadaEm: '14/04/2026', prazo: '21/04/2026', diasRestantes: 1,    status: 'Aberta',      processo: 'PMF2026/000392', interessado: 'Empresa de Transportes', titulo: 'Assinatura de contrato de prestação', solicitante: 'SMF — Secretaria Municipal da Fazenda' },
+  { id: 'p3', tipo: 'Comunique-se',             criadaEm: '12/04/2026', prazo: '19/04/2026', diasRestantes: -1,   status: 'Aberta',      processo: 'PMF2026/000367', interessado: 'João da Silva Santos', titulo: 'Responder questionamento sobre documentação', solicitante: 'SEINFRA — Secretaria Municipal de Infraestrutura' },
+  { id: 'p4', tipo: 'Assinatura de documentos', criadaEm: '11/04/2026', prazo: '25/04/2026', diasRestantes: 5,    status: 'Aberta',      processo: 'PMF2026/000341', interessado: 'Maria Oliveira Costa',    titulo: 'Assinatura de declaração de residência', solicitante: 'SME — Secretaria Municipal de Educação' },
+  { id: 'p5', tipo: 'Complementar dados',       criadaEm: '10/04/2026', prazo: null,         diasRestantes: null, status: 'Aberta',      processo: 'PMF2026/000298', interessado: 'João da Silva Santos', titulo: 'Anexar comprovante de endereço atualizado', solicitante: 'SMMA — Secretaria Municipal do Meio Ambiente' },
+  { id: 'p6', tipo: 'Análise de documentos',    criadaEm: '08/04/2026', prazo: '28/04/2026', diasRestantes: 8,    status: 'Aberta',      processo: 'PMF2026/000275', interessado: 'João da Silva Santos', titulo: 'Analisar parecer técnico da vistoria', solicitante: 'SMDU — Secretaria Municipal de Desenvolvimento Urbano' },
+  { id: 'p7', tipo: 'Assinatura de documentos', criadaEm: '05/04/2026', prazo: '12/04/2026', diasRestantes: -8,   status: 'Aberta',      processo: 'PMF2026/000244', interessado: 'João da Silva Santos', titulo: 'Assinatura de termo de compromisso', solicitante: 'OUV — Ouvidoria Municipal' },
+  { id: 'p8', tipo: 'Comunique-se',             criadaEm: '02/04/2026', prazo: '09/04/2026', diasRestantes: -11,  status: 'Finalizada',  processo: 'PMF2026/000221', interessado: 'João da Silva Santos', titulo: 'Responder sobre histórico escolar', solicitante: 'SMM — Secretaria Municipal de Mobilidade' },
+  { id: 'p9', tipo: 'Verificar informações',    criadaEm: '28/03/2026', prazo: '04/04/2026', diasRestantes: -16,  status: 'Finalizada',  processo: 'PMF2026/000198', interessado: 'João da Silva Santos', titulo: 'Verificar dados cadastrais', solicitante: 'SMMA — Secretaria Municipal do Meio Ambiente' },
 ];
 
 // Ícone e cor para cada tipo de pendência
@@ -304,16 +304,41 @@ export const MOCK_SERVICOS_AV: Servico[] = [
   { servico: '2ª Via de IPTU',                         categoria: 'Impostos e taxas',                    setor: 'SMF/SUBRT/CCC/Departamento de Cadastro Imobiliário', destino: ['Cidadão', 'Empresa'] },
   { servico: 'Agendamento de atendimento presencial',  categoria: 'Solicitações',                         setor: 'SMA/SGP/GAC/Central de Atendimento',                 destino: ['Cidadão', 'Empresa', 'Visitante'] },
   { servico: 'Alvará de funcionamento',                categoria: 'Alvarás, autorizações e licenças',     setor: 'SMPHDU/SDU/DLAE/Gerência de Alvarás',               destino: ['Empresa'] },
-  { servico: 'Alvará de obra',                         categoria: 'Obras e urbanismo',                   setor: 'SMPHDU/SDU/DLAE/Plano Diretor',                     destino: ['Cidadão', 'Empresa'] },
+  { servico: 'Alvará de obra',                         categoria: 'Obras e urbanismo',                   setor: 'SMPHDU/SDU/DLAE/Plano Diretor',                     destino: ['Cidadão', 'Empresa'],
+    detalhe: {
+      modo: 'campos',
+      classificacao: 'Alvarás, autorizações e licenças',
+      unidadePath: 'SDU / DLAE / Plano Diretor',
+      descricaoResumida: '<p>O <strong>Alvará de Obra</strong> autoriza a execução de obras de construção, reforma ou ampliação em imóveis no município de Florianópolis, garantindo que o projeto atenda às normas urbanísticas e de segurança vigentes.</p>',
+      descricaoDetalhada: '<p>A emissão do alvará é obrigatória antes do início de qualquer obra. O documento vincula-se ao projeto arquitetônico aprovado e possui prazo de validade conforme o porte da obra.</p><ul><li>Construções novas</li><li>Reformas com alteração de área</li><li>Ampliações e demolições</li></ul>',
+      requisitos: '<ul><li>Imóvel regularizado junto ao cadastro imobiliário municipal</li><li>Projeto arquitetônico aprovado</li><li>Responsável técnico com ART/RRT ativa</li></ul>',
+      comoSolicitar: '<ol><li>Preencha o formulário de solicitação com os dados do imóvel.</li><li>Anexe o projeto aprovado e a ART/RRT.</li><li>Acompanhe a análise em “Meus processos”.</li></ol>',
+      infoTaxa: '<p>A taxa é calculada com base na área construída, conforme a tabela vigente do Código Tributário Municipal. O boleto é gerado após a análise inicial do pedido.</p>',
+      documentosSolicitar: [
+        { nome: 'Requerimento de alvará de obra', descricao: 'Formulário padrão preenchido e assinado', arquivoModelo: 'modelo_requerimento_alvara.pdf' },
+        { nome: 'ART/RRT do responsável técnico', descricao: 'Anotação/registro de responsabilidade técnica' },
+        { nome: 'Projeto arquitetônico aprovado', descricao: 'Cópia do projeto com carimbo de aprovação' },
+      ],
+      linksRelacionados: [
+        { label: 'Código de Obras de Florianópolis', url: 'https://www.pmf.sc.gov.br/' },
+        { label: 'Consulta de viabilidade construtiva', url: 'https://www.pmf.sc.gov.br/' },
+      ],
+      documentosDownload: [
+        { nome: 'Cartilha do solicitante — Obras', arquivoModelo: 'cartilha_obras.pdf' },
+        { nome: 'Tabela de taxas 2026', arquivoModelo: 'tabela_taxas_2026.pdf' },
+      ],
+      diagramaFluxo: true,
+      documentacaoFluxo: '<p>O fluxo percorre as etapas de <strong>protocolo</strong>, <strong>análise técnica</strong> na Gerência de Alvarás, <strong>emissão do boleto</strong> e <strong>liberação do alvará</strong>. Em caso de exigências, o processo retorna ao solicitante para complementação.</p>',
+    } },
   { servico: 'Aprovação de projetos arquitetônicos',   categoria: 'Obras e urbanismo',                   setor: 'SMPHDU/SDU/DIPU/Projetos',                          destino: ['Empresa', 'Visitante'] },
   { servico: 'Atestado de residência',                 categoria: 'Certidões, declarações e documentos', setor: 'SMA/SGP/GAC/Protocolo',                             destino: ['Cidadão'] },
   { servico: 'Baixa de inscrição municipal',           categoria: 'Baixas e cancelamentos',              setor: 'SMF/SUBRT/CCC/Cadastro Municipal',                  destino: ['Empresa'] },
   { servico: 'Cadastro de MEI',                        categoria: 'Comércio e serviços',                 setor: 'SMF/SUBRT/CCC/Departamento de Cadastro de Pessoas', destino: ['Cidadão', 'Empresa'] },
   { servico: 'Carteira do idoso',                      categoria: 'Assistência social',                  setor: 'SMDS/Coordenadoria do Idoso',                       destino: ['Cidadão'] },
   { servico: 'Certidão de débitos municipais',         categoria: 'Certidões, declarações e documentos', setor: 'SMF/SUBRT/CCC/Certidões',                           destino: ['Cidadão', 'Empresa', 'Visitante'] },
-  { servico: 'Certidão negativa de débitos (CND)',     categoria: 'Certidões, declarações e documentos', setor: 'SMF/SUBRT/CCC/Certidões',                           destino: ['Cidadão', 'Empresa'] },
+  { servico: 'Certidão negativa de débitos (CND)',     categoria: 'Certidões, declarações e documentos', setor: 'SMF/SUBRT/CCC/Certidões',                           destino: ['Cidadão', 'Empresa'], opcaoAbertura: 'terceiro', linkExterno: 'https://www.pmf.sc.gov.br/servicos/' },
   { servico: 'Consulta de processo administrativo',    categoria: 'Processos externos',                  setor: 'SMA/SGP/GAC/Protocolo',                             destino: ['Cidadão', 'Empresa', 'Visitante'] },
-  { servico: 'Emissão de boleto de IPTU',              categoria: 'Impostos e taxas',                    setor: 'SMF/SUBRT/CCC/Departamento de Cadastro Imobiliário', destino: ['Cidadão', 'Empresa'] },
+  { servico: 'Emissão de boleto de IPTU',              categoria: 'Impostos e taxas',                    setor: 'SMF/SUBRT/CCC/Departamento de Cadastro Imobiliário', destino: ['Cidadão', 'Empresa'], opcaoAbertura: 'terceiro', linkExterno: 'https://www.pmf.sc.gov.br/servicos/' },
   { servico: 'Fala, cidadão (Ouvidoria)',              categoria: 'Reclamações e denúncias',             setor: 'SMA/SGP/GAC/Ouvidoria',                             destino: ['Cidadão', 'Visitante'] },
   { servico: 'Habite-se',                              categoria: 'Obras e urbanismo',                   setor: 'SMPHDU/SDU/DLAE/Vistoria',                          destino: ['Cidadão', 'Empresa'] },
   { servico: 'Isenção de IPTU para idosos',            categoria: 'Isenções e imunidade',                setor: 'SMF/SUBRT/CCC/Isenções',                            destino: ['Cidadão'] },
@@ -348,13 +373,66 @@ export const FORM_FIELDS_ANALISE: FormField[] = [
   { id: 'laudo',         label: 'Laudo técnico assinado', type: 'file', required: true, readonlyValue: 'laudo_tecnico_analise.pdf' },
 ];
 
-//  Mock: Dashboard atividades 
-export const MOCK_DASH_ATIVIDADES = [
-  { icon: 'fa-regular fa-circle-check',        text: 'Pendência "Assinatura de documentos" concluída',  processo: 'PMF2026/000418', date: '20/04/2026', color: 'var(--success-color)' },
-  { icon: 'fa-regular fa-file-circle-plus',    text: 'Nova solicitação criada: Alvará de Obra',          processo: 'PMF2026/000501', date: '19/04/2026', color: 'var(--primary-pure)' },
-  { icon: 'fa-regular fa-triangle-exclamation',text: 'Pendência de assinatura aguardando ação',          processo: 'PMF2026/000392', date: '18/04/2026', color: 'var(--error-color)' },
-  { icon: 'fa-regular fa-folder-open',         text: 'Processo acessado: Ranking de Sustentabilidade',  processo: 'PMF2026/000322', date: '17/04/2026', color: 'var(--neutral-dark-down)' },
+//  Últimas atividades — 6 tipos de evento (ícone + cor + chave i18n).
+//  Mesma definição reaproveitada na home e na tela "Todas as atividades".
+export type AtividadeTipo = 'acessado' | 'servico' | 'solicitacao' | 'pendencia-finalizada' | 'liberado' | 'pendencia-criada';
+
+export const ATIVIDADE_TIPOS: { key: AtividadeTipo; icon: string; color: string; labelKey: string }[] = [
+  { key: 'acessado',             icon: 'fa-regular fa-folder-open',      color: 'var(--neutral-dark-down)', labelKey: 'atvTipoAcessado' },
+  { key: 'servico',              icon: 'fa-regular fa-grid-2',           color: 'var(--govbr-color)',       labelKey: 'atvTipoServico' },
+  { key: 'solicitacao',          icon: 'fa-regular fa-file-circle-plus', color: 'var(--primary-pure)',      labelKey: 'atvTipoSolicitacao' },
+  { key: 'pendencia-finalizada', icon: 'fa-regular fa-circle-check',     color: 'var(--success-color)',     labelKey: 'atvTipoPendFinalizada' },
+  { key: 'liberado',             icon: 'fa-regular fa-unlock',           color: 'var(--primary-medium)',    labelKey: 'atvTipoLiberado' },
+  { key: 'pendencia-criada',     icon: 'fa-regular fa-bell',             color: 'var(--warning-color)',     labelKey: 'atvTipoPendCriada' },
 ];
+
+export const ATIVIDADE_TIPO_META: Record<AtividadeTipo, { icon: string; color: string; labelKey: string }> =
+  Object.fromEntries(ATIVIDADE_TIPOS.map(t => [t.key, { icon: t.icon, color: t.color, labelKey: t.labelKey }])) as Record<AtividadeTipo, { icon: string; color: string; labelKey: string }>;
+
+export interface Atividade { id: string; tipo: AtividadeTipo; text: string; ref: string; date: string; }
+
+// Histórico completo (mock) — ordenado do mais recente ao mais antigo.
+export const MOCK_ATIVIDADES: Atividade[] = [
+  { id: 'a01', tipo: 'pendencia-finalizada', text: 'Pendência "Assinatura de documentos" concluída',       ref: 'PMF2026/000418', date: '20/04/2026 · 16h42' },
+  { id: 'a02', tipo: 'solicitacao',          text: 'Nova solicitação criada: Alvará de obra',              ref: 'PMF2026/000501', date: '19/04/2026 · 11h08' },
+  { id: 'a03', tipo: 'pendencia-criada',     text: 'Nova pendência de assinatura atribuída a você',        ref: 'PMF2026/000392', date: '18/04/2026 · 09h20' },
+  { id: 'a04', tipo: 'acessado',             text: 'Processo acessado: Ranking de Sustentabilidade',       ref: 'PMF2026/000322', date: '17/04/2026 · 14h55' },
+  { id: 'a05', tipo: 'liberado',             text: 'Processo liberado para você: PMF2026/000848',          ref: 'PMF2026/000848', date: '16/04/2026 · 10h12' },
+  { id: 'a06', tipo: 'servico',              text: 'Serviço acessado: Certidão negativa de débitos (CND)', ref: 'CND-2026/1182',  date: '15/04/2026 · 08h39' },
+  { id: 'a07', tipo: 'acessado',             text: 'Documento consultado: Alvará de funcionamento 2025',   ref: 'DOC-00U61ULQ',   date: '14/04/2026 · 17h03' },
+  { id: 'a08', tipo: 'solicitacao',          text: 'Nova solicitação criada: Solicitação de poda de árvore', ref: 'PMF2026/000498', date: '13/04/2026 · 13h47' },
+  { id: 'a09', tipo: 'pendencia-finalizada', text: 'Pendência "Verificar informações" concluída',          ref: 'PMF2026/000367', date: '12/04/2026 · 15h30' },
+  { id: 'a10', tipo: 'servico',              text: 'Serviço acessado: 2ª Via de IPTU',                     ref: 'IPTU-2026/9932', date: '11/04/2026 · 10h58' },
+  { id: 'a11', tipo: 'pendencia-criada',     text: 'Nova pendência: Complementar dados do processo',       ref: 'PMF2026/000298', date: '10/04/2026 · 09h05' },
+  { id: 'a12', tipo: 'liberado',             text: 'Documento liberado para você: Parecer técnico',        ref: 'PMF2026/000721', date: '09/04/2026 · 16h18' },
+  { id: 'a13', tipo: 'acessado',             text: 'Processo acessado: Matrícula Escolar Municipal',       ref: 'PMF2026/000341', date: '08/04/2026 · 11h44' },
+  { id: 'a14', tipo: 'solicitacao',          text: 'Nova solicitação criada: Licença ambiental',           ref: 'PMF2026/000298', date: '07/04/2026 · 14h22' },
+  { id: 'a15', tipo: 'pendencia-finalizada', text: 'Pendência "Análise de documentos" concluída',          ref: 'PMF2026/000275', date: '06/04/2026 · 10h31' },
+  { id: 'a16', tipo: 'servico',              text: 'Serviço acessado: Agendamento de atendimento',         ref: 'AGD-2026/0455',  date: '05/04/2026 · 08h50' },
+  { id: 'a17', tipo: 'acessado',             text: 'Documento consultado: Declaração de residência',       ref: 'DOC-77K21ABZ',   date: '04/04/2026 · 17h39' },
+  { id: 'a18', tipo: 'pendencia-criada',     text: 'Nova pendência: Assinatura de declaração de residência', ref: 'PMF2026/000341', date: '03/04/2026 · 09h14' },
+  { id: 'a19', tipo: 'liberado',             text: 'Processo liberado para você: PMF2026/000721',          ref: 'PMF2026/000721', date: '02/04/2026 · 15h02' },
+  { id: 'a20', tipo: 'acessado',             text: 'Processo acessado: Mobilidade Urbana',                 ref: 'PMF2026/000221', date: '01/04/2026 · 13h27' },
+  { id: 'a21', tipo: 'solicitacao',          text: 'Nova solicitação criada: Aprovação de projeto',        ref: 'PMF2026/000275', date: '31/03/2026 · 10h49' },
+  { id: 'a22', tipo: 'servico',              text: 'Serviço acessado: Fala, cidadão (Ouvidoria)',          ref: 'OUV-2026/3310',  date: '30/03/2026 · 16h05' },
+  { id: 'a23', tipo: 'pendencia-finalizada', text: 'Pendência "Comunique-se" concluída',                   ref: 'PMF2026/000221', date: '29/03/2026 · 11h18' },
+  { id: 'a24', tipo: 'acessado',             text: 'Documento consultado: Memorial descritivo',            ref: 'DOC-90P12QWE',   date: '28/03/2026 · 09h33' },
+  { id: 'a25', tipo: 'pendencia-criada',     text: 'Nova pendência: Analisar parecer técnico da vistoria', ref: 'PMF2026/000275', date: '27/03/2026 · 14h41' },
+  { id: 'a26', tipo: 'liberado',             text: 'Documento liberado para você: Planta baixa do imóvel', ref: 'PMF2025/009812', date: '26/03/2026 · 10h07' },
+  { id: 'a27', tipo: 'servico',              text: 'Serviço acessado: Carteira do idoso',                  ref: 'IDO-2026/0781',  date: '25/03/2026 · 08h22' },
+  { id: 'a28', tipo: 'acessado',             text: 'Processo acessado: Vistoria de habite-se',             ref: 'PMF2026/000174', date: '24/03/2026 · 17h11' },
+  { id: 'a29', tipo: 'solicitacao',          text: 'Nova solicitação criada: Retificação de área',         ref: 'PMF2026/000152', date: '23/03/2026 · 13h59' },
+  { id: 'a30', tipo: 'pendencia-finalizada', text: 'Pendência "Complementar dados" concluída',             ref: 'PMF2026/000152', date: '22/03/2026 · 10h28' },
+  { id: 'a31', tipo: 'servico',              text: 'Serviço acessado: Matrícula escolar municipal',        ref: 'EDU-2026/1290',  date: '21/03/2026 · 09h47' },
+  { id: 'a32', tipo: 'pendencia-criada',     text: 'Nova pendência: Verificar dados cadastrais',           ref: 'PMF2026/000198', date: '20/03/2026 · 15h36' },
+  { id: 'a33', tipo: 'acessado',             text: 'Documento consultado: Certidão de regularidade fiscal', ref: 'DOC-12A98ZXC',  date: '19/03/2026 · 11h52' },
+  { id: 'a34', tipo: 'liberado',             text: 'Processo liberado para você: PMF2025/007109',          ref: 'PMF2025/007109', date: '18/03/2026 · 10h19' },
+  { id: 'a35', tipo: 'solicitacao',          text: 'Nova solicitação criada: Alvará de construção',        ref: 'PMF2026/000128', date: '17/03/2026 · 14h03' },
+  { id: 'a36', tipo: 'acessado',             text: 'Processo acessado: Fala, cidadão — iluminação',        ref: 'PMF2026/000244', date: '16/03/2026 · 09h41' },
+];
+
+// Quantidade de atividades exibidas na home antes do "Ver todos".
+export const HOME_ATIVIDADES_LIMIT = 6;
 
 //  rgãos e procedências 
 export const ORGAOS       = ['PMF', 'SMTTU', 'FLORIPAMANHÒ', 'IPUF', 'SMDS'];
