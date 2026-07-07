@@ -47,12 +47,20 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
   const h2Style: React.CSSProperties = { fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: 8 };
   const htmlStyle: React.CSSProperties = { fontSize: 14, color: 'var(--neutral-dark-pure)', lineHeight: '23px' };
 
-  // Seção com conteúdo HTML renderizado
+  // Seção com conteúdo HTML renderizado.
+  // Ícone numa faixa de largura fixa (16px) + gap 8 → o texto do título começa sempre a
+  // 24px da borda do card; o conteúdo HTML usa o mesmo recuo (classe .sd-rich abaixo),
+  // de modo que parágrafos e itens de lista alinhem com o início do texto do título.
   function HtmlSection({ icon, title, html }: { icon: string; title: string; html: string }) {
     return (
       <div style={cardBox}>
-        <h2 style={h2Style}><FAIcon icon={icon} style={{ fontSize: 15, color: 'var(--primary-pure)' }} />{title}</h2>
-        <div style={htmlStyle} dangerouslySetInnerHTML={{ __html: html }} />
+        <h2 style={h2Style}>
+          <span style={{ width: 16, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <FAIcon icon={icon} style={{ fontSize: 15, color: 'var(--primary-pure)' }} />
+          </span>
+          {title}
+        </h2>
+        <div className="sd-rich" style={{ ...htmlStyle, paddingLeft: 24 }} dangerouslySetInnerHTML={{ __html: html }} />
       </div>
     );
   }
@@ -139,6 +147,17 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: isMobile ? '16px 16px 80px 16px' : '24px 24px 48px 24px' }}>
+
+      {/* Normalização do HTML das seções "por campos": listas e parágrafos alinham com
+          o início do texto do título (recuo de 24px no wrapper .sd-rich). */}
+      <style>{`
+        .sd-rich > *:first-child { margin-top: 0; }
+        .sd-rich > *:last-child { margin-bottom: 0; }
+        .sd-rich p { margin: 0 0 10px; }
+        .sd-rich ol, .sd-rich ul { margin: 0 0 10px; padding-left: 0; list-style-position: inside; }
+        .sd-rich li { margin: 0 0 6px; }
+        .sd-rich li:last-child { margin-bottom: 0; }
+      `}</style>
 
       {/* Cabeçalho fixo */}
       <div style={{ background: 'white', border: '1px solid var(--card-border)', borderRadius: 10, padding: isMobile ? '20px' : 28, boxShadow: '0px 4px 12px rgba(24,39,75,0.10)' }}>
