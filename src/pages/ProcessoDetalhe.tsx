@@ -173,21 +173,6 @@ export default function ProcessoDetalhe({ onVoltar, liberadoItem, initialTab }: 
               Ranking de Sustentabilidade
             </div>
           </div>
-          {!isMobile && <button
-            onClick={() => window.print()}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0,
-              border: '1.5px solid var(--neutral-light-down)', borderRadius: 8, background: 'white', cursor: 'pointer',
-              padding: '8px 16px', height: 38,
-              fontWeight: 600, fontSize: 13, color: 'var(--neutral-dark-down)',
-              transition: 'all 0.12s',
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--primary-pure)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--primary-pure)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--neutral-light-down)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--neutral-dark-down)'; }}
-          >
-            <FAIcon icon="fa-regular fa-print" style={{ fontSize: 14 }} />
-            {t('imprimir')}
-          </button>}
         </div>
         {liberadoItem && (
           <div style={{ background: 'var(--success-bg-medium)', border: '1px solid var(--success-border-light)', borderRadius: 8, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12, marginTop: 12 }}>

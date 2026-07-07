@@ -91,7 +91,6 @@ export interface ServicoDocumento {
 //  Cada campo preenchido vira uma seção; campos vazios são omitidos.
 export interface ServicoDetalheConfig {
   modo: 'campos' | 'agrupamento';
-  classificacao?: string;   // se ausente, usa `categoria`
   unidadePath?: string;     // caminho da unidade responsável (ex.: 'ADM / Administração')
   // modo 'campos' — conteúdo em HTML renderizado:
   descricaoResumida?: string;   // obrigatório no modo campos

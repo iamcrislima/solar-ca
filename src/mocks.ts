@@ -304,10 +304,9 @@ export const MOCK_SERVICOS_AV: Servico[] = [
   { servico: '2ª Via de IPTU',                         categoria: 'Impostos e taxas',                    setor: 'SMF/SUBRT/CCC/Departamento de Cadastro Imobiliário', destino: ['Cidadão', 'Empresa'] },
   { servico: 'Agendamento de atendimento presencial',  categoria: 'Solicitações',                         setor: 'SMA/SGP/GAC/Central de Atendimento',                 destino: ['Cidadão', 'Empresa', 'Visitante'] },
   { servico: 'Alvará de funcionamento',                categoria: 'Alvarás, autorizações e licenças',     setor: 'SMPHDU/SDU/DLAE/Gerência de Alvarás',               destino: ['Empresa'] },
-  { servico: 'Alvará de obra',                         categoria: 'Obras e urbanismo',                   setor: 'SMPHDU/SDU/DLAE/Plano Diretor',                     destino: ['Cidadão', 'Empresa'],
+  { servico: 'Alvará de obra',                         categoria: 'Alvarás, autorizações e licenças',    setor: 'SMPHDU/SDU/DLAE/Plano Diretor',                     destino: ['Cidadão', 'Empresa'],
     detalhe: {
       modo: 'campos',
-      classificacao: 'Alvarás, autorizações e licenças',
       unidadePath: 'SDU / DLAE / Plano Diretor',
       descricaoResumida: '<p>O <strong>Alvará de Obra</strong> autoriza a execução de obras de construção, reforma ou ampliação em imóveis no município de Florianópolis, garantindo que o projeto atenda às normas urbanísticas e de segurança vigentes.</p>',
       descricaoDetalhada: '<p>A emissão do alvará é obrigatória antes do início de qualquer obra. O documento vincula-se ao projeto arquitetônico aprovado e possui prazo de validade conforme o porte da obra.</p><ul><li>Construções novas</li><li>Reformas com alteração de área</li><li>Ampliações e demolições</li></ul>',
@@ -335,7 +334,6 @@ export const MOCK_SERVICOS_AV: Servico[] = [
     // Conteúdo dependente e Informações sobre a taxa ficam VAZIOS → não geram seção).
     detalhe: {
       modo: 'campos',
-      classificacao: 'Certidões, declarações e documentos',
       unidadePath: 'SGP / GAC / Protocolo',
       descricaoResumida: '<p>O <strong>Atestado de Residência</strong> comprova o endereço de domicílio do cidadão no município, para fins cadastrais e de acesso a serviços públicos.</p>',
       requisitos: '<ul><li>Ser residente no município de Florianópolis</li><li>Apresentar documento de identificação com foto</li></ul>',
@@ -350,7 +348,6 @@ export const MOCK_SERVICOS_AV: Servico[] = [
     // Teste "Agrupado": conteúdo livre em HTML num único campo "Descrição".
     detalhe: {
       modo: 'agrupamento',
-      classificacao: 'Assistência social',
       unidadePath: 'Coordenadoria do Idoso',
       descricao: '<p>A <strong>Carteira do Idoso</strong> garante à pessoa idosa o acesso a benefícios como gratuidade ou desconto em transportes intermunicipais, conforme o Estatuto do Idoso.</p><p><b>Quem pode solicitar:</b></p><ul><li>Pessoas com 60 anos ou mais</li><li>Renda de até 2 salários mínimos</li></ul><p>Mais informações no <a href="https://exemplo.gov.br/carteira-idoso">portal da Assistência Social</a>.</p>',
     } },
@@ -369,7 +366,6 @@ export const MOCK_SERVICOS_AV: Servico[] = [
   { servico: 'Renovação de alvará',                    categoria: 'Alvarás, autorizações e licenças',    setor: 'SMPHDU/SDU/DLAE/Gerência de Alvarás',              destino: ['Empresa'],
     detalhe: {
       modo: 'campos',
-      classificacao: 'Alvarás, autorizações e licenças',
       unidadePath: 'SDU / DLAE / Gerência de Alvarás',
       descricaoResumida: '<p>A <strong>Renovação de Alvará</strong> prorroga a validade do alvará de funcionamento do estabelecimento, mantendo a atividade regularizada perante o município.</p>',
       comoSolicitar: '<ol><li>Confirme os dados do estabelecimento.</li><li>Anexe a documentação atualizada.</li><li>Acompanhe a análise em “Meus processos”.</li></ol>',

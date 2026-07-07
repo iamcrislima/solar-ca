@@ -12,8 +12,9 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
   const isMobile = useIsMobile();
   const d = service.detalhe;
 
-  // Cabeçalho (universal)
-  const classificacao = d?.classificacao ?? service.categoria;
+  // Cabeçalho (universal) — a tag de classificação deriva SEMPRE da categoria do serviço
+  // (fonte única, a mesma usada na listagem por categoria).
+  const classificacao = service.categoria;
   const setorParts = service.setor.split('/').map(s => s.trim()).filter(Boolean);
   const orgaoSigla = setorParts[0] ?? service.setor;
   const unidadePath = d?.unidadePath ?? setorParts.slice(1).join(' / ');
