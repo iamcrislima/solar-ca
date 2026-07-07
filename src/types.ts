@@ -106,8 +106,13 @@ export interface ServicoDetalheConfig {
   documentosSolicitar?: ServicoDocumento[];
   linksRelacionados?: { label: string; url: string }[];
   documentosDownload?: ServicoDocumento[];
-  diagramaFluxo?: boolean;
-  documentacaoFluxo?: string; // HTML
+  // Card "Fluxo" — uma linha por ação disponível:
+  fluxo?: {
+    temFluxo?: boolean;            // serviço tem fluxo configurado
+    diagrama?: boolean;           // checkbox "Diagrama" marcado → linha "Diagrama" (abrir em nova aba)
+    diagramaUrl?: string;         // URL do diagrama (abre em nova aba)
+    documentacaoArquivo?: string; // arquivo de documentação anexado → linha "Documentação" (download)
+  };
 }
 
 //  Tipo de serviço municipal

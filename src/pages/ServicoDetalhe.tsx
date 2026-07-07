@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { useT, useIsMobile } from '../i18n';
 import { Servico, ServicoDocumento } from '../types';
+import { sanitizeHtml, baixarArquivoMock } from '../format';
 import FAIcon from '../components/FAIcon';
 //  Tela: Detalhe do serviço
 export default function ServicoDetalhe({ service, onNavigateForm }: {
@@ -60,7 +61,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
           </span>
           {title}
         </h2>
-        <div className="sd-rich" style={{ ...htmlStyle, paddingLeft: 24 }} dangerouslySetInnerHTML={{ __html: html }} />
+        <div className="sd-rich" style={{ ...htmlStyle, paddingLeft: 24 }} dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }} />
       </div>
     );
   }
@@ -80,7 +81,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
               </div>
               {doc.arquivoModelo && (
                 <button
-                  onClick={() => window.open('#', '_blank', 'noopener,noreferrer')}
+                  onClick={() => baixarArquivoMock(doc.arquivoModelo!)}
                   style={{ height: 32, padding: '0 12px', border: '1.5px solid var(--primary-pure)', borderRadius: 6, background: 'white', color: 'var(--primary-pure)', fontWeight: 600, fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap', flexShrink: 0 }}
                 >
                   <FAIcon icon="fa-regular fa-download" style={{ fontSize: 11 }} />
@@ -116,6 +117,52 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
     );
   }
 
+  // Card "Fluxo" — uma linha por ação (Diagrama / Documentação), com botão de ação à direita.
+  function FluxoCard({ fluxo }: { fluxo: NonNullable<NonNullable<Servico['detalhe']>['fluxo']> }) {
+    const temDiagrama = !!(fluxo.temFluxo && fluxo.diagrama);
+    const temDoc = !!fluxo.documentacaoArquivo;
+    if (!temDiagrama && !temDoc) return null;
+
+    const rowStyle: React.CSSProperties = { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '12px 14px', background: 'var(--bg-subtle)', border: '1px solid var(--neutral-light-medium)', borderRadius: 8 };
+    const actionBtn: React.CSSProperties = { width: 38, height: 38, borderRadius: 8, border: '1.5px solid var(--primary-pure)', background: 'white', color: 'var(--primary-pure)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.12s' };
+    const nomeCol = (icon: string, label: string) => (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <FAIcon icon={icon} style={{ fontSize: 15, color: 'var(--primary-pure)', flexShrink: 0 }} />
+        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--neutral-dark-pure)' }}>{label}</span>
+      </div>
+    );
+
+    return (
+      <div style={cardBox}>
+        <h2 style={h2Style}><FAIcon icon="fa-regular fa-diagram-project" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />{t('sdFluxo')}</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {temDiagrama && (
+            <div style={rowStyle}>
+              {nomeCol('fa-regular fa-diagram-project', t('sdFluxoDiagrama'))}
+              <button title={t('sdFluxoDiagrama')} aria-label={t('sdFluxoDiagrama')} style={actionBtn}
+                onClick={() => window.open(fluxo.diagramaUrl || 'https://exemplo.gov.br/fluxo-diagrama', '_blank', 'noopener,noreferrer')}
+                onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-bg-hover)'}
+                onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}>
+                <FAIcon icon="fa-regular fa-arrow-up-right-from-square" style={{ fontSize: 14 }} />
+              </button>
+            </div>
+          )}
+          {temDoc && (
+            <div style={rowStyle}>
+              {nomeCol('fa-regular fa-file-lines', t('sdFluxoDocumentacao'))}
+              <button title={t('sdBaixarDoc')} aria-label={t('sdBaixarDoc')} style={actionBtn}
+                onClick={() => baixarArquivoMock(fluxo.documentacaoArquivo!)}
+                onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-bg-hover)'}
+                onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}>
+                <FAIcon icon="fa-regular fa-download" style={{ fontSize: 14 }} />
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   // Seções adicionais comuns (data-driven)
   const secoesAdicionais = d && (
     <>
@@ -138,10 +185,7 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
       {d.documentosDownload && d.documentosDownload.length > 0 && (
         <DocLista icon="fa-regular fa-folder-arrow-down" title={t('sdDocsDownload')} items={d.documentosDownload} labelBaixar={t('sdBaixar')} />
       )}
-      {d.diagramaFluxo && <DiagramaFluxo />}
-      {d.documentacaoFluxo && (
-        <HtmlSection icon="fa-regular fa-book" title={t('sdDocumentacaoFluxo')} html={d.documentacaoFluxo} />
-      )}
+      {d.fluxo && <FluxoCard fluxo={d.fluxo} />}
     </>
   );
 
@@ -206,10 +250,16 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
       {/* ── Conteúdo: modo "Por agrupamento" ── */}
       {(d?.modo === 'agrupamento' || (!d && 'agrupado' in service && service.agrupado)) ? (
         <>
-          <div style={cardBox}>
-            <h2 style={h2Style}><FAIcon icon="fa-regular fa-circle-info" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />{t('sdDescricaoUnica')}</h2>
-            <div style={htmlStyle} dangerouslySetInnerHTML={{ __html: d?.descricao ?? service.htmlContent ?? '' }} />
-          </div>
+          {d?.descricao ? (
+            // Campo único "Descrição" do cadastro → HTML sanitizado (seção única)
+            <HtmlSection icon="fa-regular fa-circle-info" title={t('sdDescricaoUnica')} html={d.descricao} />
+          ) : (
+            // Conteúdo legado pré-formatado (mock interno confiável)
+            <div style={cardBox}>
+              <h2 style={h2Style}><FAIcon icon="fa-regular fa-circle-info" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />{t('sdDescricaoUnica')}</h2>
+              <div style={htmlStyle} dangerouslySetInnerHTML={{ __html: service.htmlContent ?? '' }} />
+            </div>
+          )}
           {secoesAdicionais}
         </>
       ) : d?.modo === 'campos' ? (
@@ -271,9 +321,18 @@ export default function ServicoDetalhe({ service, onNavigateForm }: {
             <h2 style={h2Style}><FAIcon icon="fa-regular fa-paperclip" style={{ fontSize: 15, color: 'var(--primary-pure)' }} />{t('solDocsTitle')}</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {docs.map((doc) => (
-                <div key={doc} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', padding: '8px 12px', background: 'var(--bg-subtle)', borderRadius: 8 }}>
-                  <FAIcon icon="fa-regular fa-file-check" style={{ fontSize: 14, color: 'var(--primary-pure)', flexShrink: 0, marginTop: 2 }} />
-                  <span style={{ fontSize: 13, color: 'var(--neutral-dark-pure)', lineHeight: '20px' }}>{doc}</span>
+                <div key={doc}
+                  onClick={() => baixarArquivoMock(`${doc}.pdf`)}
+                  title={t('sdBaixar')}
+                  style={{ display: 'flex', gap: 10, alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', background: 'var(--bg-subtle)', border: '1px solid var(--neutral-light-medium)', borderRadius: 8, cursor: 'pointer', transition: 'border-color 0.12s, background 0.12s' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--primary-pure)'; (e.currentTarget as HTMLDivElement).style.background = 'var(--primary-bg-subtle)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--neutral-light-medium)'; (e.currentTarget as HTMLDivElement).style.background = 'var(--bg-subtle)'; }}
+                >
+                  <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', minWidth: 0 }}>
+                    <FAIcon icon="fa-regular fa-file-check" style={{ fontSize: 14, color: 'var(--primary-pure)', flexShrink: 0, marginTop: 2 }} />
+                    <span style={{ fontSize: 13, color: 'var(--neutral-dark-pure)', lineHeight: '20px' }}>{doc}</span>
+                  </div>
+                  <FAIcon icon="fa-regular fa-download" style={{ fontSize: 13, color: 'var(--primary-pure)', flexShrink: 0 }} />
                 </div>
               ))}
             </div>
