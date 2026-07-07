@@ -22,6 +22,7 @@ import ProcessoDetalhe      from './pages/ProcessoDetalhe';
 import ConsultaDocumentos   from './pages/ConsultaDocumentos';
 import MeusDados            from './pages/MeusDados';
 import MeusProcessos        from './pages/MeusProcessos';
+import type { MpFiltro }    from './pages/MeusProcessos';
 import MinhasPendencias     from './pages/MinhasPendencias';
 import ProcessosLiberados   from './pages/ProcessosLiberados';
 import ResolverPendencia    from './pages/ResolverPendencia';
@@ -47,7 +48,7 @@ export default function App() {
   const [selectedLiberado,  setSelectedLiberado]  = useState<ProcessoLiberado | null>(null);
   const [isMobile,          setIsMobile]          = useState(() => window.innerWidth < 768);
   const [drawerOpen,        setDrawerOpen]        = useState(false);
-  const [meusProcessosFilter, setMeusProcessosFilter] = useState<'todos' | 'Em Andamento' | 'Concluído' | 'Pendente'>('todos');
+  const [meusProcessosFilter, setMeusProcessosFilter] = useState<MpFiltro>('todos');
   const [pendingPage, setPendingPage] = useState<Page | null>(null);
 
   // Aceite de termos (mock do endpoint via localStorage) — timestamp ISO do aceite, ou null se pendente.
@@ -110,7 +111,7 @@ export default function App() {
           onNavigateCat={cat => { setSelectedCat(cat); setPage('cat-servicos'); }}
           isLoggedIn={isLoggedIn}
           onNavigate={(p, filter?) => {
-            if (filter) setMeusProcessosFilter(filter as 'todos' | 'Em Andamento' | 'Concluído' | 'Pendente');
+            if (filter) setMeusProcessosFilter(filter as MpFiltro);
             setPage(p);
           }}
           onNavigateService={svc => { setSelectedService(svc); setPage('servico-detalhe'); }}

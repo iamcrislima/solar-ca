@@ -48,7 +48,7 @@ export default function HomePage({ onNavigateCat, isLoggedIn, onNavigate, onNavi
             <div style={{ display: 'flex', gap: isMobile ? 10 : 16, flexWrap: 'nowrap' }}>
               {([
                               { label: t('dashPendencias'), value: '3', icon: 'fa-regular fa-bell',        onClick: () => onNavigate('minhaspendencias') },
-                { label: t('dashProcessos'),  value: '7', icon: 'fa-regular fa-folder-open', onClick: () => onNavigate('meusprocessos', 'Em Andamento') },
+                { label: t('dashProcessos'),  value: '8', icon: 'fa-regular fa-folder-open', onClick: () => onNavigate('meusprocessos', 'andamento') },
                 { label: t('dashLiberados'),  value: '2', icon: 'fa-regular fa-unlock',      onClick: () => onNavigate('processosliberados') },
               ] as { label: string; value: string; icon: string; onClick: () => void }[]).map((stat) => (
                 <div

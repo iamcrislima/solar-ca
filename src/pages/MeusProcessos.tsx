@@ -1,11 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { useT, useIsMobile } from '../i18n';
-import type { MeuProcesso, ProcessoStatus } from '../types';
+import type { MeuProcesso } from '../types';
 import { MOCK_MEUS_PROCESSOS } from '../mocks';
 import { formatOrgao } from '../format';
 import FAIcon from '../components/FAIcon';
 import StatusBadge from '../components/StatusBadge';
 import StatCard from '../components/StatCard';
+
+// "Com pendências" é um refinamento de "Em andamento", não um status independente.
+export type MpFiltro = 'todos' | 'andamento' | 'com-pendencias' | 'concluido';
 
 function ProcessoCard({ processo, onClick }: { processo: MeuProcesso; onClick: () => void }) {
   const t = useT();
@@ -26,7 +29,19 @@ function ProcessoCard({ processo, onClick }: { processo: MeuProcesso; onClick: (
         <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--primary-pure)', letterSpacing: 0.2 }}>
           {processo.numero}
         </span>
-        <StatusBadge status={processo.status} />
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          <StatusBadge status={processo.status} />
+          {processo.pendencias > 0 && (
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 5,
+              background: 'var(--warning-bg)', color: 'var(--warning-color)',
+              borderRadius: 100, padding: '2px 10px', fontWeight: 600, fontSize: 12, whiteSpace: 'nowrap',
+            }}>
+              <FAIcon icon="fa-regular fa-bell" style={{ fontSize: 11 }} />
+              {t('mpPendentes')}
+            </span>
+          )}
+        </div>
       </div>
 
       <div style={{ fontWeight: 700, fontSize: 16, color: 'var(--neutral-ink-strong)', lineHeight: 1.35 }}>
@@ -60,21 +75,24 @@ function ProcessoCard({ processo, onClick }: { processo: MeuProcesso; onClick: (
   );
 }
 
-export default function MeusProcessos({ onNavigateProcesso, initialFilter }: { onNavigateProcesso: () => void; initialFilter?: 'todos' | ProcessoStatus }) {
+export default function MeusProcessos({ onNavigateProcesso, initialFilter }: { onNavigateProcesso: () => void; initialFilter?: MpFiltro }) {
   const t = useT();
   const isMobile = useIsMobile();
   const [query, setQuery]   = useState('');
-  const [filtro, setFiltro] = useState<'todos' | ProcessoStatus>(initialFilter ?? 'todos');
+  const [filtro, setFiltro] = useState<MpFiltro>(initialFilter ?? 'todos');
 
-  const { total, andamento, concluidos, pendentes } = useMemo(() => ({
-    total:      MOCK_MEUS_PROCESSOS.length,
-    andamento:  MOCK_MEUS_PROCESSOS.filter(p => p.status === 'Em Andamento').length,
-    concluidos: MOCK_MEUS_PROCESSOS.filter(p => p.status === 'Concluído').length,
-    pendentes:  MOCK_MEUS_PROCESSOS.filter(p => p.status === 'Pendente').length,
+  // "Com pendências" é um refinamento de "Em andamento", não um status paralelo.
+  const { total, andamento, comPendencias, concluidos } = useMemo(() => ({
+    total:         MOCK_MEUS_PROCESSOS.length,
+    andamento:     MOCK_MEUS_PROCESSOS.filter(p => p.status === 'Em Andamento').length,
+    comPendencias: MOCK_MEUS_PROCESSOS.filter(p => p.status === 'Em Andamento' && p.pendencias > 0).length,
+    concluidos:    MOCK_MEUS_PROCESSOS.filter(p => p.status === 'Concluído').length,
   }), []);
 
   const filtrados = MOCK_MEUS_PROCESSOS.filter(p => {
-    if (filtro !== 'todos' && p.status !== filtro) return false;
+    if (filtro === 'andamento'      && p.status !== 'Em Andamento') return false;
+    if (filtro === 'concluido'      && p.status !== 'Concluído') return false;
+    if (filtro === 'com-pendencias' && !(p.status === 'Em Andamento' && p.pendencias > 0)) return false;
     if (query.trim()) {
       const q = query.toLowerCase();
       return (
@@ -86,11 +104,12 @@ export default function MeusProcessos({ onNavigateProcesso, initialFilter }: { o
     return true;
   });
 
-  const tabs: { id: 'todos' | ProcessoStatus; label: string; count: number }[] = [
-    { id: 'todos',        label: t('mpTodos'),      count: total },
-    { id: 'Em Andamento', label: t('mpAndamento'),  count: andamento },
-    { id: 'Concluído',    label: t('mpConcluidos'), count: concluidos },
-    { id: 'Pendente',     label: t('mpPendentes'),  count: pendentes },
+  // Ordem: Todos, Em andamento, Com pendências (subconjunto), Concluídos.
+  const tabs: { id: MpFiltro; label: string; count: number }[] = [
+    { id: 'todos',          label: t('mpTodos'),      count: total },
+    { id: 'andamento',      label: t('mpAndamento'),  count: andamento },
+    { id: 'com-pendencias', label: t('mpPendentes'),  count: comPendencias },
+    { id: 'concluido',      label: t('mpConcluidos'), count: concluidos },
   ];
 
   return (
@@ -140,20 +159,20 @@ export default function MeusProcessos({ onNavigateProcesso, initialFilter }: { o
         <StatCard
           icon="fa-regular fa-clock-rotate-left" label={t('mpAndamento')} value={andamento}
           color="var(--neutral-dark-down)" bg="var(--neutral-light-medium)"
-          active={filtro === 'Em Andamento'}
-          onClick={() => setFiltro('Em Andamento')}
+          active={filtro === 'andamento'}
+          onClick={() => setFiltro('andamento')}
+        />
+        <StatCard
+          icon="fa-regular fa-bell" label={t('mpPendentes')} value={comPendencias}
+          color="var(--warning-color)" bg="var(--warning-bg)"
+          active={filtro === 'com-pendencias'}
+          onClick={() => setFiltro('com-pendencias')}
         />
         <StatCard
           icon="fa-regular fa-circle-check" label={t('mpConcluidos')} value={concluidos}
           color="var(--success-color)" bg="var(--success-bg)"
-          active={filtro === 'Concluído'}
-          onClick={() => setFiltro('Concluído')}
-        />
-        <StatCard
-          icon="fa-regular fa-triangle-exclamation" label={t('mpPendentes')} value={pendentes}
-          color="var(--error-color)" bg="var(--error-bg)"
-          active={filtro === 'Pendente'}
-          onClick={() => setFiltro('Pendente')}
+          active={filtro === 'concluido'}
+          onClick={() => setFiltro('concluido')}
         />
       </div>
 

@@ -16,6 +16,8 @@ export interface ConsultaRecente {
 export type ProcessoTab = 'dados' | 'documentos' | 'tramitacoes' | 'movimentacoes' | 'arquivamentos' | 'numeros-externos';
 
 //  Meu processo
+//  A situação é sempre 'Em Andamento' ou 'Concluído'. A existência de pendências NÃO é
+//  um status — é um refinamento de "Em andamento" (contagem em `pendencias`).
 export interface MeuProcesso {
   numero: string;
   titulo: string;
@@ -23,6 +25,7 @@ export interface MeuProcesso {
   dataAbertura: string;
   atualizadoEm: string;
   status: ProcessoStatus;
+  pendencias: number; // nº de pendências vinculadas (0 = sem pendências)
 }
 
 //  Pendência

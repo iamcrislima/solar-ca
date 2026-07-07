@@ -142,17 +142,21 @@ export default function MinhasPendencias({ onNavigateProcesso, onResolverPendenc
   const t = useT();
   const isMobile = useIsMobile();
   const [query, setQuery]   = useState('');
-  const [filtro, setFiltro] = useState<'todas' | 'aberto' | 'vencendo' | 'finalizadas'>('aberto');
+  const [filtro, setFiltro] = useState<'todas' | 'aberto' | 'vencendo' | 'vencidas' | 'finalizadas'>('aberto');
 
+  // "Vencendo em breve" e "Vencidas" são condições de prazo de pendências que continuam
+  // ABERTAS — subconjuntos de "Em aberto", não status paralelos.
   const total       = MOCK_PENDENCIAS.length;
   const emAberto    = MOCK_PENDENCIAS.filter(p => p.status === 'Aberta').length;
-  const vencendo    = MOCK_PENDENCIAS.filter(p => p.status === 'Aberta' && p.diasRestantes !== null && p.diasRestantes <= 3).length;
+  const vencendo    = MOCK_PENDENCIAS.filter(p => p.status === 'Aberta' && p.diasRestantes !== null && p.diasRestantes >= 0 && p.diasRestantes <= 3).length;
+  const vencidas    = MOCK_PENDENCIAS.filter(p => p.status === 'Aberta' && p.diasRestantes !== null && p.diasRestantes < 0).length;
   const finalizadas = MOCK_PENDENCIAS.filter(p => p.status === 'Finalizada').length;
 
   const filtradas = MOCK_PENDENCIAS.filter(p => {
     if (filtro === 'aberto'      && p.status !== 'Aberta') return false;
     if (filtro === 'finalizadas' && p.status !== 'Finalizada') return false;
-    if (filtro === 'vencendo'    && !(p.status === 'Aberta' && p.diasRestantes !== null && p.diasRestantes <= 3)) return false;
+    if (filtro === 'vencendo'    && !(p.status === 'Aberta' && p.diasRestantes !== null && p.diasRestantes >= 0 && p.diasRestantes <= 3)) return false;
+    if (filtro === 'vencidas'    && !(p.status === 'Aberta' && p.diasRestantes !== null && p.diasRestantes < 0)) return false;
     if (query.trim()) {
       const q = query.toLowerCase();
       return (
@@ -174,6 +178,7 @@ export default function MinhasPendencias({ onNavigateProcesso, onResolverPendenc
     { id: 'todas',       label: t('mpTodos'),          count: total },
     { id: 'aberto',      label: t('mpendAberto'),      count: emAberto },
     { id: 'vencendo',    label: t('mpendVencendo'),    count: vencendo },
+    { id: 'vencidas',    label: t('mpendVencidas'),    count: vencidas },
     { id: 'finalizadas', label: t('mpendFinalizadas'), count: finalizadas },
   ];
 
@@ -228,10 +233,16 @@ export default function MinhasPendencias({ onNavigateProcesso, onResolverPendenc
           onClick={() => setFiltro('aberto')}
         />
         <StatCard
-          icon="fa-regular fa-triangle-exclamation" label={t('mpendVencendo')} value={vencendo}
-          color="var(--error-color)" bg="var(--error-bg)"
+          icon="fa-regular fa-clock" label={t('mpendVencendo')} value={vencendo}
+          color="var(--warning-color)" bg="var(--warning-bg)"
           active={filtro === 'vencendo'}
           onClick={() => setFiltro('vencendo')}
+        />
+        <StatCard
+          icon="fa-regular fa-triangle-exclamation" label={t('mpendVencidas')} value={vencidas}
+          color="var(--error-color)" bg="var(--error-bg)"
+          active={filtro === 'vencidas'}
+          onClick={() => setFiltro('vencidas')}
         />
         <StatCard
           icon="fa-regular fa-circle-check" label={t('mpendFinalizadas')} value={finalizadas}
