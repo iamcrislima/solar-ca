@@ -14,7 +14,7 @@ import WhatsAppContextStrip from '../components/WhatsAppContextStrip';
 import { autenticacaoConfig, whatsappUrl, sessaoValidaAte, formatarData } from '../config/autenticacao';
 import { useWaT } from '../textosWhatsapp';
 import {
-  navegarWa, urlWa, veioDoWhatsapp, telasDemoHabilitadas, ESTADOS_DEMO,
+  navegarWa, urlWa, veioDoWhatsapp, retornoAutomatico, ESTADOS_DEMO,
 } from '../rotasWhatsapp';
 import type { WaEstado } from '../rotasWhatsapp';
 
@@ -132,10 +132,10 @@ function RetornoWhatsApp({ rotuloMobile, texto, textoDesktop, mostrarQr, contage
   const url = whatsappUrl();
 
   const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Contagem só no celular e só com movimento normal. Em modo demonstração ela
-  // aparece mas NÃO redireciona, para não jogar quem apresenta fora da tela.
+  // Contagem só no celular e só com movimento normal. Ela aparece sempre; o
+  // redirecionamento em si depende de VITE_RETORNO_AUTOMATICO.
   const contar = !!contagem && isMobile && !reduzido;
-  const redirecionar = contar && !telasDemoHabilitadas;
+  const redirecionar = contar && retornoAutomatico;
   const [restante, setRestante] = useState(5);
 
   useEffect(() => {

@@ -32,8 +32,14 @@ const SUFIXO: Record<Exclude<WaEstado, 'nao-encontrado'>, string> = {
 export const ESTADOS_DEMO: Exclude<WaEstado, 'estados' | 'nao-encontrado'>[] =
   ['login', 'senha', 'confirmado', 'sessao-valida', 'link-expirado'];
 
-// A rota /estados só existe com a variável de demonstração ligada.
-export const telasDemoHabilitadas = import.meta.env.VITE_MOSTRAR_TELAS === 'true';
+// A lista de telas fica disponível por padrão — é protótipo de apresentação.
+// Para esconder em um ambiente real: VITE_MOSTRAR_TELAS=false.
+export const telasDemoHabilitadas = import.meta.env.VITE_MOSTRAR_TELAS !== 'false';
+
+// Retorno automático para o wa.me ao fim da contagem. Desligado por padrão: o
+// número do config ainda é placeholder, e redirecionar no meio de uma
+// apresentação joga quem está demonstrando fora da tela.
+export const retornoAutomatico = import.meta.env.VITE_RETORNO_AUTOMATICO === 'true';
 
 // Casa o pathname com um estado do fluxo.
 // null  → a URL não é do fluxo (o portal segue normal).
