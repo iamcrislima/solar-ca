@@ -10,6 +10,14 @@ export const imgFloripa       = '/Floripa 02.jpg';
 //  Usuário logado (mock) 
 export const MOCK_USER = { nome: 'Cris Lima', cpf: '012.345.678-90', initials: 'CL' };
 
+// Telefone do cidadão no atendimento via WhatsApp. Em produção vem da troca do
+// token de identificação — NUNCA da query string. Aqui é mock e é sempre exibido
+// mascarado (ver WhatsAppContextStrip).
+export const MOCK_TELEFONE_WHATSAPP = '5548999990566';
+
+// CPF parcial exibido na tela de sessão ainda válida.
+export const MOCK_CPF_PARCIAL = '•••.•••.789-00';
+
 //  Layout sidebar 
 export const SIDEBAR_COLLAPSED = 48;
 export const SIDEBAR_EXPANDED  = 248;

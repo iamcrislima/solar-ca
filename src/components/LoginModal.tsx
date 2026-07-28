@@ -4,6 +4,10 @@ import { useT, useIsMobile } from '../i18n';
 import { imgFloripa } from '../mocks';
 import FAIcon from './FAIcon';
 import TermosModal from './TermosModal';
+import LoginOptions from './LoginOptions';
+import CredenciaisForm from './CredenciaisForm';
+// Estilos do login agora vivem em loginStyles (compartilhados com /entrar/whatsapp).
+import { loginLabel as label, loginInputWrap as inputStyle, loginInputEl as inputEl2 } from './loginStyles';
 
 type ViewType = 'login' | 'recovery' | 'cadastro' | 'sucesso';
 type TipoPessoa = 'fisica' | 'juridica';
@@ -60,9 +64,7 @@ export default function LoginModal({
   const [step,          setStep]          = useState(1);
 
   // ── Login state ──
-  const [email,         setEmail]         = useState('');
-  const [senha,         setSenha]         = useState('');
-  const [showSenha,     setShowSenha]     = useState(false);
+  // (e-mail/senha/olho da senha moraram aqui até a extração do CredenciaisForm)
   const [emailRecov,    setEmailRecov]    = useState('');
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showTermos,    setShowTermos]    = useState(false);
@@ -148,11 +150,6 @@ export default function LoginModal({
   const col: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 4 };
   const g2: React.CSSProperties  = { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 12 };
   const req = <span style={{ color: '#c0182d' }}>*</span>;
-
-  // ── Login original styles (kept for existing views) ──
-  const label: React.CSSProperties = { fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-pure)', lineHeight: '20px' };
-  const inputStyle: React.CSSProperties = { background: 'white', border: '1px solid var(--neutral-dark-up)', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 8, padding: 8, height: 44, width: '100%', boxSizing: 'border-box' };
-  const inputEl2: React.CSSProperties = { flex: 1, border: 'none', outline: 'none', background: 'transparent', fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-pure)', minWidth: 0 };
 
   // ── Cadastro steps ──
   function renderStep1() {
@@ -519,72 +516,39 @@ export default function LoginModal({
                   {t('boasVindas')}
                 </p>
 
-                <a href="https://sso.acesso.gov.br/login?client_id=floripa.sc.gov.br&authorization_id=19dadc40977" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                  <button style={{ width: '100%', height: 52, borderRadius: 10, background: 'var(--govbr-color)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontWeight: 700, fontSize: 15, color: 'white', boxShadow: '0px 2px 8px rgba(19,81,180,0.30)', transition: 'background 0.12s' }}
-                    onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--govbr-hover)'}
-                    onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--govbr-color)'}>
-                    <FAIcon icon="fa-regular fa-shield-check" style={{ fontSize: 18 }} />
-                    Entrar com <strong style={{ fontSize: 20, letterSpacing: '0.09px' }}>gov.br</strong>
-                  </button>
-                </a>
-                <p style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', textAlign: 'center', margin: 0, lineHeight: '18px' }}>{t('loginGovBrRecomendado')}</p>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                  <div style={{ flex: 1, height: 1, background: 'var(--neutral-light-down)' }} />
-                  <span style={{ fontWeight: 400, fontSize: 12, color: 'var(--neutral-dark-down)', whiteSpace: 'nowrap' }}>ou</span>
-                  <div style={{ flex: 1, height: 1, background: 'var(--neutral-light-down)' }} />
-                </div>
-
-                <button style={{ width: '100%', height: 48, borderRadius: 10, background: 'white', border: '1.5px solid var(--cert-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontWeight: 700, fontSize: 14, color: 'var(--cert-color)', transition: 'background 0.12s' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--cert-bg-hover)'}
-                  onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}>
-                  <FAIcon icon="fa-regular fa-certificate" style={{ fontSize: 18, color: 'var(--cert-color)' }} />
-                  {t('certDigital')}
-                </button>
-                <p style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', textAlign: 'center', margin: 0, lineHeight: '18px' }}>{t('certDigitalDesc')}</p>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                  <div style={{ flex: 1, height: 1, background: 'var(--neutral-light-down)' }} />
-                  <span style={{ fontWeight: 400, fontSize: 12, color: 'var(--neutral-dark-down)', whiteSpace: 'nowrap' }}>ou {t('loginEntrarSistema')}</span>
-                  <div style={{ flex: 1, height: 1, background: 'var(--neutral-light-down)' }} />
-                </div>
-
-                {!showLoginForm ? (
-                  <button onClick={() => setShowLoginForm(true)} style={{ width: '100%', height: 44, border: '1.5px solid var(--neutral-light-down)', borderRadius: 8, background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontWeight: 600, fontSize: 14, color: 'var(--neutral-dark-down)', transition: 'all 0.12s' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--primary-pure)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--primary-pure)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--neutral-light-down)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--neutral-dark-down)'; }}>
-                    <FAIcon icon="fa-regular fa-arrow-right-to-bracket" style={{ fontSize: 14 }} />
-                    {t('loginEntrarSistema')}
-                  </button>
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      <span style={label}>Email <span style={{ color: 'var(--error-required)' }}>*</span></span>
-                      <div style={inputStyle}><input style={inputEl2} type="email" placeholder="Digite seu email" value={email} onChange={e => setEmail(e.target.value)} /></div>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      <span style={label}>Senha <span style={{ color: 'var(--error-required)' }}>*</span></span>
-                      <div style={inputStyle}>
-                        <input style={inputEl2} type={showSenha ? 'text' : 'password'} placeholder="Senha FloripaOn" value={senha} onChange={e => setSenha(e.target.value)} />
-                        <FAIcon icon={showSenha ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'} style={{ fontSize: 16, color: 'var(--neutral-dark-medium)', cursor: 'pointer', flexShrink: 0 }} onClick={() => setShowSenha(v => !v)} />
-                      </div>
-                      <span onClick={() => setView('recovery')} style={{ fontWeight: 600, fontSize: 12, color: 'var(--primary-pure)', textDecoration: 'underline', cursor: 'pointer' }}>Esqueci a senha</span>
-                    </div>
-                    <Button size="md" variant="primary" onClick={() => { onLogin(); onClose(); }} style={{ width: '100%' }}>Entrar</Button>
-                    <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', textAlign: 'center', margin: 0 }}>
-                      Não possui conta?{' '}
-                      <span onClick={() => { setView('cadastro'); setStep(1); }} style={{ fontWeight: 700, color: 'var(--primary-pure)', cursor: 'pointer', textDecoration: 'underline' }}>
-                        Criar conta
-                      </span>
-                    </p>
-                    <p style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', textAlign: 'center', margin: 0 }}>
-                      Ao entrar você concorda com os{' '}
-                      <span onClick={() => setShowTermos(true)} style={{ fontWeight: 600, color: 'var(--primary-pure)', cursor: 'pointer', textDecoration: 'underline' }}>
-                        Termos de Uso e Política de Privacidade
-                      </span>
-                    </p>
-                  </div>
-                )}
+                {/* Meios de acesso e formulário de credenciais: mesmos componentes
+                    usados pelas rotas /entrar/whatsapp. */}
+                <LoginOptions
+                  showForm={showLoginForm}
+                  onShowForm={() => setShowLoginForm(true)}
+                  form={
+                    <CredenciaisForm
+                      identificadorLabel="Email"
+                      identificadorTipo="email"
+                      identificadorPlaceholder="Digite seu email"
+                      senhaLabel={t('senha')}
+                      senhaPlaceholder="Senha FloripaOn"
+                      submitLabel={t('entrar')}
+                      esqueciSenhaLabel={t('esqueciSenha')}
+                      onEsqueciSenha={() => setView('recovery')}
+                      onSubmit={() => { onLogin(); onClose(); }}
+                      rodape={<>
+                        <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', textAlign: 'center', margin: 0 }}>
+                          Não possui conta?{' '}
+                          <span onClick={() => { setView('cadastro'); setStep(1); }} style={{ fontWeight: 700, color: 'var(--primary-pure)', cursor: 'pointer', textDecoration: 'underline' }}>
+                            Criar conta
+                          </span>
+                        </p>
+                        <p style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', textAlign: 'center', margin: 0 }}>
+                          Ao entrar você concorda com os{' '}
+                          <span onClick={() => setShowTermos(true)} style={{ fontWeight: 600, color: 'var(--primary-pure)', cursor: 'pointer', textDecoration: 'underline' }}>
+                            Termos de Uso e Política de Privacidade
+                          </span>
+                        </p>
+                      </>}
+                    />
+                  }
+                />
               </div>
             )}
 

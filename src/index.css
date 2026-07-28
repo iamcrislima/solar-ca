@@ -85,6 +85,15 @@
   --cert-color: #22a06b;
   --cert-bg-hover: #f0faf5;
 
+  /* WhatsApp (canal de atendimento) */
+  --wa-color: #25d366;
+  --wa-hover: #1fbe5b;
+  --wa-deep: #128c7e;
+  --wa-bg-soft: #e7fbf0;
+  --wa-border-soft: #c9efdc;
+  --wa-ink: #0b3d2c;
+  --wa-ink-soft: #2f6b54;
+
   /* Badge "Simplificado" / aviso laranja */
   --badge-simplified-bg: #fff8e6;
   --badge-simplified-color: #b45a00;

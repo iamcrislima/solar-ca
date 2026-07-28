@@ -32,7 +32,12 @@ import ServicoDetalhe       from './pages/ServicoDetalhe';
 import ServicoForm          from './pages/ServicoForm';
 import TodasAtividades      from './pages/TodasAtividades';
 import CadastroPage         from './pages/CadastroPage';
+import EntrarWhatsApp       from './pages/EntrarWhatsApp';
 import ErrorBoundary        from './components/ErrorBoundary';
+
+//  Rotas do fluxo de autenticação via WhatsApp
+import { casarRotaWa } from './rotasWhatsapp';
+import type { WaEstado } from './rotasWhatsapp';
 //  Componente principal 
 export default function App() {
   const [page,              setPage]              = useState<Page>('home');
@@ -57,6 +62,10 @@ export default function App() {
   });
   const [showTermosGate, setShowTermosGate] = useState(false); // gate obrigatório no 1º acesso
   const [showTermosView, setShowTermosView] = useState(false); // consulta dentro do portal
+
+  // Estado da URL: só /entrar/whatsapp* sai do portal por state. Qualquer outro
+  // endereço continua caindo na navegação por useState<Page>, como antes.
+  const [waEstado, setWaEstado] = useState<WaEstado | null>(() => casarRotaWa(window.location.pathname));
 
   function finalizeLogin() {
     setIsLoggedIn(true);
@@ -102,6 +111,33 @@ export default function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-contrast', highContrast ? 'true' : 'false');
   }, [highContrast]);
+
+  // Um único ponto de escuta: trata voltar/avançar do navegador e a navegação
+  // interna do fluxo (que dispara um popstate sintético).
+  useEffect(() => {
+    const onPop = () => setWaEstado(casarRotaWa(window.location.pathname));
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  // Sai do fluxo do WhatsApp e devolve o controle ao portal (sem recarregar).
+  function irParaPortal(p: Page) {
+    window.history.pushState({}, '', '/');
+    setWaEstado(null);
+    setPage(p);
+  }
+
+  if (waEstado) {
+    return (
+      <LangContext.Provider value={lang}>
+        <IsMobileContext.Provider value={isMobile}>
+          <ErrorBoundary fallbackTitle="Erro ao carregar a tela de autenticação">
+            <EntrarWhatsApp estado={waEstado} onNavigatePortal={irParaPortal} />
+          </ErrorBoundary>
+        </IsMobileContext.Provider>
+      </LangContext.Provider>
+    );
+  }
 
   //  Contedo de pgina (compartilhado mobile/desktop) 
   const pageContent = (

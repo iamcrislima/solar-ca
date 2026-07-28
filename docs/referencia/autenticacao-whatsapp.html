@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FloripaOn · Autenticação via WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────
+   TOKENS — extraídos do FloripaOn (solar-ca.vercel.app)
+   ───────────────────────────────────────────── */
+:root{
+  --bg:#F4F6F9;
+  --surface:#FFFFFF;
+  --ink:#333333;
+  --ink-2:#565656;
+  --ink-3:#A3A3A3;
+  --line:#D5D5D5;
+  --line-soft:#DCE6F5;
+  --primary:#0058DB;
+  --primary-ink:#FFFFFF;
+  --primary-soft:#EAF1FD;
+  --govbr:#1351B4;
+  --cert:#22A06B;
+  --cert-soft:#E9F7F0;
+  --wa:#25D366;
+  --wa-deep:#128C7E;
+  --wa-soft:#E7FBF0;
+  --warn-bg:#FFF7E6;
+  --warn-line:#F0C36D;
+  --warn-ink:#8A5A00;
+  --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:14px;
+  --shadow-card:0 1px 2px rgba(16,24,40,.05), 0 8px 24px rgba(16,24,40,.06);
+
+  /* chrome do protótipo (escuro) */
+  --p-bg:#111418;
+  --p-bg-2:#181C22;
+  --p-line:#282E37;
+  --p-ink:#E8ECF2;
+  --p-ink-2:#98A2B3;
+  --p-accent:#4C8DFF;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--p-bg);
+  color:var(--p-ink);
+  font-family:"Open Sans",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--p-accent);outline-offset:2px}
+
+/* ── Chrome do protótipo ───────────────────── */
+.pbar{
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  padding:14px 22px;border-bottom:1px solid var(--p-line);
+  background:var(--p-bg-2);position:sticky;top:0;z-index:20;
+}
+.pbrand{font-size:13px;font-weight:700;letter-spacing:.2px}
+.pbrand span{display:block;font-weight:400;font-size:11px;color:var(--p-ink-2);letter-spacing:.4px;text-transform:uppercase;margin-top:2px}
+.seg{display:flex;background:#0C0F13;border:1px solid var(--p-line);border-radius:999px;padding:3px;margin-left:auto}
+.seg button{
+  border:0;background:transparent;color:var(--p-ink-2);
+  font-size:12px;font-weight:600;padding:7px 16px;border-radius:999px;transition:.15s;
+}
+.seg button[aria-pressed="true"]{background:var(--p-accent);color:#06101F}
+.seg button:disabled{opacity:.35;cursor:not-allowed}
+
+.psteps{
+  display:flex;gap:6px;overflow-x:auto;padding:12px 22px;
+  border-bottom:1px solid var(--p-line);background:var(--p-bg);
+  scrollbar-width:thin;
+}
+.psteps button{
+  flex:0 0 auto;border:1px solid var(--p-line);background:var(--p-bg-2);
+  color:var(--p-ink-2);font-size:12px;font-weight:600;
+  padding:8px 14px;border-radius:var(--r-md);transition:.15s;white-space:nowrap;
+}
+.psteps button b{color:var(--p-ink-2);font-weight:800;margin-right:6px;opacity:.6}
+.psteps button[aria-pressed="true"]{border-color:var(--p-accent);color:var(--p-ink);background:#101B2E}
+.psteps button[aria-pressed="true"] b{color:var(--p-accent);opacity:1}
+
+.stage{padding:32px 22px 12px;display:flex;justify-content:center}
+.notes{
+  max-width:940px;margin:0 auto;padding:0 22px 56px;
+}
+.notes h3{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--p-ink-2);margin:24px 0 10px}
+.notes ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.notes li{
+  font-size:13px;line-height:1.55;color:#C7CFDB;
+  border-left:2px solid var(--p-line);padding:2px 0 2px 14px;
+}
+.notes li strong{color:var(--p-ink);font-weight:700}
+.notes code{
+  font-family:"JetBrains Mono",monospace;font-size:12px;
+  background:#0C0F13;border:1px solid var(--p-line);border-radius:5px;padding:1px 5px;color:#8FB8FF;
+}
+
+/* ── Molduras ───────────────────────────────── */
+.phone{
+  width:390px;flex:0 0 390px;height:820px;background:#000;border-radius:42px;
+  padding:11px;box-shadow:0 30px 70px rgba(0,0,0,.55);position:relative;
+}
+.phone::after{
+  content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:18px;
+  width:128px;height:5px;border-radius:3px;background:rgba(255,255,255,.55);z-index:5;
+}
+.phone-screen{
+  width:100%;height:100%;background:var(--bg);border-radius:32px;overflow:hidden;
+  position:relative;display:flex;flex-direction:column;
+}
+.statusbar{
+  flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;
+  padding:14px 26px 6px;font-size:14px;font-weight:700;color:var(--ink);
+}
+.statusbar .sb-right{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600}
+.batt{border:1.4px solid var(--ink);border-radius:3px;width:22px;height:11px;position:relative;display:inline-block}
+.batt i{position:absolute;inset:1.5px;right:6px;background:#F5C037;border-radius:1px}
+
+.browser{
+  width:100%;max-width:1080px;background:#0A0D11;border-radius:12px;
+  box-shadow:0 30px 70px rgba(0,0,0,.55);overflow:hidden;border:1px solid var(--p-line);
+}
+.browser-bar{display:flex;align-items:center;gap:10px;padding:11px 14px;background:#15191F}
+.dots{display:flex;gap:6px}
+.dots i{width:11px;height:11px;border-radius:50%;background:#3A424E;display:block}
+.urlbar{
+  flex:1;background:#0A0D11;border:1px solid var(--p-line);border-radius:7px;
+  padding:6px 12px;font-family:"JetBrains Mono",monospace;font-size:11.5px;color:#7F8CA0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.urlbar b{color:#B8C4D4;font-weight:500}
+.browser-screen{height:680px;overflow-y:auto;background:var(--bg)}
+
+/* ── Página FloripaOn ───────────────────────── */
+.page{
+  flex:1;overflow-y:auto;background:var(--bg);color:var(--ink);
+  display:flex;flex-direction:column;
+}
+.page-head{
+  display:flex;align-items:center;gap:10px;padding:14px 20px;
+  background:var(--surface);border-bottom:1px solid var(--line-soft);
+}
+.crest{
+  width:34px;height:34px;border-radius:8px;flex:0 0 34px;
+  background:linear-gradient(160deg,#0058DB,#003C99);
+  display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800;letter-spacing:-.5px;
+}
+.page-head .t{font-size:14px;font-weight:800;line-height:1.15}
+.page-head .s{font-size:11px;color:var(--ink-3);font-weight:600}
+
+.page-body{flex:1;padding:22px 20px 32px;display:flex;flex-direction:column;align-items:center}
+.card{
+  width:100%;max-width:420px;background:var(--surface);border:1px solid var(--line-soft);
+  border-radius:var(--r-xl);box-shadow:var(--shadow-card);overflow:hidden;
+}
+
+/* faixa de contexto — o elemento novo deste fluxo */
+.wa-strip{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:14px 16px;background:var(--wa-soft);border-bottom:1px solid #C9EFDC;
+}
+.wa-ic{
+  flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:var(--wa);
+  display:grid;place-items:center;
+}
+.wa-ic svg{width:19px;height:19px;fill:#fff}
+.wa-strip .lbl{font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--wa-deep)}
+.wa-strip .who{font-size:13px;font-weight:700;color:#0B3D2C;margin-top:2px}
+.wa-strip .why{font-size:12px;color:#2F6B54;line-height:1.45;margin-top:3px}
+
+.card-body{padding:22px 20px}
+.title{font-size:19px;font-weight:800;line-height:1.3;margin:0 0 6px;letter-spacing:-.2px}
+.sub{font-size:13px;color:var(--ink-2);line-height:1.5;margin:0 0 20px}
+
+/* botões de identidade */
+.btn{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:9px;
+  border-radius:var(--r-lg);font-weight:700;font-size:15px;padding:14px 16px;
+  border:1px solid transparent;transition:.15s;text-decoration:none;
+}
+.btn-govbr{background:var(--govbr);color:#fff}
+.btn-govbr:hover{background:#0F459B}
+.btn-govbr .gov{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.btn-cert{background:#fff;color:var(--cert);border-color:var(--cert);font-size:14px}
+.btn-cert:hover{background:var(--cert-soft)}
+.btn-ghost{background:#fff;color:var(--ink-2);border-color:var(--line);font-size:14px;font-weight:600}
+.btn-ghost:hover{background:#FAFBFD}
+.btn-primary{background:var(--primary);color:#fff;border-radius:var(--r-md);font-size:15px}
+.btn-primary:hover{background:#0049B8}
+.btn-primary[disabled]{background:#E9ECF1;color:var(--ink-3);cursor:not-allowed}
+.btn-wa{background:var(--wa);color:#063E2B;border-radius:var(--r-lg)}
+.btn-wa:hover{background:#1FBE5B}
+.btn-wa svg{width:19px;height:19px;fill:#063E2B}
+.hint{font-size:11.5px;color:var(--ink-3);text-align:center;margin:7px 0 0;line-height:1.45}
+.stack{display:grid;gap:8px}
+.stack + .stack{margin-top:14px}
+
+.sep{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--ink-3);font-size:12px}
+.sep::before,.sep::after{content:"";height:1px;background:var(--line-soft);flex:1}
+
+label.fl{display:block;font-size:12.5px;font-weight:700;color:var(--ink-2);margin:0 0 6px}
+.field{
+  width:100%;border:1px solid var(--line);border-radius:var(--r-md);
+  padding:13px 14px;font-size:14.5px;color:var(--ink);background:#fff;font-family:inherit;
+}
+.field::placeholder{color:#B9BEC7}
+.field:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.field-row{margin-bottom:14px}
+.forgot{display:block;text-align:right;font-size:12.5px;color:var(--primary);font-weight:600;text-decoration:none;margin-top:8px}
+
+/* validade da sessão — valor parametrizável */
+.validade{
+  display:flex;gap:10px;align-items:flex-start;margin-top:18px;
+  background:#F7F9FC;border:1px solid var(--line-soft);border-radius:var(--r-md);padding:12px 13px;
+}
+.validade svg{flex:0 0 16px;width:16px;height:16px;fill:var(--ink-3);margin-top:1px}
+.validade p{margin:0;font-size:12px;color:var(--ink-2);line-height:1.5}
+.param{
+  font-weight:800;color:var(--ink);border-bottom:1.5px dashed var(--primary);
+  padding-bottom:1px;cursor:help;
+}
+.legal{font-size:11.5px;color:var(--ink-3);line-height:1.5;margin:16px 0 0;text-align:center}
+.legal a{color:var(--primary);text-decoration:none}
+.powered{
+  text-align:center;font-size:11.5px;color:var(--ink-3);padding:18px 0 6px;font-weight:600;
+}
+.powered b{color:var(--primary);font-weight:800}
+
+/* estados de resultado */
+.result{text-align:center;padding:34px 24px 26px}
+.result .badge{
+  width:66px;height:66px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;
+}
+.badge-ok{background:var(--wa-soft);border:2px solid var(--wa)}
+.badge-ok svg{width:30px;height:30px;fill:none;stroke:var(--wa-deep);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.badge-warn{background:var(--warn-bg);border:2px solid var(--warn-line)}
+.badge-warn svg{width:30px;height:30px;fill:var(--warn-ink)}
+.result h2{font-size:20px;font-weight:800;margin:0 0 8px;letter-spacing:-.2px}
+.result p{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:0 auto 20px;max-width:320px}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;background:#F7F9FC;border:1px solid var(--line-soft);
+  border-radius:999px;padding:6px 13px;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:18px;
+}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:var(--wa)}
+.count{
+  font-size:12px;color:var(--ink-3);margin-top:12px;
+}
+.count b{color:var(--ink-2)}
+.qr{
+  width:132px;height:132px;margin:4px auto 14px;border-radius:var(--r-md);
+  border:1px solid var(--line);background:
+   repeating-conic-gradient(#333 0 25%, #fff 0 50%) 0 0/16px 16px;
+  opacity:.85;
+}
+/* só esconde — nunca redefine display de quem está visível,
+   senão quebra o flex dos botões com ícone */
+.stage:not(.is-desktop) .only-desktop{display:none}
+.stage.is-desktop .only-mobile{display:none}
+
+/* desktop: card centralizado mais largo */
+.stage.is-desktop .page-body{padding:48px 24px}
+.stage.is-desktop .card{max-width:460px}
+.stage.is-desktop .title{font-size:22px}
+
+/* ── Mock WhatsApp ──────────────────────────── */
+.wa-app{flex:1;display:flex;flex-direction:column;background:#EFE7DE;overflow:hidden}
+.wa-head{
+  display:flex;align-items:center;gap:11px;padding:9px 14px 12px;background:#F6F6F6;
+  border-bottom:1px solid #DDD;
+}
+.wa-back{font-size:20px;color:#007AFF;font-weight:400;line-height:1}
+.wa-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(150deg,#7C4DFF,#3F51B5);flex:0 0 36px;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800}
+.wa-head .n{font-size:14.5px;font-weight:700;color:#111;display:flex;align-items:center;gap:5px}
+.wa-head .n svg{width:13px;height:13px;fill:#1DA1F2}
+.wa-head .o{font-size:11.5px;color:#8A8A8E}
+.wa-msgs{flex:1;overflow-y:auto;padding:14px 12px 8px;display:flex;flex-direction:column;gap:7px}
+.msg{
+  max-width:82%;padding:8px 11px 6px;border-radius:12px;font-size:14px;line-height:1.42;
+  color:#111;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.08);
+}
+.msg .tm{font-size:10.5px;color:#8A8A8E;float:right;margin:4px 0 0 8px}
+.msg.in{background:#fff;align-self:flex-start;border-top-left-radius:4px}
+.msg.out{background:#D9FDD3;align-self:flex-end;border-top-right-radius:4px}
+.msg.out .tm{color:#5A8C55}
+.linkcard{
+  background:#F0F0F0;border-radius:9px;padding:8px;margin:-2px -3px 7px;display:flex;gap:9px;
+}
+.linkcard .thumb{width:44px;height:44px;border-radius:6px;flex:0 0 44px;background:linear-gradient(160deg,#0058DB,#003C99);display:grid;place-items:center;color:#fff;font-size:11px;font-weight:800}
+.linkcard .lt{font-size:12px;font-weight:700;color:#111;line-height:1.3}
+.linkcard .ld{font-size:11px;color:#8A8A8E;margin-top:3px}
+.msg a{color:#0058DB;word-break:break-all}
+.wa-input{
+  flex:0 0 auto;display:flex;align-items:center;gap:11px;padding:9px 14px 22px;background:#F6F6F6;
+  border-top:1px solid #DDD;
+}
+.wa-input .plus{font-size:24px;color:#8A8A8E;line-height:1}
+.wa-input .box{flex:1;background:#fff;border:1px solid #DDD;border-radius:18px;height:34px}
+
+@media (max-width:900px){
+  .phone{transform:scale(.82);transform-origin:top center;margin-bottom:-140px}
+  .browser{max-width:100%}
+  .browser-screen{height:560px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="pbar">
+  <div class="pbrand">Autenticação via WhatsApp<span>Solar BPM · FloripaOn · proposta de telas</span></div>
+  <div class="seg" role="group" aria-label="Dispositivo">
+    <button id="dev-m" aria-pressed="true">Celular</button>
+    <button id="dev-d" aria-pressed="false">Desktop</button>
+  </div>
+</div>
+
+<nav class="psteps" id="steps" aria-label="Etapas do fluxo"></nav>
+
+<div class="stage" id="stage"></div>
+
+<div class="notes">
+  <h3 id="notes-title">Regra da tela</h3>
+  <ul id="notes-list"></ul>
+</div>
+
+<script>
+const ICON_WA = '<svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.4.5-.6.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 1.5 2.4 3.7 3.3 2.2.9 2.5.8 2.9.7.4 0 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1 0-.1-.2-.2-.5-.4M12 21.5c-1.6 0-3.2-.4-4.6-1.3l-.3-.2-3.4.9.9-3.3-.2-.3A8.9 8.9 0 0 1 3.1 12 8.9 8.9 0 0 1 12 3.1 8.9 8.9 0 0 1 20.9 12 8.9 8.9 0 0 1 12 21.5M12 1.2A10.8 10.8 0 0 0 1.2 12c0 1.9.5 3.7 1.4 5.3L1.1 23l5.8-1.5c1.5.8 3.3 1.3 5.1 1.3A10.8 10.8 0 0 0 22.8 12 10.8 10.8 0 0 0 12 1.2"/></svg>';
+const ICON_CHECK = '<svg viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></svg>';
+const ICON_CLOCK = '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20m0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16m.5-13h-1.5v6l5 3 .8-1.3-4.3-2.5z"/></svg>';
+const ICON_WARN = '<svg viewBox="0 0 24 24"><path d="M12 2 1 21h22zm0 5 7.5 12.9h-15zM11 10v5h2v-5zm0 6.5V19h2v-2.5z"/></svg>';
+const ICON_VERIF = '<svg viewBox="0 0 24 24"><path d="M12 2 9.8 4.2 6.7 3.8 5.6 6.7l-3 1.1.4 3.1L1 13l2 2.2-.4 3.1 3 1.1 1.1 2.9 3.1-.4L12 24l2.2-2.1 3.1.4 1.1-2.9 3-1.1-.4-3.1L23 13l-2-2.1.4-3.1-3-1.1-1.1-2.9-3.1.4zm-1.3 14.2L7 12.5l1.5-1.5 2.2 2.2 4.8-4.8 1.5 1.5z"/></svg>';
+
+const NUM_MASK = '+55 (48) 9••••-0566';
+const PRAZO = '10 dias';
+
+/* ─── Blocos reutilizáveis ─────────────────── */
+const statusbar = `
+  <div class="statusbar">
+    <span>13:53</span>
+    <span class="sb-right">▪▪ ᯤ <span class="batt"><i></i></span></span>
+  </div>`;
+
+const pageHead = `
+  <div class="page-head">
+    <div class="crest">FO</div>
+    <div>
+      <div class="t">FloripaOn</div>
+      <div class="s">Município de Florianópolis</div>
+    </div>
+  </div>`;
+
+const waStrip = (why) => `
+  <div class="wa-strip">
+    <div class="wa-ic">${ICON_WA}</div>
+    <div>
+      <div class="lbl">Atendimento via WhatsApp</div>
+      <div class="who">${NUM_MASK}</div>
+      <div class="why">${why}</div>
+    </div>
+  </div>`;
+
+const validade = `
+  <div class="validade">
+    ${ICON_CLOCK}
+    <p>Depois de entrar, você não precisa autenticar de novo por
+    <span class="param" title="Valor parametrizável por cliente: 1 dia, 10 dias, 1 ano…">${PRAZO}</span>.</p>
+  </div>`;
+
+const legal = `
+  <p class="legal">Ao continuar você concorda com o nosso <a href="#">Aviso de Privacidade</a>.</p>
+  <p class="powered">Powered by <b>Solar BPM</b></p>`;
+
+/* ─── Telas ────────────────────────────────── */
+const SCREENS = {
+
+chat: {
+  label:'Conversa no WhatsApp',
+  device:'phone-only',
+  notes:[
+    'A IA identifica que a ação pedida (<strong>abrir protocolo</strong>) exige identidade e interrompe o fluxo antes de coletar qualquer dado.',
+    'A mensagem diz <strong>o que</strong> vai acontecer e <strong>por quê</strong> — não só “faça login”. Reduz abandono no clique.',
+    'O link carrega o contexto da conversa: <code>?origem=whatsapp&protocolo=rascunho&t=token</code>. O número não vai na URL em texto aberto.',
+    'Botão nativo do WhatsApp seria melhor que link solto, se o canal permitir template com botão de URL.'
+  ],
+  render:() => `
+    <div class="wa-app">
+      <div class="wa-head">
+        <span class="wa-back">‹</span>
+        <div class="wa-av">LF</div>
+        <div>
+          <div class="n">LIA Floripa ${ICON_VERIF}</div>
+          <div class="o">Prefeitura de Florianópolis · SC</div>
+        </div>
+      </div>
+      <div class="wa-msgs">
+        <div class="msg in">Você pode solicitar esse serviço por aqui mesmo. Quer abrir o protocolo agora?<span class="tm">13:43</span></div>
+        <div class="msg out">sim<span class="tm">13:43 ✓✓</span></div>
+        <div class="msg in">Antes de abrir, preciso confirmar sua identidade. É rápido e serve para proteger seus dados.<span class="tm">13:44</span></div>
+        <div class="msg in">
+          <div class="linkcard">
+            <div class="thumb">FO</div>
+            <div>
+              <div class="lt">Confirmar identidade · FloripaOn</div>
+              <div class="ld">floripaon.pmf.sc.gov.br</div>
+            </div>
+          </div>
+          Toque para entrar: <a href="#">floripaon.pmf.sc.gov.br/entrar?origem=whatsapp</a>
+          <span class="tm">13:44</span>
+        </div>
+        <div class="msg in">Assim que terminar, volte aqui e eu continuo de onde paramos.<span class="tm">13:44</span></div>
+      </div>
+      <div class="wa-input"><span class="plus">＋</span><div class="box"></div></div>
+    </div>`
+},
+
+login: {
+  label:'Entrar',
+  notes:[
+    'Mesma tela de login do FloripaOn — <strong>nada muda</strong> nos meios de acesso, na ordem nem nos estilos.',
+    'O que entra é a <strong>faixa de contexto</strong> no topo do card: origem (WhatsApp), número mascarado e motivo. Sem ela o cidadão cai numa tela genérica e não entende por que está ali.',
+    'O número aparece <strong>mascarado</strong> — confirma para a pessoa certa sem expor dado em tela que pode ser vista por terceiros.',
+    'O aviso de validade adianta a recompensa: entrar uma vez vale por <strong>' + PRAZO + '</strong>. O prazo é <code>parametrizável por cliente</code> (1 dia / 10 dias / 1 ano).',
+    'Título fala do resultado (“continuar seu atendimento”), não do meio (“autenticar”).'
+  ],
+  render:() => `
+    ${pageHead}
+    <div class="page-body">
+      <div class="card">
+        ${waStrip('Confirme sua identidade para abrir o protocolo e voltar à conversa.')}
+        <div class="card-body">
+          <h1 class="title">Entre para continuar seu atendimento</h1>
+          <p class="sub">Escolha como quer se identificar. Você volta para a conversa em seguida.</p>
+
+          <div class="stack">
+            <button class="btn btn-govbr">Entrar com <span class="gov">gov.br</span></button>
+            <p class="hint">Acesso seguro via conta gov.br — recomendado</p>
+          </div>
+
+          <div class="stack">
+            <button class="btn btn-cert">Entrar com Certificado Digital</button>
+            <p class="hint">Acesso seguro com seu certificado ICP-Brasil</p>
+          </div>
+
+          <div class="sep">ou</div>
+
+          <button class="btn btn-ghost" data-go="senha">Entrar com login do sistema</button>
+
+          ${validade}
+          ${legal}
+        </div>
+      </div>
+    </div>`
+},
+
+senha: {
+  label:'Login do sistema',
+  notes:[
+    'Mesmo padrão do 1Doc: <strong>e-mail ou CPF/CNPJ + senha</strong>, com “Prosseguir/Entrar” desabilitado até o campo ter conteúdo.',
+    'A faixa de contexto <strong>permanece</strong> em toda a jornada — a pessoa nunca perde a referência de onde veio.',
+    '“Voltar” devolve para a escolha de meio de acesso, não fecha o fluxo.',
+    'Sem cadastro novo aqui: quem não tem conta vai para gov.br. Evita duplicar base de identidade.'
+  ],
+  render:() => `
+    ${pageHead}
+    <div class="page-body">
+      <div class="card">
+        ${waStrip('Confirme sua identidade para abrir o protocolo e voltar à conversa.')}
+        <div class="card-body">
+          <h1 class="title">Entrar com login do sistema</h1>
+          <p class="sub">Use o e-mail ou o documento cadastrado no FloripaOn.</p>
+
+          <div class="field-row">
+            <label class="fl" for="i1">E-mail ou CPF/CNPJ</label>
+            <input class="field" id="i1" placeholder="Insira seu e-mail, CPF ou CNPJ">
+          </div>
+          <div class="field-row">
+            <label class="fl" for="i2">Senha</label>
+            <input class="field" id="i2" type="password" placeholder="Insira sua senha">
+            <a class="forgot" href="#">Esqueci minha senha</a>
+          </div>
+
+          <button class="btn btn-primary" data-go="ok">Entrar</button>
+          <button class="btn btn-ghost" data-go="login" style="margin-top:8px">Voltar</button>
+
+          ${validade}
+          ${legal}
+        </div>
+      </div>
+    </div>`
+},
+
+ok: {
+  label:'Identidade confirmada',
+  notes:[
+    'Fecha o loop com a mesma palavra do começo: pediu “confirmar identidade”, entrega “identidade confirmada”.',
+    'Volta ao WhatsApp é <strong>ação explícita</strong> (deep link <code>wa.me</code>) e também automática por contagem — quem não age não fica preso.',
+    'No <strong>celular</strong>: botão verde volta direto para a conversa.',
+    'No <strong>desktop</strong>: o WhatsApp está no celular da pessoa. A tela muda o texto e oferece QR / WhatsApp Web em vez de prometer um retorno que não acontece.',
+    'Mostra a validade já concreta (“até 06/08”), não abstrata. É a informação que evita o próximo suporte.'
+  ],
+  render:() => `
+    ${pageHead}
+    <div class="page-body">
+      <div class="card">
+        <div class="result">
+          <div class="badge badge-ok">${ICON_CHECK}</div>
+          <h2>Identidade confirmada</h2>
+          <div class="pill"><span class="dot"></span> Válido até 06/08/2026</div>
+
+          <div class="only-mobile">
+            <p>Volte para a conversa e a LIA continua a abertura do seu protocolo de onde parou.</p>
+            <button class="btn btn-wa">${ICON_WA} Voltar para o WhatsApp</button>
+            <p class="count">Levamos você de volta em <b id="cd">5</b>s</p>
+          </div>
+
+          <div class="only-desktop">
+            <p>Abra o WhatsApp no seu celular para continuar a abertura do protocolo com a LIA.</p>
+            <div class="qr" aria-label="Código QR para abrir a conversa"></div>
+            <button class="btn btn-ghost">Abrir no WhatsApp Web</button>
+            <p class="count">A conversa já está liberada — nada mais a fazer aqui.</p>
+          </div>
+        </div>
+        <div style="padding:0 20px 8px">${legal}</div>
+      </div>
+    </div>`
+},
+
+sessao: {
+  label:'Sessão ainda válida',
+  notes:[
+    'Se a autenticação está dentro da janela parametrizada, <strong>a tela de login não aparece</strong>. Esta é a tela que a maioria vai ver da segunda vez em diante.',
+    'É uma confirmação de passagem, não uma parada: sem campo, sem botão obrigatório, retorno automático.',
+    '“Não é você?” dá saída para quem compartilha aparelho — encerra a sessão e cai na tela de login.',
+    'Esse estado é o que transforma o prazo parametrizável em benefício percebido.'
+  ],
+  render:() => `
+    ${pageHead}
+    <div class="page-body">
+      <div class="card">
+        ${waStrip('Verificamos sua identidade automaticamente.')}
+        <div class="result" style="padding-top:26px">
+          <div class="badge badge-ok">${ICON_CHECK}</div>
+          <h2>Você já está identificado</h2>
+          <p>Entrou como <strong>Cristiane L.</strong> · CPF •••.•••.789-00. Não precisa entrar de novo.</p>
+          <button class="btn btn-wa only-mobile">${ICON_WA} Continuar no WhatsApp</button>
+          <button class="btn btn-ghost only-desktop">Abrir no WhatsApp Web</button>
+          <p class="count" style="margin-top:14px"><a href="#" style="color:var(--primary);font-weight:700;text-decoration:none">Não é você? Sair desta conta</a></p>
+        </div>
+        <div style="padding:0 20px 8px">${legal}</div>
+      </div>
+    </div>`
+},
+
+expirado: {
+  label:'Link expirado',
+  notes:[
+    'O link tem validade curta (janela de minutos) — diferente da sessão. São dois prazos distintos e a tela deixa isso claro.',
+    'Erro não pede desculpa e não é vago: diz o que aconteceu e qual é a única ação necessária.',
+    'A saída é <strong>voltar ao canal de origem</strong> e pedir um link novo à LIA — não um formulário de suporte.',
+    'Nunca reaproveitar token expirado nem redirecionar silenciosamente para o login: a pessoa perde a referência do protocolo em rascunho.'
+  ],
+  render:() => `
+    ${pageHead}
+    <div class="page-body">
+      <div class="card">
+        <div class="result">
+          <div class="badge badge-warn">${ICON_WARN}</div>
+          <h2>Este link já expirou</h2>
+          <p>Links de identificação valem por 15 minutos, por segurança. Peça um novo à LIA na conversa e seu protocolo em rascunho continua salvo.</p>
+          <button class="btn btn-wa only-mobile">${ICON_WA} Pedir novo link no WhatsApp</button>
+          <button class="btn btn-ghost only-desktop">Abrir no WhatsApp Web</button>
+          <p class="count">Nada do que você já respondeu foi perdido.</p>
+        </div>
+        <div style="padding:0 20px 8px">${legal}</div>
+      </div>
+    </div>`
+}
+};
+
+/* ─── Runtime ──────────────────────────────── */
+const ORDER = ['chat','login','senha','ok','sessao','expirado'];
+let current = 'chat', device = 'mobile';
+
+const stage = document.getElementById('stage');
+const stepsEl = document.getElementById('steps');
+const notesList = document.getElementById('notes-list');
+const notesTitle = document.getElementById('notes-title');
+const devM = document.getElementById('dev-m'), devD = document.getElementById('dev-d');
+
+ORDER.forEach((k,i)=>{
+  const b = document.createElement('button');
+  b.innerHTML = '<b>'+(i+1)+'</b>'+SCREENS[k].label;
+  b.onclick = ()=>go(k);
+  b.dataset.k = k;
+  stepsEl.appendChild(b);
+});
+
+function go(k){
+  current = k;
+  const sc = SCREENS[k];
+  const phoneOnly = sc.device === 'phone-only';
+  devM.disabled = devD.disabled = phoneOnly;
+  const useDesktop = device === 'desktop' && !phoneOnly;
+
+  stage.className = 'stage' + (useDesktop ? ' is-desktop' : '');
+  stage.innerHTML = useDesktop
+    ? `<div class="browser">
+         <div class="browser-bar">
+           <div class="dots"><i></i><i></i><i></i></div>
+           <div class="urlbar">🔒 <b>floripaon.pmf.sc.gov.br</b>/entrar?origem=whatsapp&amp;t=•••••</div>
+         </div>
+         <div class="browser-screen"><div class="page">${sc.render()}</div></div>
+       </div>`
+    : `<div class="phone"><div class="phone-screen">${statusbar}<div class="page">${sc.render()}</div></div></div>`;
+
+  stage.querySelectorAll('[data-go]').forEach(el=>el.onclick=()=>go(el.dataset.go));
+  stepsEl.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===k));
+  notesTitle.textContent = (ORDER.indexOf(k)+1) + ' · ' + sc.label + ' — regras da tela';
+  notesList.innerHTML = sc.notes.map(n=>'<li>'+n+'</li>').join('');
+
+  const cd = document.getElementById('cd');
+  if(cd && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    let n = 5;
+    const t = setInterval(()=>{ n--; if(n<=0){clearInterval(t); return;} if(document.getElementById('cd')) document.getElementById('cd').textContent=n; else clearInterval(t); },1000);
+  }
+}
+function setDevice(d){ device = d; devM.setAttribute('aria-pressed', d==='mobile'); devD.setAttribute('aria-pressed', d==='desktop'); go(current); }
+devM.onclick=()=>setDevice('mobile'); devD.onclick=()=>setDevice('desktop');
+go('chat');
+</script>
+</body>
+</html>
