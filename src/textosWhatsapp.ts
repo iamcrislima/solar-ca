@@ -1,49 +1,52 @@
 // ── Textos das telas de autenticação via WhatsApp ────────────────────────────
 // Recorte de copy deste fluxo, alimentado pelo MESMO LangContext do portal
-// (useLang) — não é um i18n paralelo. Copy PT é a do protótipo de referência
-// (docs/referencia/autenticacao-whatsapp.html).
+// (useLang) — não é um i18n paralelo.
+// Nos títulos, o trecho entre ** vai em negrito (como nas telas de referência).
 import { useLang } from './i18n';
 import type { Lang } from './i18n';
 
 export interface TextosWa {
-  // Faixa de contexto
-  faixaLabel: string;
-  faixaMotivoLogin: string;
-  faixaMotivoSessao: string;
   // Tela: entrar
-  loginTitulo: string;
-  loginSub: string;
-  // Tela: senha (título, "Senha", "Esqueci a senha", "Entrar" e "Voltar" vêm do i18n do portal)
-  senhaSub: string;
-  senhaIdentificador: string;
-  senhaIdentificadorPlaceholder: string;
-  senhaCampoPlaceholder: string;
-  // Validade da SESSÃO — {prazo} é substituído pelo valor derivado do config
-  validadeSessao: string;
-  validadeSessaoTooltip: string;
-  prazoDias: (n: number) => string;
-  // Tela: identidade confirmada
-  okTitulo: string;
-  okValidoAte: (data: string) => string;
-  okTextoMobile: string;
-  okTextoDesktop: string;
-  okBotaoMobile: string;
-  okContagem: (s: number) => string;
-  okQrLabel: string;
-  abrirWhatsappWeb: string;
-  // Tela: sessão ainda válida
-  sessaoTitulo: string;
-  sessaoTexto: (nome: string, cpf: string) => string;
-  sessaoBotaoMobile: string;
-  sessaoNaoEhVoce: string;
-  // Tela: link expirado
-  expiradoTitulo: string;
-  expiradoTexto: (minutos: number) => string;
-  expiradoBotaoMobile: string;
-  expiradoNadaPerdido: string;
+  tituloLogin: string;
+  entrarGoogle: string;
+  identificacaoLabel: string;
+  identificacaoPlaceholder: string;
+  prosseguir: string;
+  // Tela: certificado
+  tituloCertificado: string;
+  certificadoLabel: string;
+  certificadoPlaceholder: string;
+  // Tela: senha
+  tituloSenha: string;
+  senhaLabel: string;
+  senhaPlaceholder: string;
+  autenticar: string;
+  esqueciSenha: string;
+  // Tela: cadastro
+  tituloCadastro: string;
+  // Tela: recuperar senha
+  avisoVoltaWhatsapp: string;
+  voltar: string;
+  politicaPrivacidade: string;
+  politicaPrivacidadeLink: string;
+  // Regras de senha (ordem: tamanho, letra, número, especial)
+  regrasSenha: [string, string, string, string];
+  // Tela: e-mail
+  tituloEmail: string;
+  telefoneLabel: string;
+  emailLabel: string;
+  emailPlaceholder: string;
+  // Tela: e-mail enviado
+  emailEnviado: (email: string) => string;
+  emailEnviadoDetalhe: string;
+  // Tela: criar senha
+  tituloCriarSenha: string;
+  criarEEntrar: string;
+  // Tela: concluído
+  concluidoAutenticacao: string;
+  concluidoCadastro: string;
+  voltarAoWhatsapp: string;
   // Rodapé do card
-  legal: string;
-  legalLink: string;
   powered: string;
   // Demonstração / rota inexistente
   estadosTitulo: string;
@@ -54,144 +57,147 @@ export interface TextosWa {
 }
 
 const PT: TextosWa = {
-  faixaLabel: 'Atendimento via WhatsApp',
-  faixaMotivoLogin: 'Confirme sua identidade para abrir o protocolo e voltar à conversa.',
-  faixaMotivoSessao: 'Verificamos sua identidade automaticamente.',
+  tituloLogin: 'Entre ou cadastre-se para **autenticar com o WhatsApp**',
+  entrarGoogle: 'Entrar com Google',
+  identificacaoLabel: 'E-mail, CPF ou telefone',
+  identificacaoPlaceholder: 'Insira seu e-mail, CPF ou telefone',
+  prosseguir: 'Prosseguir',
 
-  loginTitulo: 'Entre para continuar seu atendimento',
-  loginSub: 'Escolha como quer se identificar. Você volta para a conversa em seguida.',
+  tituloCertificado: 'Entre com Certificado para **autenticar com o WhatsApp**',
+  certificadoLabel: 'Certificado',
+  certificadoPlaceholder: 'Escolha um certificado',
 
-  senhaSub: 'Use o e-mail ou o documento cadastrado no FloripaOn.',
-  senhaIdentificador: 'E-mail ou CPF/CNPJ',
-  senhaIdentificadorPlaceholder: 'Insira seu e-mail, CPF ou CNPJ',
-  senhaCampoPlaceholder: 'Insira sua senha',
+  tituloSenha: 'Insira sua senha para **autenticar com o WhatsApp**',
+  senhaLabel: 'Senha',
+  senhaPlaceholder: 'Insira sua senha',
+  autenticar: 'Autenticar',
+  esqueciSenha: 'Esqueci a minha senha',
 
-  validadeSessao: 'Depois de entrar, você não precisa autenticar de novo por {prazo}.',
-  validadeSessaoTooltip: 'Valor parametrizável por cliente: 1 dia, 10 dias, 1 ano…',
-  prazoDias: n => (n === 1 ? '1 dia' : n === 365 ? '1 ano' : `${n} dias`),
+  tituloCadastro: 'Crie uma conta para **autenticar com o WhatsApp**',
+  avisoVoltaWhatsapp: 'Depois de redefinir a senha, você volta para a conversa no WhatsApp e continua de onde parou.',
+  voltar: 'Voltar',
+  politicaPrivacidade: 'Ao continuar, você aceita a',
+  politicaPrivacidadeLink: 'Política de privacidade',
 
-  okTitulo: 'Identidade confirmada',
-  okValidoAte: data => `Válido até ${data}`,
-  okTextoMobile: 'Volte para a conversa e a LIA continua a abertura do seu protocolo de onde parou.',
-  okTextoDesktop: 'Abra o WhatsApp no seu celular para continuar a abertura do protocolo com a LIA.',
-  okBotaoMobile: 'Voltar para o WhatsApp',
-  okContagem: s => `Levamos você de volta em ${s}s`,
-  okQrLabel: 'Código QR para abrir a conversa',
-  abrirWhatsappWeb: 'Abrir no WhatsApp Web',
+  regrasSenha: ['Ao menos 8 caracteres', 'Ao menos uma letra', 'Ao menos um número', 'Ao menos um caractere especial'],
 
-  sessaoTitulo: 'Você já está identificado',
-  sessaoTexto: (nome, cpf) => `Entrou como ${nome} · CPF ${cpf}. Não precisa entrar de novo.`,
-  sessaoBotaoMobile: 'Continuar no WhatsApp',
-  sessaoNaoEhVoce: 'Não é você? Sair desta conta',
+  tituloEmail: 'Insira um e-mail para **autenticar com o WhatsApp**',
+  telefoneLabel: 'Telefone',
+  emailLabel: 'E-mail',
+  emailPlaceholder: 'Insira um e-mail',
 
-  expiradoTitulo: 'Este link já expirou',
-  expiradoTexto: minutos =>
-    `Links de identificação valem por ${minutos} minutos, por segurança. Peça um novo à LIA na conversa e seu protocolo em rascunho continua salvo.`,
-  expiradoBotaoMobile: 'Pedir novo link no WhatsApp',
-  expiradoNadaPerdido: 'Nada do que você já respondeu foi perdido.',
+  emailEnviado: email => `Um e-mail foi enviado para ${email} com um link para criar uma senha`,
+  emailEnviadoDetalhe: 'Você já tem uma conta cadastrada, mas precisa criar uma senha. Para isso, acesse sua caixa de e-mail e clique no link para criar uma nova senha.',
 
-  legal: 'Ao continuar você concorda com o nosso',
-  legalLink: 'Aviso de Privacidade',
+  tituloCriarSenha: 'Crie uma senha para finalizar seu cadastro e **autenticar com o WhatsApp**',
+  criarEEntrar: 'Criar e entrar',
+
+  concluidoAutenticacao: 'Autenticação concluída com sucesso!',
+  concluidoCadastro: 'Cadastro e autenticação concluídas com sucesso!',
+  voltarAoWhatsapp: 'Voltar ao WhatsApp',
+
   powered: 'Powered by',
 
   estadosTitulo: 'Telas do fluxo',
-  estadosSub: 'Lista de demonstração — habilitada por VITE_MOSTRAR_TELAS.',
+  estadosSub: 'Lista de demonstração — esconda com VITE_MOSTRAR_TELAS=false.',
   naoEncontradoTitulo: 'Página não encontrada',
   naoEncontradoTexto: 'O endereço acessado não existe neste portal.',
   irParaPortal: 'Ir para o FloripaOn',
 };
 
 const EN: TextosWa = {
-  faixaLabel: 'WhatsApp support',
-  faixaMotivoLogin: 'Confirm your identity to open the request and return to the chat.',
-  faixaMotivoSessao: 'We verified your identity automatically.',
+  tituloLogin: 'Sign in or sign up to **authenticate with WhatsApp**',
+  entrarGoogle: 'Sign in with Google',
+  identificacaoLabel: 'E-mail, CPF or phone',
+  identificacaoPlaceholder: 'Enter your e-mail, CPF or phone',
+  prosseguir: 'Continue',
 
-  loginTitulo: 'Sign in to continue your request',
-  loginSub: 'Choose how to identify yourself. You will return to the chat right after.',
+  tituloCertificado: 'Use a Certificate to **authenticate with WhatsApp**',
+  certificadoLabel: 'Certificate',
+  certificadoPlaceholder: 'Choose a certificate',
 
-  senhaSub: 'Use the e-mail or the document registered on FloripaOn.',
-  senhaIdentificador: 'E-mail or CPF/CNPJ',
-  senhaIdentificadorPlaceholder: 'Enter your e-mail, CPF or CNPJ',
-  senhaCampoPlaceholder: 'Enter your password',
+  tituloSenha: 'Enter your password to **authenticate with WhatsApp**',
+  senhaLabel: 'Password',
+  senhaPlaceholder: 'Enter your password',
+  autenticar: 'Authenticate',
+  esqueciSenha: 'I forgot my password',
 
-  validadeSessao: 'Once you sign in, you will not need to authenticate again for {prazo}.',
-  validadeSessaoTooltip: 'Configurable per client: 1 day, 10 days, 1 year…',
-  prazoDias: n => (n === 1 ? '1 day' : n === 365 ? '1 year' : `${n} days`),
+  tituloCadastro: 'Create an account to **authenticate with WhatsApp**',
+  avisoVoltaWhatsapp: 'After resetting your password you go back to the WhatsApp chat and continue where you stopped.',
+  voltar: 'Back',
+  politicaPrivacidade: 'By continuing, you accept the',
+  politicaPrivacidadeLink: 'Privacy Policy',
 
-  okTitulo: 'Identity confirmed',
-  okValidoAte: data => `Valid until ${data}`,
-  okTextoMobile: 'Go back to the chat and LIA resumes your request where it stopped.',
-  okTextoDesktop: 'Open WhatsApp on your phone to continue the request with LIA.',
-  okBotaoMobile: 'Back to WhatsApp',
-  okContagem: s => `Taking you back in ${s}s`,
-  okQrLabel: 'QR code to open the chat',
-  abrirWhatsappWeb: 'Open WhatsApp Web',
+  regrasSenha: ['At least 8 characters', 'At least one letter', 'At least one number', 'At least one special character'],
 
-  sessaoTitulo: 'You are already identified',
-  sessaoTexto: (nome, cpf) => `Signed in as ${nome} · CPF ${cpf}. No need to sign in again.`,
-  sessaoBotaoMobile: 'Continue on WhatsApp',
-  sessaoNaoEhVoce: 'Not you? Sign out of this account',
+  tituloEmail: 'Enter an e-mail to **authenticate with WhatsApp**',
+  telefoneLabel: 'Phone',
+  emailLabel: 'E-mail',
+  emailPlaceholder: 'Enter an e-mail',
 
-  expiradoTitulo: 'This link has expired',
-  expiradoTexto: minutos =>
-    `Identification links are valid for ${minutos} minutes, for security reasons. Ask LIA for a new one in the chat — your draft request is still saved.`,
-  expiradoBotaoMobile: 'Ask for a new link on WhatsApp',
-  expiradoNadaPerdido: 'Nothing you have answered was lost.',
+  emailEnviado: email => `An e-mail was sent to ${email} with a link to create a password`,
+  emailEnviadoDetalhe: 'You already have an account, but you still need a password. Open your inbox and click the link to create a new one.',
 
-  legal: 'By continuing you agree to our',
-  legalLink: 'Privacy Notice',
+  tituloCriarSenha: 'Create a password to finish signing up and **authenticate with WhatsApp**',
+  criarEEntrar: 'Create and sign in',
+
+  concluidoAutenticacao: 'Authentication completed successfully!',
+  concluidoCadastro: 'Registration and authentication completed successfully!',
+  voltarAoWhatsapp: 'Back to WhatsApp',
+
   powered: 'Powered by',
 
   estadosTitulo: 'Flow screens',
-  estadosSub: 'Demo list — enabled by VITE_MOSTRAR_TELAS.',
+  estadosSub: 'Demo list — hide it with VITE_MOSTRAR_TELAS=false.',
   naoEncontradoTitulo: 'Page not found',
   naoEncontradoTexto: 'The address you opened does not exist in this portal.',
   irParaPortal: 'Go to FloripaOn',
 };
 
 const ES: TextosWa = {
-  faixaLabel: 'Atención por WhatsApp',
-  faixaMotivoLogin: 'Confirme su identidad para abrir el trámite y volver a la conversación.',
-  faixaMotivoSessao: 'Verificamos su identidad automáticamente.',
+  tituloLogin: 'Ingrese o regístrese para **autenticar con WhatsApp**',
+  entrarGoogle: 'Ingresar con Google',
+  identificacaoLabel: 'Correo, CPF o teléfono',
+  identificacaoPlaceholder: 'Ingrese su correo, CPF o teléfono',
+  prosseguir: 'Continuar',
 
-  loginTitulo: 'Ingrese para continuar su atención',
-  loginSub: 'Elija cómo desea identificarse. Volverá a la conversación enseguida.',
+  tituloCertificado: 'Use un Certificado para **autenticar con WhatsApp**',
+  certificadoLabel: 'Certificado',
+  certificadoPlaceholder: 'Elija un certificado',
 
-  senhaSub: 'Use el correo o el documento registrado en FloripaOn.',
-  senhaIdentificador: 'Correo o CPF/CNPJ',
-  senhaIdentificadorPlaceholder: 'Ingrese su correo, CPF o CNPJ',
-  senhaCampoPlaceholder: 'Ingrese su contraseña',
+  tituloSenha: 'Ingrese su contraseña para **autenticar con WhatsApp**',
+  senhaLabel: 'Contraseña',
+  senhaPlaceholder: 'Ingrese su contraseña',
+  autenticar: 'Autenticar',
+  esqueciSenha: 'Olvidé mi contraseña',
 
-  validadeSessao: 'Después de ingresar, no necesita autenticarse de nuevo por {prazo}.',
-  validadeSessaoTooltip: 'Valor configurable por cliente: 1 día, 10 días, 1 año…',
-  prazoDias: n => (n === 1 ? '1 día' : n === 365 ? '1 año' : `${n} días`),
+  tituloCadastro: 'Cree una cuenta para **autenticar con WhatsApp**',
+  avisoVoltaWhatsapp: 'Después de redefinir la contraseña, usted vuelve a la conversación en WhatsApp y continúa donde quedó.',
+  voltar: 'Volver',
+  politicaPrivacidade: 'Al continuar, usted acepta la',
+  politicaPrivacidadeLink: 'Política de privacidad',
 
-  okTitulo: 'Identidad confirmada',
-  okValidoAte: data => `Válido hasta ${data}`,
-  okTextoMobile: 'Vuelva a la conversación y LIA continúa la apertura de su trámite donde quedó.',
-  okTextoDesktop: 'Abra WhatsApp en su celular para continuar el trámite con LIA.',
-  okBotaoMobile: 'Volver a WhatsApp',
-  okContagem: s => `Lo llevamos de vuelta en ${s}s`,
-  okQrLabel: 'Código QR para abrir la conversación',
-  abrirWhatsappWeb: 'Abrir WhatsApp Web',
+  regrasSenha: ['Al menos 8 caracteres', 'Al menos una letra', 'Al menos un número', 'Al menos un carácter especial'],
 
-  sessaoTitulo: 'Usted ya está identificado',
-  sessaoTexto: (nome, cpf) => `Ingresó como ${nome} · CPF ${cpf}. No necesita ingresar de nuevo.`,
-  sessaoBotaoMobile: 'Continuar en WhatsApp',
-  sessaoNaoEhVoce: '¿No es usted? Salir de esta cuenta',
+  tituloEmail: 'Ingrese un correo para **autenticar con WhatsApp**',
+  telefoneLabel: 'Teléfono',
+  emailLabel: 'Correo',
+  emailPlaceholder: 'Ingrese un correo',
 
-  expiradoTitulo: 'Este enlace ya expiró',
-  expiradoTexto: minutos =>
-    `Los enlaces de identificación valen por ${minutos} minutos, por seguridad. Pida uno nuevo a LIA en la conversación y su trámite en borrador sigue guardado.`,
-  expiradoBotaoMobile: 'Pedir un nuevo enlace en WhatsApp',
-  expiradoNadaPerdido: 'Nada de lo que ya respondió se perdió.',
+  emailEnviado: email => `Se envió un correo a ${email} con un enlace para crear una contraseña`,
+  emailEnviadoDetalhe: 'Usted ya tiene una cuenta registrada, pero necesita crear una contraseña. Abra su correo y haga clic en el enlace para crearla.',
 
-  legal: 'Al continuar usted acepta nuestro',
-  legalLink: 'Aviso de Privacidad',
+  tituloCriarSenha: 'Cree una contraseña para finalizar su registro y **autenticar con WhatsApp**',
+  criarEEntrar: 'Crear e ingresar',
+
+  concluidoAutenticacao: '¡Autenticación completada con éxito!',
+  concluidoCadastro: '¡Registro y autenticación completados con éxito!',
+  voltarAoWhatsapp: 'Volver a WhatsApp',
+
   powered: 'Powered by',
 
   estadosTitulo: 'Pantallas del flujo',
-  estadosSub: 'Lista de demostración — habilitada por VITE_MOSTRAR_TELAS.',
+  estadosSub: 'Lista de demostración — ocúltela con VITE_MOSTRAR_TELAS=false.',
   naoEncontradoTitulo: 'Página no encontrada',
   naoEncontradoTexto: 'La dirección abierta no existe en este portal.',
   irParaPortal: 'Ir a FloripaOn',

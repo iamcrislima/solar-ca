@@ -66,6 +66,7 @@ export default function App() {
   // Estado da URL: só /entrar/whatsapp* sai do portal por state. Qualquer outro
   // endereço continua caindo na navegação por useState<Page>, como antes.
   const [waEstado, setWaEstado] = useState<WaEstado | null>(() => casarRotaWa(window.location.pathname));
+  const [loginRecovery, setLoginRecovery] = useState(false); // abre o modal já na redefinição de senha
 
   function finalizeLogin() {
     setIsLoggedIn(true);
@@ -126,6 +127,7 @@ export default function App() {
     setWaEstado(null);
     setPage(p);
   }
+
 
   if (waEstado) {
     return (
@@ -233,7 +235,14 @@ export default function App() {
   return (
     <LangContext.Provider value={lang}>
       <IsMobileContext.Provider value={isMobile}>
-        {showLogin && <LoginModal onClose={() => setShowLogin(false)} onLogin={handleLogin} onShowCadastro={() => setPage('cadastro')} />}
+        {showLogin && (
+          <LoginModal
+            viewInicial={loginRecovery ? 'recovery' : 'login'}
+            onClose={() => { setShowLogin(false); setLoginRecovery(false); }}
+            onLogin={handleLogin}
+            onShowCadastro={() => setPage('cadastro')}
+          />
+        )}
         {showTermosGate && <TermosModal mode="aceite" onClose={handleVoltarTermos} onAceitar={handleAceitarTermos} />}
         {showTermosView && <TermosModal mode="view" aceiteEm={termosAceiteEm} onClose={() => setShowTermosView(false)} />}
 

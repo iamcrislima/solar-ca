@@ -1,350 +1,338 @@
-import React, { useEffect, useState } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
+import React, { useState } from 'react';
 
-import { useT, useLang, useIsMobile } from '../i18n';
+import { useIsMobile } from '../i18n';
 import type { Page } from '../types';
-import { MOCK_USER, MOCK_TELEFONE_WHATSAPP, MOCK_CPF_PARCIAL } from '../mocks';
+import { MOCK_TELEFONE_FORMATADO, MOCK_EMAIL } from '../mocks';
 
 import FAIcon from '../components/FAIcon';
 import TermosModal from '../components/TermosModal';
-import LoginOptions from '../components/LoginOptions';
-import CredenciaisForm from '../components/CredenciaisForm';
-import WhatsAppContextStrip from '../components/WhatsAppContextStrip';
+import LoginPanel from '../components/LoginPanel';
+import type { PanelView } from '../components/LoginPanel';
+import SenhaRegras, { senhaValida } from '../components/SenhaRegras';
+import { IlustracaoSucesso, IlustracaoEmailEnviado } from '../components/IlustracaoWhatsApp';
 
-import { autenticacaoConfig, whatsappUrl, sessaoValidaAte, formatarData } from '../config/autenticacao';
+import { whatsappUrl } from '../config/autenticacao';
 import { useWaT } from '../textosWhatsapp';
 import {
-  navegarWa, urlWa, veioDoWhatsapp, retornoAutomatico, ESTADOS_DEMO,
+  navegarWa, urlWa, veioDoCadastro, ESTADOS_DEMO, salvarEmail, lerEmail,
 } from '../rotasWhatsapp';
 import type { WaEstado } from '../rotasWhatsapp';
 
-// Tela de tarefa única: só o card do login. Sem cabeçalho de site, sem rodapé,
-// sem menu e sem a foto de Florianópolis — é o painel do login de hoje, isolado.
-const CARD_MAX = 460;
+// É a mesma tela de login do portal, sem a foto ao lado, dentro de um card. As
+// telas extras (e-mail, criar senha, conclusão, certificado) vêm do fluxo do
+// WhatsApp.
+const CARD_MAX_LOGIN    = 460;
+const CARD_MAX_CADASTRO = 560;   // o cadastro tem campos em duas colunas
 
-// ── Blocos do card ───────────────────────────────────────────────────────────
+const inputBase: React.CSSProperties = {
+  width: '100%', height: 44, border: '1px solid var(--neutral-dark-up)', borderRadius: 8,
+  padding: '0 12px', fontSize: 16, color: 'var(--neutral-dark-pure)', background: 'white',
+  boxSizing: 'border-box', outline: 'none',
+};
+const rotuloCampo: React.CSSProperties = {
+  fontSize: 12.5, fontWeight: 600, color: 'var(--neutral-dark-pure)',
+};
 
-// Cabeçalho do card: o mesmo "FloripaOn" que o login do portal usa hoje.
+// ── Peças ────────────────────────────────────────────────────────────────────
+
 function MarcaFloripaOn() {
   const isMobile = useIsMobile();
   return (
-    <span style={{
-      fontWeight: 700, fontSize: isMobile ? 22 : 28, color: 'var(--primary-pure)',
-      letterSpacing: '-0.5px', lineHeight: 1, display: 'block',
-    }}>
-      FloripaOn
-    </span>
-  );
-}
-
-function Titulo({ titulo, sub }: { titulo: string; sub?: string }) {
-  const isMobile = useIsMobile();
-  return (
-    <div style={{ marginTop: isMobile ? 8 : 20 }}>
-      <h1 style={{
-        fontSize: isMobile ? 17 : 20, fontWeight: 700, lineHeight: 1.28, margin: 0,
-        letterSpacing: '-0.2px', color: 'var(--neutral-dark-pure)',
-      }}>
-        {titulo}
-      </h1>
-      {sub && (
-        <p style={{ fontSize: 12.5, color: 'var(--neutral-dark-down)', lineHeight: 1.4, margin: '4px 0 0' }}>
-          {sub}
-        </p>
-      )}
+    <div style={{ textAlign: 'center' }}>
+      <span style={{ fontWeight: 700, fontSize: isMobile ? 22 : 26, color: 'var(--primary-pure)', letterSpacing: '-0.5px', lineHeight: 1 }}>
+        FloripaOn
+      </span>
     </div>
   );
 }
 
-// Prazo da SESSÃO em forma relativa — derivado do config, nunca escrito em JSX.
-function ValidadeSessao() {
-  const wa = useWaT();
+// Título do fluxo: centralizado, com o trecho entre ** em negrito.
+function Titulo({ texto }: { texto: string }) {
   const isMobile = useIsMobile();
-  const prazo = wa.prazoDias(autenticacaoConfig.janelaAutenticacaoDias);
-  const [antes, depois] = wa.validadeSessao.split('{prazo}');
-
   return (
-    <div style={{
-      display: 'flex', gap: 9, alignItems: 'flex-start', marginTop: isMobile ? 10 : 16,
-      background: 'var(--bg-subtle)', border: '1px solid var(--primary-light)',
-      borderRadius: 8, padding: isMobile ? '8px 10px' : '11px 13px',
+    <h1 style={{
+      fontSize: isMobile ? 17 : 19, lineHeight: 1.32, fontWeight: 400, textAlign: 'center',
+      margin: 0, color: 'var(--neutral-dark-pure)', letterSpacing: '-0.1px',
     }}>
-      <FAIcon icon="fa-regular fa-clock" style={{ fontSize: 14, color: 'var(--neutral-dark-medium)', marginTop: 1, flexShrink: 0 }} />
-      <p style={{ margin: 0, fontSize: 12, color: 'var(--neutral-dark-down)', lineHeight: 1.45 }}>
-        {antes}
-        <span title={wa.validadeSessaoTooltip}
-          style={{ fontWeight: 700, color: 'var(--neutral-dark-pure)', borderBottom: '1.5px dashed var(--primary-pure)', cursor: 'help', whiteSpace: 'nowrap' }}>
-          {prazo}
-        </span>
-        {depois}
-      </p>
-    </div>
+      {texto.split('**').map((parte, i) => (
+        i % 2 === 1 ? <b key={i} style={{ fontWeight: 700 }}>{parte}</b> : <React.Fragment key={i}>{parte}</React.Fragment>
+      ))}
+    </h1>
   );
 }
 
-function Legal({ onOpenTermos }: { onOpenTermos: () => void }) {
+function Powered() {
   const wa = useWaT();
   const isMobile = useIsMobile();
   return (
-    <>
-      <p style={{ fontSize: 11.5, color: 'var(--neutral-dark-medium)', lineHeight: 1.4, margin: `${isMobile ? 14 : 18}px 0 0`, textAlign: 'center' }}>
-        {wa.legal}{' '}
-        <span onClick={onOpenTermos} style={{ color: 'var(--primary-pure)', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}>
-          {wa.legalLink}
-        </span>.
-      </p>
-      <p style={{ textAlign: 'center', fontSize: 11.5, color: 'var(--neutral-dark-medium)', margin: `${isMobile ? 7 : 12}px 0 0`, fontWeight: 600 }}>
-        {wa.powered} <b style={{ color: 'var(--primary-pure)', fontWeight: 800 }}>Solar BPM</b>
-      </p>
-    </>
+    <p style={{ textAlign: 'center', fontSize: 11.5, color: 'var(--neutral-dark-medium)', margin: `${isMobile ? 14 : 20}px 0 0`, fontWeight: 600 }}>
+      {wa.powered} <b style={{ color: 'var(--primary-pure)', fontWeight: 800 }}>Solar BPM</b>
+    </p>
   );
 }
 
-function Badge({ tipo }: { tipo: 'ok' | 'aviso' }) {
-  const ok = tipo === 'ok';
-  return (
-    <div style={{
-      width: 62, height: 62, borderRadius: '50%', margin: '0 auto 14px',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: ok ? 'var(--wa-bg-soft)' : 'var(--warning-bg)',
-      border: `2px solid ${ok ? 'var(--wa-color)' : 'var(--warning-border-light)'}`,
-    }}>
-      <FAIcon
-        icon={ok ? 'fa-regular fa-check' : 'fa-regular fa-triangle-exclamation'}
-        style={{ fontSize: 26, color: ok ? 'var(--wa-deep)' : 'var(--warning-color)' }}
-      />
-    </div>
-  );
-}
-
-// Retorno ao canal. No celular a conversa está no mesmo aparelho; em tela larga o
-// WhatsApp está no celular da pessoa — a diferença é de largura de tela, não de
-// user agent.
-function RetornoWhatsApp({ rotuloMobile, texto, textoDesktop, mostrarQr, contagem }: {
-  rotuloMobile: string;
-  texto: string;
-  textoDesktop?: string;
-  mostrarQr?: boolean;
-  contagem?: boolean;
+function BotaoPrimario({ rotulo, habilitado = true, onClick }: {
+  rotulo: string; habilitado?: boolean; onClick: () => void;
 }) {
-  const wa = useWaT();
-  const isMobile = useIsMobile();
-  const url = whatsappUrl();
-
-  const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Contagem só no celular e só com movimento normal. Ela aparece sempre; o
-  // redirecionamento em si depende de VITE_RETORNO_AUTOMATICO.
-  const contar = !!contagem && isMobile && !reduzido;
-  const redirecionar = contar && retornoAutomatico;
-  const [restante, setRestante] = useState(5);
-
-  useEffect(() => {
-    if (!contar || restante <= 0) {
-      if (redirecionar && restante <= 0) window.location.href = url;
-      return;
-    }
-    const id = setTimeout(() => setRestante(s => s - 1), 1000);
-    return () => clearTimeout(id);
-  }, [contar, redirecionar, restante, url]);
-
   return (
-    <>
-      <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', lineHeight: 1.5, margin: '0 auto 16px', maxWidth: 320 }}>
-        {isMobile ? texto : (textoDesktop ?? texto)}
-      </p>
+    <button
+      onClick={() => { if (habilitado) onClick(); }}
+      disabled={!habilitado}
+      style={{
+        width: '100%', height: 48, marginTop: 16, borderRadius: 8, border: 'none',
+        background: habilitado ? 'var(--primary-pure)' : '#e9ecf1',
+        color: habilitado ? 'white' : 'var(--neutral-dark-up)',
+        cursor: habilitado ? 'pointer' : 'not-allowed',
+        fontWeight: 700, fontSize: 15, transition: 'background 0.12s',
+      }}
+      onMouseEnter={e => { if (habilitado) (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-pure-hover)'; }}
+      onMouseLeave={e => { if (habilitado) (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-pure)'; }}
+    >
+      {rotulo}
+    </button>
+  );
+}
 
-      {!isMobile && mostrarQr && (
-        <div aria-label={wa.okQrLabel} style={{
-          width: 140, height: 140, margin: '0 auto 14px', padding: 7,
-          borderRadius: 8, border: '1px solid var(--neutral-light-down)', background: 'white',
-        }}>
-          <QRCodeSVG value={url} size={124} level="M" bgColor="#ffffff" fgColor="#333333" />
-        </div>
-      )}
+function Campo({ rotulo, children }: { rotulo: string; children: React.ReactNode }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+      <span style={rotuloCampo}>{rotulo}</span>
+      {children}
+    </div>
+  );
+}
 
-      <a href={url} target="_blank" rel="noopener" style={{ textDecoration: 'none' }}>
-        <button style={{
-          width: '100%', height: 48, borderRadius: 10, cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
-          fontWeight: 700, fontSize: 15, transition: 'background 0.12s',
-          ...(isMobile
-            ? { background: 'var(--wa-color)', color: 'var(--wa-ink)', border: 'none' }
-            : { background: 'white', color: 'var(--wa-deep)', border: '1.5px solid var(--wa-color)' }),
-        }}
-          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = isMobile ? 'var(--wa-hover)' : 'var(--wa-bg-soft)'}
-          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = isMobile ? 'var(--wa-color)' : 'white'}>
-          <FAIcon icon="fa-brands fa-whatsapp" style={{ fontSize: 19 }} />
-          {isMobile ? rotuloMobile : wa.abrirWhatsappWeb}
-        </button>
-      </a>
-
-      {contar && restante > 0 && (
-        <p style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', margin: '10px 0 0' }}>
-          {wa.okContagem(restante)}
-        </p>
-      )}
-    </>
+function CampoSenha({ valor, onChange, rotulo, placeholder }: {
+  valor: string; onChange: (v: string) => void; rotulo: string; placeholder: string;
+}) {
+  const [mostrar, setMostrar] = useState(false);
+  return (
+    <Campo rotulo={rotulo}>
+      <div style={{ ...inputBase, display: 'flex', alignItems: 'center', gap: 8, padding: '0 8px 0 12px' }}>
+        <input
+          style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: 16, color: 'var(--neutral-dark-pure)', minWidth: 0 }}
+          type={mostrar ? 'text' : 'password'}
+          autoComplete="new-password"
+          placeholder={placeholder}
+          value={valor}
+          onChange={e => onChange(e.target.value)}
+        />
+        <FAIcon
+          icon={mostrar ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'}
+          style={{ fontSize: 16, color: 'var(--neutral-dark-medium)', cursor: 'pointer', flexShrink: 0, width: 32, height: 32 }}
+          onClick={() => setMostrar(v => !v)}
+        />
+      </div>
+    </Campo>
   );
 }
 
 // ── Telas ────────────────────────────────────────────────────────────────────
 
-function TelaLogin({ daOrigemWhatsapp, onOpenTermos }: { daOrigemWhatsapp: boolean; onOpenTermos: () => void }) {
-  const t = useT();
+// Login / senha / cadastro / recuperação: o MESMO painel do portal. O que muda é
+// o título, o rótulo do botão ("Autenticar") e para onde o sucesso vai.
+function TelaPainel({ estado }: { estado: Extract<WaEstado, 'login' | 'senha' | 'cadastro' | 'recuperar-senha'> }) {
   const wa = useWaT();
-  const isMobile = useIsMobile();
-  const [showForm, setShowForm] = useState(false);
+
+  const viewInicial: PanelView = estado === 'cadastro' ? 'cadastro'
+    : estado === 'recuperar-senha' ? 'recovery'
+    : 'login';
+
+  const titulo =
+    estado === 'senha' ? wa.tituloSenha :
+    estado === 'cadastro' ? wa.tituloCadastro :
+    wa.tituloLogin;
 
   return (
     <>
-      <Titulo
-        titulo={daOrigemWhatsapp ? wa.loginTitulo : t('boasVindas')}
-        sub={daOrigemWhatsapp ? wa.loginSub : undefined}
+      <LoginPanel
+        viewInicial={viewInicial}
+        formAberto={estado === 'senha'}
+        marcaCentralizada
+        mostrarGoogle
+        submitLabel={wa.autenticar}
+        titulo={<Titulo texto={titulo} />}
+        tituloCadastro={<div style={{ marginBottom: 20 }}><Titulo texto={wa.tituloCadastro} /></div>}
+        avisoRecuperacao={
+          <p style={{ fontSize: 12.5, color: 'var(--wa-deep)', background: 'var(--wa-bg-soft)', border: '1px solid var(--wa-border-soft)', borderRadius: 8, padding: '10px 12px', margin: '4px 0 0', lineHeight: 1.45 }}>
+            {wa.avisoVoltaWhatsapp}
+          </p>
+        }
+        onGovBr={() => navegarWa('concluido', true)}
+        onCertificado={() => navegarWa('certificado', true)}
+        onGoogle={() => navegarWa('concluido', true)}
+        onAutenticar={() => navegarWa('concluido', true)}
+        onCadastroCriado={() => navegarWa('concluido', true, { de: 'cadastro' })}
+        // A URL acompanha a view para o link ser compartilhável e o refresh cair
+        // na mesma tela.
+        onViewChange={v => {
+          if (v === 'cadastro' && estado !== 'cadastro') navegarWa('cadastro', true);
+          if (v === 'recovery' && estado !== 'recuperar-senha') navegarWa('recuperar-senha', true);
+          if (v === 'login' && estado !== 'login') navegarWa('login', true);
+        }}
+        onFormAberto={() => { if (estado !== 'senha') navegarWa('senha', true); }}
       />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 7 : 14, marginTop: isMobile ? 12 : 18 }}>
-        {/* Mesmos componentes do login do portal — não há botão recriado aqui. */}
-        <LoginOptions
-          compacto={isMobile}
-          showForm={showForm}
-          onShowForm={() => setShowForm(true)}
-          onGovBr={() => navegarWa('confirmado', daOrigemWhatsapp)}
-          onCertificado={() => navegarWa('confirmado', daOrigemWhatsapp)}
-          onSystemLogin={() => navegarWa('senha', daOrigemWhatsapp)}
-        />
-      </div>
-      <ValidadeSessao />
-      <Legal onOpenTermos={onOpenTermos} />
+      <Powered />
     </>
   );
 }
 
-function TelaSenha({ daOrigemWhatsapp, onOpenTermos }: { daOrigemWhatsapp: boolean; onOpenTermos: () => void }) {
-  const t = useT();
+function TelaCertificado() {
   const wa = useWaT();
-  const isMobile = useIsMobile();
-
+  const [certificado, setCertificado] = useState('');
   return (
     <>
-      <Titulo titulo={t('loginEntrarSistema')} sub={wa.senhaSub} />
-      <div style={{ marginTop: isMobile ? 12 : 18 }}>
-        <CredenciaisForm
-          compacto={isMobile}
-          identificadorLabel={wa.senhaIdentificador}
-          identificadorPlaceholder={wa.senhaIdentificadorPlaceholder}
-          senhaLabel={t('senha')}
-          senhaPlaceholder={wa.senhaCampoPlaceholder}
-          submitLabel={t('entrar')}
-          submitSize="lg"
-          exigirPreenchimento
-          fonteInput={16}
-          esqueciSenhaLabel={t('esqueciSenha')}
-          esqueciSenhaAlinhamento="right"
-          onEsqueciSenha={() => { /* recuperação de senha fora do escopo do protótipo */ }}
-          onSubmit={() => navegarWa('confirmado', daOrigemWhatsapp)}
-          onVoltar={() => navegarWa('login', daOrigemWhatsapp)}
-          voltarLabel={t('voltar')}
-        />
+      <MarcaFloripaOn />
+      <div style={{ marginTop: 16 }}><Titulo texto={wa.tituloCertificado} /></div>
+      <div style={{ marginTop: 18 }}>
+        <Campo rotulo={wa.certificadoLabel}>
+          <select style={{ ...inputBase, cursor: 'pointer' }} value={certificado} onChange={e => setCertificado(e.target.value)}>
+            <option value="">{wa.certificadoPlaceholder}</option>
+            <option value="a1">CRIS LIMA:012.345.678-90 — A1</option>
+            <option value="a3">CRIS LIMA:012.345.678-90 — A3</option>
+          </select>
+        </Campo>
       </div>
-      <ValidadeSessao />
-      <Legal onOpenTermos={onOpenTermos} />
-    </>
-  );
-}
-
-function TelaConfirmado({ onOpenTermos }: { onOpenTermos: () => void }) {
-  const wa = useWaT();
-  const lang = useLang();
-
-  return (
-    <div style={{ textAlign: 'center', marginTop: 18 }}>
-      <Badge tipo="ok" />
-      <h2 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 8px', letterSpacing: '-0.2px', color: 'var(--neutral-dark-pure)' }}>
-        {wa.okTitulo}
-      </h2>
-      <div style={{
-        display: 'inline-flex', alignItems: 'center', gap: 7, marginBottom: 16,
-        background: 'var(--bg-subtle)', border: '1px solid var(--primary-light)',
-        borderRadius: 999, padding: '5px 12px', fontSize: 12, fontWeight: 700, color: 'var(--neutral-dark-down)',
-      }}>
-        <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--wa-color)' }} />
-        {wa.okValidoAte(formatarData(sessaoValidaAte(), lang))}
-      </div>
-
-      <RetornoWhatsApp
-        rotuloMobile={wa.okBotaoMobile}
-        texto={wa.okTextoMobile}
-        textoDesktop={wa.okTextoDesktop}
-        mostrarQr
-        contagem
-      />
-      <Legal onOpenTermos={onOpenTermos} />
-    </div>
-  );
-}
-
-function TelaSessaoValida({ daOrigemWhatsapp, onOpenTermos }: { daOrigemWhatsapp: boolean; onOpenTermos: () => void }) {
-  const wa = useWaT();
-
-  return (
-    <div style={{ textAlign: 'center', marginTop: 18 }}>
-      <Badge tipo="ok" />
-      <h2 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 8px', letterSpacing: '-0.2px', color: 'var(--neutral-dark-pure)' }}>
-        {wa.sessaoTitulo}
-      </h2>
-      <RetornoWhatsApp
-        rotuloMobile={wa.sessaoBotaoMobile}
-        texto={wa.sessaoTexto(MOCK_USER.nome, MOCK_CPF_PARCIAL)}
-      />
-      <p style={{ margin: '12px 0 0', fontSize: 12.5 }}>
-        <span onClick={() => navegarWa('login', daOrigemWhatsapp)}
-          style={{ color: 'var(--primary-pure)', fontWeight: 700, cursor: 'pointer' }}>
-          {wa.sessaoNaoEhVoce}
+      <BotaoPrimario rotulo={wa.prosseguir} habilitado={!!certificado} onClick={() => navegarWa('concluido', true)} />
+      <p style={{ textAlign: 'center', margin: '14px 0 0' }}>
+        <span onClick={() => navegarWa('login', true)}
+          style={{ fontSize: 12.5, color: 'var(--primary-pure)', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}>
+          {wa.voltar}
         </span>
       </p>
-      <Legal onOpenTermos={onOpenTermos} />
-    </div>
+      <Powered />
+    </>
   );
 }
 
-function TelaLinkExpirado({ onOpenTermos }: { onOpenTermos: () => void }) {
+function TelaEmail() {
   const wa = useWaT();
+  const [email, setEmail] = useState('');
+
+  function prosseguir() {
+    salvarEmail(email.trim());
+    navegarWa('email-enviado', true);
+  }
 
   return (
-    <div style={{ textAlign: 'center', marginTop: 18 }}>
-      <Badge tipo="aviso" />
-      <h2 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 8px', letterSpacing: '-0.2px', color: 'var(--neutral-dark-pure)' }}>
-        {wa.expiradoTitulo}
-      </h2>
-      <RetornoWhatsApp
-        rotuloMobile={wa.expiradoBotaoMobile}
-        texto={wa.expiradoTexto(autenticacaoConfig.validadeLinkMinutos)}
-      />
-      <p style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', margin: '10px 0 0' }}>
-        {wa.expiradoNadaPerdido}
+    <>
+      <MarcaFloripaOn />
+      <div style={{ marginTop: 16 }}><Titulo texto={wa.tituloEmail} /></div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 18 }}>
+        <Campo rotulo={wa.telefoneLabel}>
+          {/* Veio da conversa no WhatsApp — não é editável aqui. */}
+          <input style={{ ...inputBase, color: 'var(--neutral-dark-down)' }} value={MOCK_TELEFONE_FORMATADO} readOnly />
+        </Campo>
+        <Campo rotulo={wa.emailLabel}>
+          <input
+            style={inputBase} type="email" inputMode="email" autoComplete="email"
+            placeholder={wa.emailPlaceholder}
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter' && email.trim()) prosseguir(); }}
+          />
+        </Campo>
+      </div>
+      <BotaoPrimario rotulo={wa.prosseguir} habilitado={!!email.trim()} onClick={prosseguir} />
+      <Powered />
+    </>
+  );
+}
+
+function TelaEmailEnviado() {
+  const wa = useWaT();
+  const email = lerEmail() || MOCK_EMAIL;
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <MarcaFloripaOn />
+      <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--neutral-dark-pure)', lineHeight: 1.45, margin: '18px auto 0', maxWidth: 340, wordBreak: 'break-word' }}>
+        {wa.emailEnviado(email)}
       </p>
-      <Legal onOpenTermos={onOpenTermos} />
+      <div style={{ margin: '18px 0 0' }}><IlustracaoEmailEnviado /></div>
+      <p style={{ fontSize: 12, color: 'var(--neutral-dark-medium)', lineHeight: 1.5, margin: '16px auto 0', maxWidth: 320 }}>
+        {wa.emailEnviadoDetalhe}
+      </p>
+      <Powered />
     </div>
   );
 }
 
-// Lista de navegação para apresentação ao vivo. Só existe com VITE_MOSTRAR_TELAS.
+function TelaCriarSenha({ onAbrirTermos }: { onAbrirTermos: () => void }) {
+  const wa = useWaT();
+  const [senha, setSenha] = useState('');
+  return (
+    <>
+      <MarcaFloripaOn />
+      <div style={{ marginTop: 16 }}><Titulo texto={wa.tituloCriarSenha} /></div>
+      <div style={{ marginTop: 18 }}>
+        {/* Nas telas de referência as regras vêm ANTES do campo. */}
+        <SenhaRegras senha={senha} />
+        <div style={{ marginTop: 14 }}>
+          <CampoSenha valor={senha} onChange={setSenha} rotulo={wa.senhaLabel} placeholder={wa.senhaPlaceholder} />
+        </div>
+        <p style={{ fontSize: 11.5, color: 'var(--neutral-dark-medium)', lineHeight: 1.45, margin: '12px 0 0', textAlign: 'center' }}>
+          {wa.politicaPrivacidade}{' '}
+          <span onClick={onAbrirTermos} style={{ color: 'var(--primary-pure)', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}>
+            {wa.politicaPrivacidadeLink}
+          </span>.
+        </p>
+      </div>
+      <BotaoPrimario rotulo={wa.criarEEntrar} habilitado={senhaValida(senha)} onClick={() => navegarWa('concluido', true, { de: 'cadastro' })} />
+      <Powered />
+    </>
+  );
+}
+
+// Feedback de sucesso: uma tela, um botão, igual em qualquer largura.
+function TelaConcluido({ doCadastro }: { doCadastro: boolean }) {
+  const wa = useWaT();
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <MarcaFloripaOn />
+      <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--neutral-dark-pure)', lineHeight: 1.35, margin: '18px auto 0', maxWidth: 300, letterSpacing: '-0.2px' }}>
+        {doCadastro ? wa.concluidoCadastro : wa.concluidoAutenticacao}
+      </h2>
+      <div style={{ margin: '18px 0 0' }}><IlustracaoSucesso /></div>
+      <a href={whatsappUrl()} target="_blank" rel="noopener" style={{ textDecoration: 'none' }}>
+        <button style={{
+          width: '100%', height: 48, marginTop: 20, borderRadius: 8, border: 'none', cursor: 'pointer',
+          background: 'var(--primary-pure)', color: 'white',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
+          fontWeight: 700, fontSize: 15, transition: 'background 0.12s',
+        }}
+          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-pure-hover)'}
+          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--primary-pure)'}>
+          <FAIcon icon="fa-brands fa-whatsapp" style={{ fontSize: 19 }} />
+          {wa.voltarAoWhatsapp}
+        </button>
+      </a>
+      <Powered />
+    </div>
+  );
+}
+
 function TelaEstados() {
   const wa = useWaT();
-  const t = useT();
   const rotulos: Record<typeof ESTADOS_DEMO[number], string> = {
-    'login':         wa.loginTitulo,
-    'senha':         t('loginEntrarSistema'),
-    'confirmado':    wa.okTitulo,
-    'sessao-valida': wa.sessaoTitulo,
-    'link-expirado': wa.expiradoTitulo,
+    'login':           wa.tituloLogin,
+    'senha':           wa.tituloSenha,
+    'cadastro':        wa.tituloCadastro,
+    'recuperar-senha': 'Redefinição de senha',
+    'certificado':     wa.tituloCertificado,
+    'email':           wa.tituloEmail,
+    'email-enviado':   wa.emailEnviado('…'),
+    'criar-senha':     wa.tituloCriarSenha,
+    'concluido':       wa.concluidoAutenticacao,
   };
 
   return (
     <>
-      <Titulo titulo={wa.estadosTitulo} sub={wa.estadosSub} />
+      <MarcaFloripaOn />
+      <div style={{ marginTop: 16 }}><Titulo texto={wa.estadosTitulo} /></div>
+      <p style={{ fontSize: 12.5, color: 'var(--neutral-dark-down)', margin: '6px 0 0', textAlign: 'center' }}>{wa.estadosSub}</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 16 }}>
         {ESTADOS_DEMO.map((estado, i) => {
-          const href = urlWa(estado, estado !== 'confirmado' && estado !== 'link-expirado');
+          const href = urlWa(estado, true);
           return (
             <a key={estado} href={href} style={{ textDecoration: 'none' }}>
               <div style={{
@@ -357,7 +345,9 @@ function TelaEstados() {
                   fontWeight: 800, fontSize: 13, color: 'var(--primary-pure)',
                 }}>{i + 1}</div>
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--neutral-dark-pure)' }}>{rotulos[estado]}</div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--neutral-dark-pure)', lineHeight: 1.3 }}>
+                    {rotulos[estado].replace(/\*\*/g, '')}
+                  </div>
                   <div style={{ fontSize: 11, color: 'var(--neutral-dark-medium)', wordBreak: 'break-all' }}>{href}</div>
                 </div>
                 <FAIcon icon="fa-regular fa-arrow-right" style={{ fontSize: 13, color: 'var(--primary-pure)', marginLeft: 'auto', flexShrink: 0 }} />
@@ -373,20 +363,22 @@ function TelaEstados() {
 function TelaNaoEncontrado({ onIrParaPortal }: { onIrParaPortal: () => void }) {
   const wa = useWaT();
   return (
-    <div style={{ textAlign: 'center', marginTop: 18 }}>
-      <Badge tipo="aviso" />
-      <h2 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 8px', letterSpacing: '-0.2px', color: 'var(--neutral-dark-pure)' }}>
+    <div style={{ textAlign: 'center' }}>
+      <MarcaFloripaOn />
+      <div style={{
+        width: 62, height: 62, borderRadius: '50%', margin: '18px auto 14px',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'var(--warning-bg)', border: '2px solid var(--warning-border-light)',
+      }}>
+        <FAIcon icon="fa-regular fa-triangle-exclamation" style={{ fontSize: 26, color: 'var(--warning-color)' }} />
+      </div>
+      <h2 style={{ fontSize: 19, fontWeight: 700, margin: '0 0 8px', color: 'var(--neutral-dark-pure)' }}>
         {wa.naoEncontradoTitulo}
       </h2>
       <p style={{ fontSize: 13, color: 'var(--neutral-dark-down)', lineHeight: 1.5, margin: '0 auto 16px', maxWidth: 320 }}>
         {wa.naoEncontradoTexto}
       </p>
-      <button onClick={onIrParaPortal} style={{
-        width: '100%', height: 44, borderRadius: 8, border: 'none', cursor: 'pointer',
-        background: 'var(--primary-pure)', color: 'white', fontWeight: 700, fontSize: 14,
-      }}>
-        {wa.irParaPortal}
-      </button>
+      <BotaoPrimario rotulo={wa.irParaPortal} onClick={onIrParaPortal} />
     </div>
   );
 }
@@ -397,28 +389,21 @@ export default function EntrarWhatsApp({ estado, onNavigatePortal }: {
   onNavigatePortal: (p: Page) => void;
 }) {
   const isMobile = useIsMobile();
-  const wa = useWaT();
   const [showTermos, setShowTermos] = useState(false);
-  const daOrigemWhatsapp = veioDoWhatsapp();
-  const abrirTermos = () => setShowTermos(true);
 
-  // A faixa de contexto aparece nas telas em que a pessoa ainda está sendo
-  // identificada. Sem `origem=whatsapp`, é o login normal do portal.
-  const comFaixa = daOrigemWhatsapp && (estado === 'login' || estado === 'senha' || estado === 'sessao-valida');
-  const motivo = estado === 'sessao-valida' ? 'faixaMotivoSessao' : 'faixaMotivoLogin';
+  const usaPainel = estado === 'login' || estado === 'senha' || estado === 'cadastro' || estado === 'recuperar-senha';
 
   const conteudo =
-    estado === 'login'         ? <TelaLogin daOrigemWhatsapp={daOrigemWhatsapp} onOpenTermos={abrirTermos} /> :
-    estado === 'senha'         ? <TelaSenha daOrigemWhatsapp={daOrigemWhatsapp} onOpenTermos={abrirTermos} /> :
-    estado === 'confirmado'    ? <TelaConfirmado onOpenTermos={abrirTermos} /> :
-    estado === 'sessao-valida' ? <TelaSessaoValida daOrigemWhatsapp={daOrigemWhatsapp} onOpenTermos={abrirTermos} /> :
-    estado === 'link-expirado' ? <TelaLinkExpirado onOpenTermos={abrirTermos} /> :
+    usaPainel                  ? <TelaPainel key={estado} estado={estado as 'login' | 'senha' | 'cadastro' | 'recuperar-senha'} /> :
+    estado === 'certificado'   ? <TelaCertificado /> :
+    estado === 'email'         ? <TelaEmail /> :
+    estado === 'email-enviado' ? <TelaEmailEnviado /> :
+    estado === 'criar-senha'   ? <TelaCriarSenha onAbrirTermos={() => setShowTermos(true)} /> :
+    estado === 'concluido'     ? <TelaConcluido doCadastro={veioDoCadastro()} /> :
     estado === 'estados'       ? <TelaEstados /> :
                                  <TelaNaoEncontrado onIrParaPortal={() => onNavigatePortal('home')} />;
 
   return (
-    // 100dvh + centralização: no celular o card cabe na tela sem scroll; em tela
-    // curta (paisagem) a página rola em vez de cortar conteúdo.
     <div style={{
       background: 'var(--background-color-light)', minHeight: '100dvh',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -429,15 +414,12 @@ export default function EntrarWhatsApp({ estado, onNavigatePortal }: {
       {showTermos && <TermosModal mode="view" onClose={() => setShowTermos(false)} />}
 
       <div style={{
-        width: '100%', maxWidth: CARD_MAX,
+        width: '100%', maxWidth: estado === 'cadastro' ? CARD_MAX_CADASTRO : CARD_MAX_LOGIN,
         background: 'white', border: '1px solid var(--primary-light)', borderRadius: 14,
         boxShadow: 'var(--shadow-card)', overflow: 'hidden',
+        display: 'flex', flexDirection: 'column',
       }}>
-        {comFaixa && (
-          <WhatsAppContextStrip telefone={MOCK_TELEFONE_WHATSAPP} motivo={wa[motivo]} />
-        )}
-        <div style={{ padding: isMobile ? '12px 16px 12px' : '26px 32px 28px' }}>
-          <MarcaFloripaOn />
+        <div style={{ padding: isMobile ? '14px 16px 16px' : '26px 32px 28px' }}>
           {conteudo}
         </div>
       </div>
