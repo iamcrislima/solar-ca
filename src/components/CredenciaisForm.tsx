@@ -13,6 +13,7 @@ export default function CredenciaisForm({
   identificadorTipo = 'text',
   identificadorAutoComplete = 'username',
   identificadorInputMode,
+  formatarIdentificador,
   senhaLabel,
   senhaPlaceholder,
   submitLabel,
@@ -33,6 +34,7 @@ export default function CredenciaisForm({
   identificadorTipo?: 'text' | 'email';
   identificadorAutoComplete?: string;
   identificadorInputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
+  formatarIdentificador?: (v: string) => string;   // máscara aplicada ao digitar
   senhaLabel: string;
   senhaPlaceholder: string;
   submitLabel: string;
@@ -67,7 +69,7 @@ export default function CredenciaisForm({
             autoComplete={identificadorAutoComplete}
             placeholder={identificadorPlaceholder}
             value={identificador}
-            onChange={e => setIdentificador(e.target.value)}
+            onChange={e => setIdentificador(formatarIdentificador ? formatarIdentificador(e.target.value) : e.target.value)}
           />
         </div>
       </div>

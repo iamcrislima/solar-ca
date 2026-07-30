@@ -12,6 +12,12 @@ export function fmtCnpj(v: string): string {
   return d.replace(/(\d{2})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1/$2').replace(/(\d{4})(\d{1,2})$/, '$1-$2');
 }
 
+// Documento de login: CPF até 11 dígitos, CNPJ a partir daí.
+export function fmtDocumento(v: string): string {
+  const d = v.replace(/\D/g, '');
+  return d.length <= 11 ? fmtCpf(d) : fmtCnpj(d);
+}
+
 export function fmtTel(v: string): string {
   const d = v.replace(/\D/g, '').slice(0, 11);
   if (d.length <= 10) return d.replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d)/, '$1-$2');

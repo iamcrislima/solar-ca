@@ -6,7 +6,7 @@ import TermosModal from './TermosModal';
 import LoginOptions from './LoginOptions';
 import CredenciaisForm from './CredenciaisForm';
 import StepIndicator from './StepIndicator';
-import { fmtCpf, fmtCnpj, fmtTel, fmtCep, UF_LIST } from '../masks';
+import { fmtCpf, fmtCnpj, fmtDocumento, fmtTel, fmtCep, UF_LIST } from '../masks';
 import { loginLabel as label, loginInputWrap as inputStyle, loginInputEl as inputEl2 } from './loginStyles';
 
 // ── Painel de login — fonte única ────────────────────────────────────────────
@@ -481,11 +481,14 @@ export default function LoginPanel({
             onCertificado={onCertificado}
             mostrarGoogle={mostrarGoogle}
             onGoogle={onGoogle}
+            // O acesso é feito com o documento (CPF/CNPJ), com a mesma máscara
+            // do cadastro. Vale para o modal do portal e para /whatsapp.
             form={
               <CredenciaisForm
-                identificadorLabel="Email"
-                identificadorTipo="email"
-                identificadorPlaceholder="Digite seu email"
+                identificadorLabel="CPF/CNPJ"
+                identificadorPlaceholder="Insira seu CPF ou CNPJ"
+                identificadorInputMode="numeric"
+                formatarIdentificador={fmtDocumento}
                 senhaLabel={t('senha')}
                 senhaPlaceholder="Senha FloripaOn"
                 submitLabel={submitLabel ?? t('entrar')}
