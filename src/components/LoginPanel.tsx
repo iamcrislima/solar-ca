@@ -66,7 +66,7 @@ export default function LoginPanel({
 
   const [view,          setViewState]    = useState<PanelView>(viewInicial);
   const [step,          setStep]         = useState(1);
-  const [emailRecov,    setEmailRecov]   = useState('');
+  const [docRecov,      setDocRecov]     = useState('');   // documento na redefinição de senha
   const [showLoginForm, setShowLoginForm] = useState(formAberto);
   const [showTermos,    setShowTermos]   = useState(false);
 
@@ -520,15 +520,26 @@ export default function LoginPanel({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, flex: 1, marginTop: marcaCentralizada ? 14 : 32 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <p style={{ fontWeight: 700, fontSize: 24, color: 'var(--neutral-dark-pure)', margin: 0, letterSpacing: '0.12px' }}>Redefinição de senha</p>
+            {/* A identificação é pelo documento; as instruções seguem para o
+                e-mail cadastrado na conta. */}
             <p style={{ fontWeight: 400, fontSize: 14, color: 'var(--neutral-dark-down)', margin: 0, lineHeight: '20px', letterSpacing: '0.07px' }}>
-              Informe seu e-mail no campo abaixo e enviaremos instruções para você redefinir sua senha com segurança.
+              Informe seu CPF ou CNPJ no campo abaixo e enviaremos para o e-mail cadastrado as instruções para você redefinir sua senha com segurança.
             </p>
             {avisoRecuperacao}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <span style={label}>Email cadastrado <span style={{ color: 'var(--error-required)' }}>*</span></span>
-              <div style={inputStyle}><input style={inputEl2} type="email" placeholder="Digite seu email" value={emailRecov} onChange={e => setEmailRecov(e.target.value)} /></div>
+              <span style={label}>CPF/CNPJ cadastrado <span style={{ color: 'var(--error-required)' }}>*</span></span>
+              <div style={inputStyle}>
+                <input
+                  style={inputEl2}
+                  inputMode="numeric"
+                  autoComplete="username"
+                  placeholder="Insira seu CPF ou CNPJ"
+                  value={docRecov}
+                  onChange={e => setDocRecov(fmtDocumento(e.target.value))}
+                />
+              </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <Button size="md" variant="primary" style={{ width: '100%' }}>Redefinir senha</Button>
