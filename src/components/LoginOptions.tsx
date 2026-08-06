@@ -8,9 +8,9 @@ const GOVBR_SSO_URL = 'https://sso.acesso.gov.br/login?client_id=floripa.sc.gov.
 
 // ── Meios de acesso — fonte única ────────────────────────────────────────────
 // É o bloco do login do portal, sem alteração de ordem nem de estilo:
-//   gov.br · ou · Certificado Digital · [Google] · ou entrar com login do
-//   sistema · botão que revela o formulário de credenciais.
-// O fluxo do WhatsApp só acrescenta o Google (mostrarGoogle).
+//   gov.br · ou · Certificado Digital · ou entrar com login do sistema ·
+//   botão que revela o formulário de credenciais.
+// Só entram aqui meios de acesso que o portal realmente integra.
 //
 // Estrutura estável de propósito: o botão do gov.br está SEMPRE dentro do <a>
 // (o onClick só intercepta quando há navegação de protótipo), para o React nunca
@@ -20,9 +20,6 @@ export default function LoginOptions({
   onShowForm,
   onGovBr,
   onCertificado,
-  mostrarGoogle = false,
-  onGoogle,
-  googleLabel = 'Entrar com Google',
   systemLoginLabel,
   form,
 }: {
@@ -30,9 +27,6 @@ export default function LoginOptions({
   onShowForm: () => void;
   onGovBr?: () => void;              // protótipo navegável — no lugar de ir ao SSO
   onCertificado?: () => void;
-  mostrarGoogle?: boolean;
-  onGoogle?: () => void;
-  googleLabel?: string;
   systemLoginLabel?: string;
   form?: React.ReactNode;
 }) {
@@ -77,16 +71,6 @@ export default function LoginOptions({
         {t('certDigital')}
       </button>
       <p style={loginHint}>{t('certDigitalDesc')}</p>
-
-      {mostrarGoogle && (
-        <button onClick={onGoogle}
-          style={{ ...botaoContorno, color: 'var(--neutral-dark-pure)', border: '1.5px solid var(--neutral-light-down)' }}
-          onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-subtle)'}
-          onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'white'}>
-          <FAIcon icon="fa-brands fa-google" style={{ fontSize: 17, color: 'var(--govbr-color)' }} />
-          {googleLabel}
-        </button>
-      )}
 
       <div style={loginDivisor}>
         <div style={loginDivisorLinha} />

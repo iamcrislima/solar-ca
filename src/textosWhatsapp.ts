@@ -8,7 +8,6 @@ import type { Lang } from './i18n';
 export interface TextosWa {
   // Tela: entrar
   tituloLogin: string;
-  entrarGoogle: string;
   identificacaoLabel: string;
   identificacaoPlaceholder: string;
   prosseguir: string;
@@ -58,7 +57,6 @@ export interface TextosWa {
 
 const PT: TextosWa = {
   tituloLogin: 'Entre ou cadastre-se para **autenticar com o WhatsApp**',
-  entrarGoogle: 'Entrar com Google',
   identificacaoLabel: 'E-mail, CPF ou telefone',
   identificacaoPlaceholder: 'Insira seu e-mail, CPF ou telefone',
   prosseguir: 'Prosseguir',
@@ -107,7 +105,6 @@ const PT: TextosWa = {
 
 const EN: TextosWa = {
   tituloLogin: 'Sign in or sign up to **authenticate with WhatsApp**',
-  entrarGoogle: 'Sign in with Google',
   identificacaoLabel: 'E-mail, CPF or phone',
   identificacaoPlaceholder: 'Enter your e-mail, CPF or phone',
   prosseguir: 'Continue',
@@ -156,7 +153,6 @@ const EN: TextosWa = {
 
 const ES: TextosWa = {
   tituloLogin: 'Ingrese o regístrese para **autenticar con WhatsApp**',
-  entrarGoogle: 'Ingresar con Google',
   identificacaoLabel: 'Correo, CPF o teléfono',
   identificacaoPlaceholder: 'Ingrese su correo, CPF o teléfono',
   prosseguir: 'Continuar',

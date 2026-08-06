@@ -31,13 +31,11 @@ export default function LoginPanel({
   tituloCadastro,
   avisoRecuperacao,
   submitLabel,
-  mostrarGoogle = false,
   marcaCentralizada = false,
   onFechar,
   mostrarFechar = false,
   onGovBr,
   onCertificado,
-  onGoogle,
   onAutenticar,
   onCadastroCriado,
   onViewChange,
@@ -49,13 +47,11 @@ export default function LoginPanel({
   tituloCadastro?: React.ReactNode;     // padrão: "Criar conta"
   avisoRecuperacao?: React.ReactNode;   // linha extra na redefinição de senha
   submitLabel?: string;                 // padrão: "Entrar"
-  mostrarGoogle?: boolean;
   marcaCentralizada?: boolean;
   onFechar?: () => void;
   mostrarFechar?: boolean;
   onGovBr?: () => void;
   onCertificado?: () => void;
-  onGoogle?: () => void;
   onAutenticar: () => void;
   onCadastroCriado?: () => void;        // se definido, substitui a tela interna de sucesso
   onViewChange?: (v: PanelView) => void;
@@ -479,8 +475,6 @@ export default function LoginPanel({
             onShowForm={abrirForm}
             onGovBr={onGovBr}
             onCertificado={onCertificado}
-            mostrarGoogle={mostrarGoogle}
-            onGoogle={onGoogle}
             // O acesso é feito com o documento (CPF/CNPJ), com a mesma máscara
             // do cadastro. Vale para o modal do portal e para /whatsapp.
             form={

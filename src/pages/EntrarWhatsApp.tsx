@@ -149,7 +149,6 @@ function TelaPainel({ estado }: { estado: Extract<WaEstado, 'login' | 'senha' | 
         viewInicial={viewInicial}
         formAberto={estado === 'senha'}
         marcaCentralizada
-        mostrarGoogle
         submitLabel={wa.autenticar}
         titulo={<Titulo texto={titulo} />}
         tituloCadastro={<div style={{ marginBottom: 20 }}><Titulo texto={wa.tituloCadastro} /></div>}
@@ -160,7 +159,6 @@ function TelaPainel({ estado }: { estado: Extract<WaEstado, 'login' | 'senha' | 
         }
         onGovBr={() => navegarWa('concluido', true)}
         onCertificado={() => navegarWa('certificado', true)}
-        onGoogle={() => navegarWa('concluido', true)}
         onAutenticar={() => navegarWa('concluido', true)}
         onCadastroCriado={() => navegarWa('concluido', true, { de: 'cadastro' })}
         // A URL acompanha a view para o link ser compartilhável e o refresh cair
